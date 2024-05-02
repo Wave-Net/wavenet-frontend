@@ -3,24 +3,19 @@
         <DataTable 
         id="mytable"
         :value="products" 
-        :size="small" 
+        size="small" 
         showGridlines 
         scrollable scrollHeight="100vh"  
         tableStyle="min-width: 50rem"
         contextMenu v-model:contextMenuSelection="selectedProduct"
         >
-            <!-- size : 칸 간격
-            showGridlines : 그리드 속성 
-            scrollable scrollHeight 스크롤바/스크롤바 생성 위
-        -->
-        
             <Column field="number" header="No."></Column>
             <Column field="time" header="Time"></Column>
             <Column field="source" header="Source IP"></Column>
             <Column field="destination" header="Destination IP"></Column>
-            <Column field="proto" header="Protocol"></Column>
-            <Column field="len" header="Len"></Column>
-            <Column field="info" header="Info"></Column>
+            <Column field="protocol" header="Protocol"></Column>
+            <Column field="length" header="Len"></Column>
+            <Column field="info" header="Info"></Column> 
         </DataTable>
     </div>
 </template>
@@ -28,7 +23,6 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { packet } from '@/./pktlist/packet';
 
 export default {
     components:{
@@ -38,12 +32,33 @@ export default {
     },
     data() {
         return {
-            products: null
+            products: [],
         };
     },
     mounted() {
-        packet.getProductsMini().then((data) => (this.products = data));
+        iotpacket.getProductsMini().then((data) => {this.products = data});
+    },
+    methods: {
     }
 };
 
+export const iotpacket = {
+    getProductsData() {
+        return [];
+    },
+
+    getProductsMini() {
+        return Promise.resolve(this.getProductsData());
+    }
+}
+
+const socket1 = new WebSocket(`ws://127.0.0.1:8088/front`) //사용예제
+
+socket1.onmessage = function(event) {
+    const receivedData = JSON.parse(event.data);
+    console.log('받은 데이터:', receivedData);
+
+    // 원하는 방식으로 데이터를 처리하여 products 배열에 추가
+    this.products.push(receivedData);
+};
 </script>
