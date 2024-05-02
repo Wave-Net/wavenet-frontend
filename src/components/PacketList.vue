@@ -46,20 +46,20 @@ export default {
     },
     methods: {
         subscribeToWebSocketStore() {
-            this.websocketStore.$subscribe((mutation) => {
-                if (mutation.type === 'websocket/addMessage') {
-                    const newMessage = mutation.payload;
-                    this.products.push({
-                        number: this.products.length + 1,
-                        time: '',
-                        source: '',
-                        destination: '',
-                        protocol: 'MQTT',
-                        length: newMessage.length,
-                        info: newMessage.data,
-                    });
-                }
+            this.websocketStore.$subscribe(() => {
+                this.updateProducts();
             });
+        },
+        updateProducts() {
+            this.products = this.websocketStore.messages.map((message, index) => ({
+                number: index + 1,
+                time: '', // 시간을 어떻게 얻을 지에 따라 구현이 필요
+                source: '', // 출발지 IP를 어떻게 얻을 지에 따라 구현이 필요
+                destination: '', // 목적지 IP를 어떻게 얻을 지에 따라 구현이 필요
+                protocol: 'MQTT', // 프로토콜 정보가 있을 경우 추가
+                length: message.length,
+                info: message.data,
+            }));
         },
     },
 };
