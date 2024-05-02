@@ -3,10 +3,10 @@ import { defineStore } from "pinia";
 // 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
   // 메시지의 속성들을 정의
-	type: string;
-	flasg: string;
-	length: string;
-	data: string;
+  type: string;
+  flasg: string;
+  length: string;
+  data: string;
 }
 
 export const useWebSocketStore = defineStore("websocket", {
@@ -17,9 +17,10 @@ export const useWebSocketStore = defineStore("websocket", {
   }),
   actions: {
     connect() {
-      this.websocket = new WebSocket("ws://127.0.0.1:8765");
+      this.websocket = new WebSocket("ws://localhost:8765");
       this.websocket.onopen = () => {
         this.isConnected = true;
+        console.log("웹소켓 connect");
       };
       this.websocket.onmessage = (event) => {
         const receivedData = JSON.parse(event.data);
@@ -35,6 +36,7 @@ export const useWebSocketStore = defineStore("websocket", {
         this.websocket.close();
         this.websocket = null;
         this.isConnected = false;
+        console.log("웹소켓 disconnect");
       }
     },
   },
