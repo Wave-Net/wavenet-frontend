@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 interface Message {
   // 메시지의 속성들을 정의
   type: string;
-  flasg: string;
+  flags: string;
   length: string;
   data: string;
 }
