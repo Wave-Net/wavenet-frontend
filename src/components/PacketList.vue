@@ -1,8 +1,8 @@
 <template>
     <div class="card">
         <DataTable 
+        :value="messages" 
         id="mytable"
-        :value="products" 
         size="small"
         showGridlines 
         scrollable scrollHeight="100vh"  
@@ -15,52 +15,29 @@
             <Column field="destination" header="Destination IP"></Column>
             <Column field="protocol" header="Protocol"></Column>
             <Column field="length" header="Len"></Column>
-            <Column field="info" header="Info"></Column> 
+            <Column field="info" header="Info"></Column>
         </DataTable>
     </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, onUnmounted } from 'vue';
+import { useWebSocketStore } from '@/store/websocketStore';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { useWebSocketStore } from '@/store/websocketStore';
 
-export default {
-    components: {
-        DataTable,
-        Column,
-    },
-    data() {
-        return {
-            products: [],
-            selectedProduct: null,
-            websocketStore: useWebSocketStore(),
-        };
-    },
-    mounted() {
-        this.websocketStore.connect();
-        this.subscribeToWebSocketStore();
-    },
-    beforeUnmount() {
-        this.websocketStore.disconnect();
-    },
-    methods: {
-        subscribeToWebSocketStore() {
-            this.websocketStore.$subscribe(() => {
-                this.updateProducts();
-            });
-        },
-        updateProducts() {
-            this.products = this.websocketStore.messages.map((message, index) => ({
-                number: index + 1,
-                time: '', // 시간을 어떻게 얻을 지에 따라 구현이 필요
-                source: '', // 출발지 IP를 어떻게 얻을 지에 따라 구현이 필요
-                destination: '', // 목적지 IP를 어떻게 얻을 지에 따라 구현이 필요
-                protocol: 'MQTT', // 프로토콜 정보가 있을 경우 추가
-                length: message.length,
-                info: message.data,
-            }));
-        },
-    },
-};
+const websocketStore = useWebSocketStore();
+
+// 웹소켓 연결
+onMounted(() => {
+  websocketStore.connect('ws://localhost:8765');
+});
+
+// 컴포넌트 언마운트 시 웹소켓 연결 종료
+onUnmounted(() => {
+  websocketStore.disconnect();
+});
+
+// 메시지 목록 가져오기
+const messages = computed(() => websocketStore.messages);
 </script>
