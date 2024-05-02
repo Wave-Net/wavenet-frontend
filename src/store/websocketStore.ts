@@ -1,0 +1,41 @@
+import { defineStore } from "pinia";
+
+// 수신된 메시지의 타입을 정의하는 인터페이스
+interface Message {
+  // 메시지의 속성들을 정의
+	type: string;
+	flasg: string;
+	length: string;
+	data: string;
+}
+
+export const useWebSocketStore = defineStore("websocket", {
+  state: () => ({
+    websocket: null as WebSocket | null, // 웹소켓 객체
+    isConnected: false, // 웹소켓 연결 상태
+    messages: [] as Message[], // 수신된 메시지들
+  }),
+  actions: {
+    connect() {
+      this.websocket = new WebSocket("ws://127.0.0.1:8765");
+      this.websocket.onopen = () => {
+        this.isConnected = true;
+      };
+      this.websocket.onmessage = (event) => {
+        const receivedData = JSON.parse(event.data);
+        console.log("받은 데이터:", receivedData);
+        this.messages.push(receivedData);
+      };
+      this.websocket.onclose = () => {
+        this.isConnected = false;
+      };
+    },
+    disconnect() {
+      if (this.websocket) {
+        this.websocket.close();
+        this.websocket = null;
+        this.isConnected = false;
+      }
+    },
+  },
+});
