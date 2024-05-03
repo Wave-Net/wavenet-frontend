@@ -1,23 +1,20 @@
 <template>
-    <div class="card">
-        <DataTable 
-        :value="messages" 
-        id="mytable"
-        size="small"
-        showGridlines 
-        scrollable scrollHeight="100vh"  
-        tableStyle="min-width: 50rem"
-        contextMenu v-model:contextMenuSelection="selectedProduct"
-        >
-            <Column field="number" header="No."></Column>
-            <Column field="time" header="Time"></Column>
-            <Column field="source" header="Source IP"></Column>
-            <Column field="destination" header="Destination IP"></Column>
-            <Column field="protocol" header="Protocol"></Column>
-            <Column field="length" header="Len"></Column>
-            <Column field="info" header="Info"></Column>
-        </DataTable>
-    </div>
+  <div class="card">
+    <DataTable :value="messages" id="mytable" size="small" showGridlines scrollable scrollHeight="100vh"
+      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedProduct">
+      <Column field="rowIndex" header="No.">
+        <template #body="{ index }">
+          {{ index + 1 }}
+        </template>
+      </Column>
+      <Column field="seconds_since_beginning" header="Time"></Column>
+      <Column field="source_ip" header="Source IP"></Column>
+      <Column field="destination_ip" header="Destination IP"></Column>
+      <Column field="protocol" header="Protocol"></Column>
+      <Column field="length" header="Len"></Column>
+      <Column field="topic" header="Info"></Column>
+    </DataTable>
+  </div>
 </template>
 
 <script setup>
