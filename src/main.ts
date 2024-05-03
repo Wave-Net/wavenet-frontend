@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia';
 import App from './App.vue'
 
 import PrimeVue from 'primevue/config'; // PrimeVue import 추가
@@ -8,7 +9,9 @@ import 'primeicons/primeicons.css'; // 아이콘
 
 
 // import ToggleButton from 'primevue/togglebutton';
+const pinia = createPinia();
 
 createApp(App)
     .use(PrimeVue) //primevue 등록
+    .use(pinia)
     .mount('#app')

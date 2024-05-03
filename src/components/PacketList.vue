@@ -1,9 +1,9 @@
 <template>
     <div class="card">
         <DataTable 
+        :value="messages" 
         id="mytable"
-        :value="products" 
-        size="small" 
+        size="small"
         showGridlines 
         scrollable scrollHeight="100vh"  
         tableStyle="min-width: 50rem"
@@ -15,50 +15,29 @@
             <Column field="destination" header="Destination IP"></Column>
             <Column field="protocol" header="Protocol"></Column>
             <Column field="length" header="Len"></Column>
-            <Column field="info" header="Info"></Column> 
+            <Column field="info" header="Info"></Column>
         </DataTable>
     </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, onUnmounted } from 'vue';
+import { useWebSocketStore } from '@/store/websocketStore';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-export default {
-    components:{
-        DataTable,
-        Column,
+const websocketStore = useWebSocketStore();
 
-    },
-    data() {
-        return {
-            products: [],
-        };
-    },
-    mounted() {
-        iotpacket.getProductsMini().then((data) => {this.products = data});
-    },
-    methods: {
-    }
-};
+// 웹소켓 연결
+onMounted(() => {
+  websocketStore.connect('ws://localhost:8765');
+});
 
-export const iotpacket = {
-    getProductsData() {
-        return [];
-    },
+// 컴포넌트 언마운트 시 웹소켓 연결 종료
+onUnmounted(() => {
+  websocketStore.disconnect();
+});
 
-    getProductsMini() {
-        return Promise.resolve(this.getProductsData());
-    }
-}
-
-const socket1 = new WebSocket(`ws://127.0.0.1:8088/front`) //사용예제
-
-socket1.onmessage = function(event) {
-    const receivedData = JSON.parse(event.data);
-    console.log('받은 데이터:', receivedData);
-
-    // 원하는 방식으로 데이터를 처리하여 products 배열에 추가
-    this.products.push(receivedData);
-};
+// 메시지 목록 가져오기
+const messages = computed(() => websocketStore.messages);
 </script>
