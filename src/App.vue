@@ -38,7 +38,7 @@ import IotPrint from "./components/IotPrint.vue";
 import MenuButton from "./components/MenuButton.vue";
 import DashboardGraph from './components/DashboardGraph.vue';
 import DashboardData from './components/DashboardData.vue';
-import DashboardTimeData from './components/ashboardTimeData.vue';
+import DashboardTimeData from './components/DashboardTimeData.vue';
 import PacketList from './components/PacketList.vue';
 
 import Splitter from "primevue/splitter";
