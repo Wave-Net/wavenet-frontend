@@ -1,11 +1,11 @@
 <template>
   <div>
     <ToggleButton
-      v-model="capturechecked"
-      onLabel="중단"
-      offLabel="시작"
-      onIcon="pi pi-stop-circle"
-      offIcon="pi pi-play-circle"
+      v-model="captureButtonState"
+      onLabel="시작"
+      offLabel="중단"
+      onIcon="pi pi-play-circle"
+      offIcon="pi pi-stop-circle"
       class="startButton"
       @change="handleCaptureToggle"
     />
@@ -13,52 +13,37 @@
     <SplitButton
       label="데이터내보내기"
       :model="items"
-      :disabled="capturechecked"
+      :disabled="!captureButtonState"
       class="dataPrint"
     >
       <i class="pi pi-download"> 데이터 내보내기</i>
-      <!-- pi-download 아이콘 추가 -->
     </SplitButton>
   </div>
 </template>
 
-<script>
-import ToggleButton from "primevue/togglebutton";
-import SplitButton from "primevue/splitbutton";
-import "primeicons/primeicons.css";
-import { useWebSocketStore } from "@/store/websocketStore";
+<script setup>
+import ToggleButton from 'primevue/togglebutton';
+import SplitButton from 'primevue/splitbutton';
+import 'primeicons/primeicons.css'
+import { useWebSocketStore } from '@/store/websocketStore';
+import { ref } from 'vue';
 
-export default {
-  components: {
-    ToggleButton,
-    SplitButton,
-  },
-  data() {
-    return {
-      capturechecked: false,
-      items: [
-        {
-          label: "PCAP",
-        },
-        {
-          label: "JSON",
-        },
-        {
-          label: "CSV",
-        },
-      ],
-    };
-  },
-  methods: {
-    handleCaptureToggle() {
-      const websocketStore = useWebSocketStore();
-      if (this.capturechecked) {
-        websocketStore.startCapture();
-      } else {
-        websocketStore.stopCapture();
-      }
-    },
-  },
+const websocketStore = useWebSocketStore();
+const captureButtonState = ref(true);
+const items = [
+  { label: "PCAP" },
+  { label: "JSON" },
+  { label: "CSV" }
+];
+
+const handleCaptureToggle = () => {
+  if (captureButtonState.value) {
+    console.log('capture stop');
+    websocketStore.stopCapture();
+  } else {
+    console.log('capture start');
+    websocketStore.startCapture();
+  }
 };
 </script>
 
