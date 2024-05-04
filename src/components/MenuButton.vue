@@ -7,6 +7,7 @@
       onIcon="pi pi-stop-circle"
       offIcon="pi pi-play-circle"
       class="startButton"
+      @change="handleCaptureToggle"
     />
 
     <SplitButton
@@ -25,6 +26,7 @@
 import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
 import "primeicons/primeicons.css";
+import { useWebSocketStore } from "@/store/websocketStore";
 
 export default {
   components: {
@@ -46,6 +48,17 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    handleCaptureToggle() {
+      const websocketStore = useWebSocketStore();
+      if (this.capturechecked) {
+        // 패킷 캡처 시작
+        websocketStore.startCapture();
+      } else {
+        // 패킷 캡처 중단 (필요한 경우 구현)
+      }
+    },
   },
 };
 </script>
