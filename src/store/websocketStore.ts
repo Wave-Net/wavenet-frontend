@@ -23,6 +23,7 @@ export const useWebSocketStore = defineStore("websocket", {
   state: () => ({
     websocket: null as WebSocket | null,
     isConnected: false,
+    isCaptureRunning: false,
     messages: [] as Message[],
   }),
   actions: {
@@ -30,16 +31,18 @@ export const useWebSocketStore = defineStore("websocket", {
       this.websocket = new WebSocket(url);
       this.websocket.onopen = () => {
         this.isConnected = true;
+        this.isCaptureRunning = false;
         console.log("웹소켓 연결됨");
       };
       this.websocket.onmessage = (event) => {
-        const receivedData = JSON.parse(event.data) as Message; // 타입 단언 추가
-        receivedData.timestamp = Date.now(); // 메시지 수신 시간 추가
+        const receivedData = JSON.parse(event.data) as Message;
+        receivedData.timestamp = Date.now();
         console.log("받은 데이터:", receivedData);
         this.messages.push(receivedData);
       };
       this.websocket.onclose = () => {
         this.isConnected = false;
+        this.isCaptureRunning = false;
         console.log("웹소켓 연결 종료");
       };
       this.websocket.onerror = (error) => {
@@ -51,6 +54,7 @@ export const useWebSocketStore = defineStore("websocket", {
         this.websocket.close();
         this.websocket = null;
         this.isConnected = false;
+        this.isCaptureRunning = false;
       }
     },
     startCapture(options?: { filter?: string; interface?: string }) {
@@ -60,6 +64,7 @@ export const useWebSocketStore = defineStore("websocket", {
           options: options || {},
         };
         this.websocket.send(JSON.stringify(message));
+        this.isCaptureRunning = true;
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
       }
@@ -70,6 +75,7 @@ export const useWebSocketStore = defineStore("websocket", {
           type: "stop_capture",
         };
         this.websocket.send(JSON.stringify(message));
+        this.isCaptureRunning = false;
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
       }
