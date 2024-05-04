@@ -3,7 +3,7 @@
     <ContextMenu ref="cm" :model="menuModel" @hide="selectedRow = null" />
     <DataTable :value="messages" id="mytable" size="small" showGridlines scrollable scrollHeight="95vh"
       tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedRowData"
-      @rowContextmenu="onRowContextMenu" rowHover>
+      @rowContextmenu="onRowContextMenu" rowHover title="더 자세히 보려면 우클릭하세요.">
       <Column field="rowIndex" header="No.">
         <template #body="{ index }">
           {{ index + 1 }}
