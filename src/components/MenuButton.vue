@@ -53,10 +53,9 @@ export default {
     handleCaptureToggle() {
       const websocketStore = useWebSocketStore();
       if (this.capturechecked) {
-        // 패킷 캡처 시작
         websocketStore.startCapture();
       } else {
-        // 패킷 캡처 중단 (필요한 경우 구현)
+        websocketStore.stopCapture();
       }
     },
   },
