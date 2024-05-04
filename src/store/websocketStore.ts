@@ -53,5 +53,16 @@ export const useWebSocketStore = defineStore("websocket", {
         this.isConnected = false;
       }
     },
+    startCapture(options?: { filter?: string; interface?: string }) {
+      if (this.websocket && this.isConnected) {
+        const message = {
+          type: "start_capture",
+          options: options || {},
+        };
+        this.websocket.send(JSON.stringify(message));
+      } else {
+        console.error("WebSocket 연결이 되어있지 않습니다.");
+      }
+    },
   },
 });
