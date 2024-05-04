@@ -2,7 +2,7 @@
   <div class="card">
     <ContextMenu ref="cm" :model="menuModel" @hide="selectedRow = null" />
     <DataTable :value="messages" id="mytable" size="small" showGridlines scrollable scrollHeight="95vh"
-      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedRow"
+      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedRowData"
       @rowContextmenu="onRowContextMenu">
       <Column field="rowIndex" header="No.">
         <template #body="{ index }">
