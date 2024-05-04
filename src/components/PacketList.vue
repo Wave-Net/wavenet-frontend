@@ -1,7 +1,16 @@
 <template>
   <div class="card">
-    <DataTable :value="messages" id="mytable" size="small" showGridlines scrollable scrollHeight="100vh"
-      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedProduct">
+    <DataTable
+      :value="messages"
+      id="mytable"
+      size="small"
+      showGridlines
+      scrollable
+      scrollHeight="100vh"
+      tableStyle="min-width: 50rem"
+      contextMenu
+      v-model:contextMenuSelection="selectedProduct"
+    >
       <Column field="rowIndex" header="No.">
         <template #body="{ index }">
           {{ index + 1 }}
@@ -18,16 +27,16 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue';
-import { useWebSocketStore } from '@/store/websocketStore';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import { computed, onMounted, onUnmounted } from "vue";
+import { useWebSocketStore } from "@/store/websocketStore";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 const websocketStore = useWebSocketStore();
 
 // 웹소켓 연결
 onMounted(() => {
-  websocketStore.connect('ws://localhost:8765');
+  websocketStore.connect("ws://localhost:8765");
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 종료
