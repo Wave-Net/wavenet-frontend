@@ -11,9 +11,13 @@
         </SplitterPanel>
         <SplitterPanel class="panel3Dashboardchart" size="98">
           <Splitter style="height:auto" layout="vertical">
-            <SplitterPanel class="panel3-1Graph" size="40">
+            <SplitterPanel class="panel3-1Graph" size="20">
               <!-- 패널 3-1) 선그래프 -->
-              <DashboardGraph />
+              <DashboardGraph :labelData1="'초당 패킷 입력량'" :labelData2="'초당 패킷 출력량'"/>
+              
+            </SplitterPanel>
+            <SplitterPanel class="panel3-1Graph" size="20">
+              <DashboardGraph :labelData1="'초당 데이터 입력량'" :labelData2="'초당 데이터 출력량'"/>
             </SplitterPanel>
             <SplitterPanel class="panel3-2Data" size="30">
               <!-- 패널 3-2) 송수신된 데이터의 값 -->
@@ -82,7 +86,7 @@ export default {
 }
 
 .panel3-1Graph {
-  min-height: 40%;
+  min-height: 20%;
 }
 
 .panel3-2Data {
