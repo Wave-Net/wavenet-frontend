@@ -2,10 +2,10 @@
   <div>
     <ToggleButton
       v-model="captureButtonState"
-      onLabel="시작"
-      offLabel="중단"
-      onIcon="pi pi-play-circle"
-      offIcon="pi pi-stop-circle"
+      onLabel="중단"
+      offLabel="시작"
+      onIcon="pi pi-stop-circle"
+      offIcon="pi pi-play-circle"
       class="startButton"
       @change="handleCaptureToggle"
     />
@@ -13,7 +13,7 @@
     <SplitButton
       label="데이터내보내기"
       :model="items"
-      :disabled="!captureButtonState"
+      :disabled="captureButtonState"
       class="dataPrint"
     >
       <i class="pi pi-download"> 데이터 내보내기</i>
@@ -29,7 +29,7 @@ import { useWebSocketStore } from '@/store/websocketStore';
 import { ref } from 'vue';
 
 const websocketStore = useWebSocketStore();
-const captureButtonState = ref(true);
+const captureButtonState = ref(false);
 const items = [
   { label: "PCAP" },
   { label: "JSON" },
@@ -38,11 +38,11 @@ const items = [
 
 const handleCaptureToggle = () => {
   if (captureButtonState.value) {
-    console.log('capture stop');
-    websocketStore.stopCapture();
-  } else {
     console.log('capture start');
     websocketStore.startCapture();
+  } else {
+    console.log('capture stop');
+    websocketStore.stopCapture();
   }
 };
 </script>
