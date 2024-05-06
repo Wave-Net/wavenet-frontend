@@ -23,9 +23,10 @@
     data() {
       return {
         products: [
-          { name: 'Product 1', price: 100, category: 'Category A' },
-          { name: 'Product 2', price: 200, category: 'Category B' },
-          { name: 'Product 3', price: 300, category: 'Category A' }
+          { name: '패킷 입력/초', price: 100, category: 'Category A' },
+          { name: '패킷 출력/초', price: 200, category: 'Category B' },
+          { name: '데이터 수신/초', price: 300, category: 'Category A' },
+          { name: '데이터 전송/초', price: 300, category: 'Category A' }
         ]
       };
     }

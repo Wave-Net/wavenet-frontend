@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
+    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" @legendClick="toggleLineVisibility" />
   </div>
 </template>
 
@@ -30,14 +30,16 @@ const chartData = reactive({
       data: [65, 59, 80, 81, 56, 55, 40],
       fill: false,
       borderColor: 'cyan',
-      tension: 0.4
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
     },
     {
       label: props.labelData2,
       data: [28, 48, 40, 19, 86, 27, 90],
       fill: false,
       borderColor: 'gray',
-      tension: 0.4
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
     }
   ]
 });
@@ -77,6 +79,15 @@ const chartOptions = reactive({
 
 // interval ID를 저장할 변수
 const intervalId = ref(null);
+
+// 차트의 범례 항목을 클릭하여 선의 가시성을 변경하는 메소드
+const toggleLineVisibility = (event) => {
+  const datasetIndex = event.element.datasetIndex;
+  const chart = event.chart;
+  const dataset = chart.data.datasets[datasetIndex];
+  dataset.hidden = !dataset.hidden;
+  chart.update();
+};
 
 onMounted(() => {
   // interval 설정
