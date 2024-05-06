@@ -9,6 +9,12 @@ import { reactive, onMounted, ref } from "vue";
 import { onUnmounted, defineProps } from '@vue/runtime-core';
 import Chart from 'primevue/chart';
 
+import { useWebSocketStore } from '@/store/websocketStore';
+
+const store = useWebSocketStore();
+
+const { messages } = store;
+
 // Props 정의
 const props = defineProps(['labelData1', 'labelData2']);
 
@@ -84,27 +90,30 @@ onUnmounted(() => {
 
 // 데이터 업데이트
 const updateChartData = () => {
-  const newDataPoint1 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
-  const newDataPoint2 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+  if (messages.length > 0) {
+    const length = messages[messages.length - 1].length;
+    // 현재 length 값을 사용하여 차트 데이터를 업데이트하는 코드를 추가합니다.
+    const newDataPoint1 = length; // 예시로 newDataPoint1에 length 값을 할당합니다.
+    const newDataPoint2 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    // 새로운 데이터 추가
+    const newChartData = {
+      labels: [...chartData.labels.slice(1), ''],
+      datasets: [
+        {
+          ...chartData.datasets[0],
+          data: [...chartData.datasets[0].data.slice(1), newDataPoint1],
+        },
+        {
+          ...chartData.datasets[1],
+          data: [...chartData.datasets[1].data.slice(1), newDataPoint2], // 새로운 데이터 추가
+        }
+      ]
+    };
 
-  // 새로운 데이터 추가
-  const newChartData = {
-    labels: [...chartData.labels.slice(1), ''], // 새로운 라벨 추가
-    datasets: [
-      {
-        ...chartData.datasets[0],
-        data: [...chartData.datasets[0].data.slice(1), newDataPoint1], // 새로운 데이터 추가
-      },
-      {
-        ...chartData.datasets[1],
-        data: [...chartData.datasets[1].data.slice(1), newDataPoint2], // 새로운 데이터 추가
-      }
-    ]
-  };
-
-  // 데이터 반영
-  chartData.labels = newChartData.labels;
-  chartData.datasets[0].data = newChartData.datasets[0].data;
-  chartData.datasets[1].data = newChartData.datasets[1].data;
+    // 데이터 반영
+    chartData.labels = newChartData.labels;
+    chartData.datasets[0].data = newChartData.datasets[0].data;
+    chartData.datasets[1].data = newChartData.datasets[1].data;
+  }
 };
 </script>
