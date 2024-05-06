@@ -2,11 +2,21 @@ import { defineStore } from "pinia";
 
 // 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
-  type: string;
-  flags: string;
-  length: string;
-  data: string;
-  timestamp: number; // 메시지 수신 시간 추가
+  protocol: string;
+  timestamp: number;
+  time_of_day: number;
+  seconds_since_beginning: number;
+  seconds_since_previous: number;
+  source_ip: string;
+  destination_ip: string;
+  source_port: number;
+  destination_port: number;
+  mqtt_type: string;
+  qos: number;
+  length: number;
+  flags?: number; // 선택적 필드
+  topic?: string; // 선택적 필드
+  value?: string; // 선택적 필드
 }
 
 export const useWebSocketStore = defineStore("websocket", {
@@ -41,6 +51,27 @@ export const useWebSocketStore = defineStore("websocket", {
         this.websocket.close();
         this.websocket = null;
         this.isConnected = false;
+      }
+    },
+    startCapture(options?: { filter?: string; interface?: string }) {
+      if (this.websocket && this.isConnected) {
+        const message = {
+          type: "start_capture",
+          options: options || {},
+        };
+        this.websocket.send(JSON.stringify(message));
+      } else {
+        console.error("WebSocket 연결이 되어있지 않습니다.");
+      }
+    },
+    stopCapture() {
+      if (this.websocket && this.isConnected) {
+        const message = {
+          type: "stop_capture",
+        };
+        this.websocket.send(JSON.stringify(message));
+      } else {
+        console.error("WebSocket 연결이 되어있지 않습니다.");
       }
     },
   },
