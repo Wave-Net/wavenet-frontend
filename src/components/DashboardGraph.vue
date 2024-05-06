@@ -16,7 +16,7 @@ const store = useWebSocketStore();
 const { messages } = store;
 
 // Props 정의
-const props = defineProps(['labelData1', 'labelData2']);
+const props = defineProps(['labelData1', 'labelData2','labelData3','labelData4']);
 
 // 데이터 갱신 간격 (밀리초)
 const updateInterval = 1000;
@@ -27,7 +27,7 @@ const chartData = reactive({
   datasets: [
     {
       label: props.labelData1,
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [0, 0, 0, 0, 0, 0, 0],
       fill: false,
       borderColor: 'cyan',
       tension: 0.4,
@@ -35,9 +35,24 @@ const chartData = reactive({
     },
     {
       label: props.labelData2,
-      data: [28, 48, 40, 19, 86, 27, 90],
+      data: [0, 0, 0, 0, 0, 0, 0],
       fill: false,
       borderColor: 'gray',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    },
+    {
+      label: props.labelData3,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'orange',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    },{
+      label: props.labelData4,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'pink',
       tension: 0.4,
       hidden: false // 선의 가시성 상태를 추가합니다.
     }
@@ -106,6 +121,8 @@ const updateChartData = () => {
     // 현재 length 값을 사용하여 차트 데이터를 업데이트하는 코드를 추가합니다.
     const newDataPoint1 = length; // 예시로 newDataPoint1에 length 값을 할당합니다.
     const newDataPoint2 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    const newDataPoint3 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    const newDataPoint4 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
     // 새로운 데이터 추가
     const newChartData = {
       labels: [...chartData.labels.slice(1), ''],
@@ -117,6 +134,14 @@ const updateChartData = () => {
         {
           ...chartData.datasets[1],
           data: [...chartData.datasets[1].data.slice(1), newDataPoint2], // 새로운 데이터 추가
+        },
+        {
+          ...chartData.datasets[2],
+          data: [...chartData.datasets[2].data.slice(1), newDataPoint3], // 새로운 데이터 추가
+        },
+        {
+          ...chartData.datasets[3],
+          data: [...chartData.datasets[3].data.slice(1), newDataPoint4], // 새로운 데이터 추가
         }
       ]
     };
@@ -125,6 +150,8 @@ const updateChartData = () => {
     chartData.labels = newChartData.labels;
     chartData.datasets[0].data = newChartData.datasets[0].data;
     chartData.datasets[1].data = newChartData.datasets[1].data;
+    chartData.datasets[2].data = newChartData.datasets[2].data;
+    chartData.datasets[3].data = newChartData.datasets[3].data;
   }
 };
 </script>
