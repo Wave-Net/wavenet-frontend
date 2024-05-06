@@ -16,16 +16,14 @@
               <DashboardGraph :labelData1="'초당 패킷 입력량'" :labelData2="'초당 패킷 출력량'"/>
               
             </SplitterPanel>
-            <SplitterPanel class="panel3-1Graph" size="20">
-              <DashboardGraph :labelData1="'초당 데이터 입력량'" :labelData2="'초당 데이터 출력량'"/>
-            </SplitterPanel>
+
             <SplitterPanel class="panel3-2Data" size="30">
               <!-- 패널 3-2) 송수신된 데이터의 값 -->
-              <DashboardData />
+              <DashboardData  class="dashboard-data"/>
             </SplitterPanel>
             <SplitterPanel class="panel3-3Time" size="30">
               <!-- 패널 3-3) 송수신된 데이터의 1초당 데이터 값 -->
-              <DashboardTimeData />
+              <DashboardTimeData class="dashboard-data"/>
             </SplitterPanel>
           </Splitter>
         </SplitterPanel>
@@ -97,5 +95,9 @@ export default {
 .panel3-3Time {
   height: auto;
   min-height: 145px;
+}
+
+.dashboard-data thead{
+  display: none;
 }
 </style>
