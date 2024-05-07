@@ -17,22 +17,7 @@
       <Column field="topic" header="Info"></Column>
     </DataTable>
     <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw' }">
-      <!-- 패킷 다이어그램 내용을 여기에 추가하세요 -->
-      <div v-if="selectedRowData">
-        <!-- <div>Time: {{ selectedRowData.seconds_since_beginning }}</div> -->
-        <div>Source IP: {{ selectedRowData.source_ip }}</div>
-        <div>Destination IP: {{ selectedRowData.destination_ip }}</div>
-        <div>SrcPort: {{ selectedRowData.source_ip }}</div>
-        <div>DstPort: {{ selectedRowData.destination_ip }}</div>
-        <div>Protocol: {{ selectedRowData.protocol }}</div>
-        <div>Len: {{ selectedRowData.length }}</div>
-        <div>Topic: {{ selectedRowData.topic }}</div>
-        <div>QOS: {{ selectedRowData.qos }}</div>
-        <div>message: {{ selectedRowData.mqtt_type }}</div>
-        <div>value: {{ selectedRowData.value }}</div>
-        <div>flags: {{ selectedRowData.flags }}</div>
-        //info에는 messageType+Topic+value
-      </div>
+      <PacketDiagram :selectedRowData="selectedRowData" />
     </Dialog>
   </div>
 </template>
@@ -44,6 +29,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ContextMenu from 'primevue/contextmenu';
 import Dialog from 'primevue/dialog';
+import PacketDiagram from './PacketDiagram.vue';
 
 const websocketStore = useWebSocketStore();
 const cm = ref();
