@@ -44,7 +44,7 @@ const display = ref(false);
 
 // 웹소켓 연결
 onMounted(() => {
-  websocketStore.connect('ws://localhost:8765');
+  websocketStore.connect("ws://localhost:8765");
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 종료
