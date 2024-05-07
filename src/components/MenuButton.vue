@@ -48,15 +48,16 @@ const handleCaptureToggle = () => {
 </script>
 
 <style>
-.startButton{
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-bottom: 5px;
+.startButton {
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
 }
-.dataPrint{
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-bottom: 5px;
-    margin-right: 5px;
+
+.dataPrint {
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 </style>
