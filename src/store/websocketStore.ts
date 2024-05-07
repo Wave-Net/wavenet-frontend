@@ -17,6 +17,46 @@ interface Message {
   flags?: number; // 선택적 필드
   topic?: string; // 선택적 필드
   value?: string; // 선택적 필드
+
+  //fixed mqtt
+  name: string; //mqtt인지 확인할수 있는인지 .. 'MQTT'
+  // mqtt_type: string; //'CONNECT' 같은 type
+  mqtt_dup: number; //
+  mqtt_qos: number;
+  mqtt_retain: number;
+
+  connect_proto_name: string;
+  connect_mqtt_level: string; //connect_mqtt_version : v3.1 or v3.1.1 or v5.0 이런식으로 ..
+  connect_usernameflag: number;
+  connect_passwordflag: number;
+  connect_willretainflag: number;
+  connect_willQOSflag: number;
+  connect_willflag: number;
+  connect_cleansession: number;
+  connect_reserved: number;
+  connect_keep_alive: number;
+  connect_clientId: string;
+
+  //위 플래그가 1인 경우에만 주시면 될거같아요!
+  connect_willtopic: string; //willflag == 1
+  connect_willmsg: string; //willflag == 1
+  connect_username: string; //usernameflag == 1
+  connect_password: string; //passwordflag == 1
+
+  connack_ackflag: number;
+  connack_return_code: string; //'Connection Accepted'
+
+  publish_topic: string;
+  publish_msgid: string;
+  publish_msgvalue: string;
+
+  puback_msgid: string;
+
+  pubrec_msgid: string;
+
+  pubrel_msgid: string;
+
+  pubcomp_msgid: string;
 }
 
 export const useWebSocketStore = defineStore("websocket", {

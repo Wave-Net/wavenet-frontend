@@ -17,7 +17,7 @@
       <Column field="topic" header="Info"></Column>
     </DataTable>
     <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw' }">
-      <PacketDiagram :selectedRowData="selectedRowData" />
+      <PacketDiagram :pkt="selectedRowData" />
     </Dialog>
   </div>
 </template>
