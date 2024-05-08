@@ -1,79 +1,157 @@
-
 <template>
   <div class="card">
-      <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
+    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" @legendClick="toggleLineVisibility" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { reactive, onMounted, ref } from "vue";
+import { onUnmounted, defineProps } from '@vue/runtime-core';
 import Chart from 'primevue/chart';
 
-onMounted(() => {
-  chartData.value = setChartData();
-  chartOptions.value = setChartOptions();
+import { useWebSocketStore } from '@/store/websocketStore';
+
+const store = useWebSocketStore();
+
+const { messages } = store;
+
+// Props 정의
+const props = defineProps(['labelData1', 'labelData2','labelData3','labelData4']);
+
+// 데이터 갱신 간격 (밀리초)
+const updateInterval = 1000;
+
+// 초기 차트 데이터 설정
+const chartData = reactive({
+  labels: ['','','','','','',''],
+  datasets: [
+    {
+      label: props.labelData1,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'cyan',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    },
+    {
+      label: props.labelData2,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'gray',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    },
+    {
+      label: props.labelData3,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'orange',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    },{
+      label: props.labelData4,
+      data: [0, 0, 0, 0, 0, 0, 0],
+      fill: false,
+      borderColor: 'pink',
+      tension: 0.4,
+      hidden: false // 선의 가시성 상태를 추가합니다.
+    }
+  ]
 });
 
-const chartData = ref();
-const chartOptions = ref();
-      
-const setChartData = () => {
-  const documentStyle = getComputedStyle(document.documentElement);
-
-  return {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-          {
-              label: 'First Dataset',
-              data: [65, 59, 80, 81, 56, 55, 40],
-              fill: false,
-              borderColor: documentStyle.getPropertyValue('--cyan-500'),
-              tension: 0.4
-          },
-          {
-              label: 'Second Dataset',
-              data: [28, 48, 40, 19, 86, 27, 90],
-              fill: false,
-              borderColor: documentStyle.getPropertyValue('--gray-500'),
-              tension: 0.4
-          }
-      ]
-  };
-};
-const setChartOptions = () => {
-  const documentStyle = getComputedStyle(document.documentElement);
-  const textColor = documentStyle.getPropertyValue('--text-color');
-  const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-  const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-  return {
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-          legend: {
-              labels: {
-                  color: textColor
-              }
-          }
-      },
-      scales: {
-          x: {
-              ticks: {
-                  color: textColorSecondary
-              },
-              grid: {
-                  color: surfaceBorder
-              }
-          },
-          y: {
-              ticks: {
-                  color: textColorSecondary
-              },
-              grid: {
-                  color: surfaceBorder
-              }
-          }
+// 차트 옵션 설정
+const chartOptions = reactive({
+  maintainAspectRatio: false,
+  aspectRatio: 0.6,
+  plugins: {
+    legend: {
+      labels: {
+        color: 'black'
       }
-  };
-}
+    }
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: 'black'
+      },
+      grid: {
+        color: 'black'
+      }
+    },
+    y: {
+      ticks: {
+        color: 'black'
+      },
+      grid: {
+        color: 'black'
+      }
+    }
+  },
+  // animation 비활성화
+  animation: false
+});
+
+// interval ID를 저장할 변수
+const intervalId = ref(null);
+
+// 차트의 범례 항목을 클릭하여 선의 가시성을 변경하는 메소드
+const toggleLineVisibility = (event) => {
+  const datasetIndex = event.element.datasetIndex;
+  const chart = event.chart;
+  const dataset = chart.data.datasets[datasetIndex];
+  dataset.hidden = !dataset.hidden;
+  chart.update();
+};
+
+onMounted(() => {
+  // interval 설정
+  intervalId.value = setInterval(updateChartData, updateInterval);
+});
+
+// 컴포넌트가 제거될 때 interval 해제
+onUnmounted(() => {
+  clearInterval(intervalId.value);
+});
+
+// 데이터 업데이트
+const updateChartData = () => {
+  if (messages.length > 0) {
+    const length = messages[messages.length - 1].length;
+    // 현재 length 값을 사용하여 차트 데이터를 업데이트하는 코드를 추가합니다.
+    const newDataPoint1 = length; // 예시로 newDataPoint1에 length 값을 할당합니다.
+    const newDataPoint2 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    const newDataPoint3 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    const newDataPoint4 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
+    // 새로운 데이터 추가
+    const newChartData = {
+      labels: [...chartData.labels.slice(1), ''],
+      datasets: [
+        {
+          ...chartData.datasets[0],
+          data: [...chartData.datasets[0].data.slice(1), newDataPoint1],
+        },
+        {
+          ...chartData.datasets[1],
+          data: [...chartData.datasets[1].data.slice(1), newDataPoint2], // 새로운 데이터 추가
+        },
+        {
+          ...chartData.datasets[2],
+          data: [...chartData.datasets[2].data.slice(1), newDataPoint3], // 새로운 데이터 추가
+        },
+        {
+          ...chartData.datasets[3],
+          data: [...chartData.datasets[3].data.slice(1), newDataPoint4], // 새로운 데이터 추가
+        }
+      ]
+    };
+
+    // 데이터 반영
+    chartData.labels = newChartData.labels;
+    chartData.datasets[0].data = newChartData.datasets[0].data;
+    chartData.datasets[1].data = newChartData.datasets[1].data;
+    chartData.datasets[2].data = newChartData.datasets[2].data;
+    chartData.datasets[3].data = newChartData.datasets[3].data;
+  }
+};
 </script>
