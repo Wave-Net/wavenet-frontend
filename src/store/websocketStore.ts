@@ -48,11 +48,11 @@ export const useWebSocketStore = defineStore("websocket", {
         const receivedData = JSON.parse(event.data) as Message; // 타입 단언 추가
         receivedData.timestamp = Date.now(); // 메시지 수신 시간 추가
         console.log("받은 데이터:", receivedData);
-        this.messages.push(receivedData);
         if ('total_statics' in receivedData) {
           this.totalStatics = (receivedData as any).total_statics;
           this.staticsDelta = (receivedData as any).statics_delta;
-          
+        } else {
+          this.messages.push(receivedData); // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
         }
       };
       this.websocket.onclose = () => {
