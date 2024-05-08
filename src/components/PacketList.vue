@@ -12,9 +12,9 @@
       <Column field="seconds_since_beginning" header="Time"></Column>
       <Column field="source_ip" header="Source IP"></Column>
       <Column field="destination_ip" header="Destination IP"></Column>
-      <Column field="protocol" header="Protocol"></Column>
+      <Column field="name" header="Protocol"></Column>
       <Column field="length" header="Len"></Column>
-      <Column field="topic" header="Info"></Column>
+      <Column field="type" header="Info"></Column> <!-- 수정해야할듯 -->
     </DataTable>
     <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw' }">
       <PacketDiagram :pkt="selectedRowData" />

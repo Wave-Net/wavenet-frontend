@@ -2,61 +2,80 @@ import { defineStore } from "pinia";
 
 // 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
+  // 공통 필드
   protocol: string;
   timestamp: number;
-  time_of_day: number;
-  seconds_since_beginning: number;
-  seconds_since_previous: number;
+  time_of_day: string;
+  seconds_since_beginning: string;
+  seconds_since_previous: string;
   source_ip: string;
   destination_ip: string;
   source_port: number;
   destination_port: number;
-  mqtt_type: string;
-  qos: number;
   length: number;
-  flags?: number; // 선택적 필드
-  topic?: string; // 선택적 필드
-  value?: string; // 선택적 필드
 
-  //fixed mqtt
-  name: string; //mqtt인지 확인할수 있는인지 .. 'MQTT'
-  // mqtt_type: string; //'CONNECT' 같은 type
-  mqtt_dup: number; //
-  mqtt_qos: number;
-  mqtt_retain: number;
+  // MQTT 헤더 정보
+  header: {
+    msg_len: number;
+    dup: number;
+    qos: number;
+    retain: number;
+  };
 
-  connect_proto_name: string;
-  connect_mqtt_level: string; //connect_mqtt_version : v3.1 or v3.1.1 or v5.0 이런식으로 ..
-  connect_usernameflag: number;
-  connect_passwordflag: number;
-  connect_willretainflag: number;
-  connect_willQOSflag: number;
-  connect_willflag: number;
-  connect_cleansession: number;
-  connect_reserved: number;
-  connect_keep_alive: number;
-  connect_clientId: string;
+  // MQTT 타입
+  type: string;
 
-  //위 플래그가 1인 경우에만 주시면 될거같아요!
-  connect_willtopic: string; //willflag == 1
-  connect_willmsg: string; //willflag == 1
-  connect_username: string; //usernameflag == 1
-  connect_password: string; //passwordflag == 1
+  // MQTT CONNECT 정보
+  connect?: {
+    proto_name: string;
+    mqtt_level: string;
+    usernameflag: number;
+    passwordflag: number;
+    willretainflag: number;
+    willQOSflag: number;
+    willflag: number;
+    cleansession: number;
+    reserved: number;
+    keep_alive: number;
+    clientId: string;
+    willtopic?: string;
+    willmsg?: string;
+    username?: string;
+    password?: string;
+  };
 
-  connack_ackflag: number;
-  connack_return_code: string; //'Connection Accepted'
+  // MQTT CONNACK 정보
+  connack?: {
+    ackflag: number;
+    return_code: string;
+  };
 
-  publish_topic: string;
-  publish_msgid: string;
-  publish_msgvalue: string;
+  // MQTT PUBLISH 정보
+  publish?: {
+    topic: string;
+    msgid: string;
+    msgvalue: string;
+  };
 
-  puback_msgid: string;
+  // MQTT PUBACK 정보
+  puback?: {
+    msgid: string;
+  };
 
-  pubrec_msgid: string;
+  // MQTT PUBREC 정보
+  pubrec?: {
+    msgid: string;
+  };
 
-  pubrel_msgid: string;
+  // MQTT PUBREL 정보
+  pubrel?: {
+    msgid: string;
+  };
 
-  pubcomp_msgid: string;
+  // MQTT PUBCOMP 정보
+  pubcomp?: {
+    msgid: string;
+  };
 }
 
 export const useWebSocketStore = defineStore("websocket", {
