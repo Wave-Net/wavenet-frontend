@@ -29,6 +29,8 @@ const chartData = reactive({
       fill: false,
       borderColor: 'cyan',
       tension: 0.4,
+      borderWidth: 1,
+      pointRadius: 2,
     },
     {
       label: props.labelData2,
@@ -36,6 +38,8 @@ const chartData = reactive({
       fill: false,
       borderColor: 'gray',
       tension: 0.4,
+      borderWidth: 1,
+      pointRadius: 2,
     },
     {
       label: props.labelData3,
@@ -43,6 +47,8 @@ const chartData = reactive({
       fill: false,
       borderColor: 'orange',
       tension: 0.4,
+      borderWidth: 1,
+      pointRadius: 2,
     },
     {
       label: props.labelData4,
@@ -50,6 +56,8 @@ const chartData = reactive({
       fill: false,
       borderColor: 'pink',
       tension: 0.4,
+      borderWidth: 1,
+      pointRadius: 2,
     },
   ],
 
@@ -58,31 +66,7 @@ const chartData = reactive({
 const chartOptions = reactive({
   maintainAspectRatio: false,
   aspectRatio: 0.6,
-  plugins: {
-    legend: {
-      labels: {
-        color: 'black'
-      }
-    }
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: 'black'
-      },
-      grid: {
-        color: 'black'
-      }
-    },
-    y: {
-      ticks: {
-        color: 'black'
-      },
-      grid: {
-        color: 'black'
-      }
-    }
-  },
+  
   // animation 비활성화
   animation: false
 });
