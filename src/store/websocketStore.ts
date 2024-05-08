@@ -24,6 +24,18 @@ export const useWebSocketStore = defineStore("websocket", {
     websocket: null as WebSocket | null,
     isConnected: false,
     messages: [] as Message[],
+    totalStatics: {
+      send_pkt: 0,
+      recv_pkt: 0,
+      send_data: 0,
+      recv_data: 0,
+    },
+    staticsDelta: {
+      send_pkt: 0,
+      recv_pkt: 0,
+      send_data: 0,
+      recv_data: 0,
+    },
   }),
   actions: {
     connect(url: string) {
@@ -37,6 +49,11 @@ export const useWebSocketStore = defineStore("websocket", {
         receivedData.timestamp = Date.now(); // 메시지 수신 시간 추가
         console.log("받은 데이터:", receivedData);
         this.messages.push(receivedData);
+        if ('total_statics' in receivedData) {
+          this.totalStatics = (receivedData as any).total_statics;
+          this.staticsDelta = (receivedData as any).statics_delta;
+          
+        }
       };
       this.websocket.onclose = () => {
         this.isConnected = false;

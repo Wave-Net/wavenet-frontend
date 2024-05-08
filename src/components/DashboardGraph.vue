@@ -13,8 +13,6 @@ import { useWebSocketStore } from '@/store/websocketStore';
 
 const store = useWebSocketStore();
 
-const { messages } = store;
-
 // Props 정의
 const props = defineProps(['labelData1', 'labelData2','labelData3','labelData4']);
 
@@ -23,7 +21,7 @@ const updateInterval = 1000;
 
 // 초기 차트 데이터 설정
 const chartData = reactive({
-  labels: ['','','','','','',''],
+  labels: ['', '', '', '', '', '', ''],
   datasets: [
     {
       label: props.labelData1,
@@ -31,7 +29,6 @@ const chartData = reactive({
       fill: false,
       borderColor: 'cyan',
       tension: 0.4,
-      hidden: false // 선의 가시성 상태를 추가합니다.
     },
     {
       label: props.labelData2,
@@ -39,7 +36,6 @@ const chartData = reactive({
       fill: false,
       borderColor: 'gray',
       tension: 0.4,
-      hidden: false // 선의 가시성 상태를 추가합니다.
     },
     {
       label: props.labelData3,
@@ -47,18 +43,17 @@ const chartData = reactive({
       fill: false,
       borderColor: 'orange',
       tension: 0.4,
-      hidden: false // 선의 가시성 상태를 추가합니다.
-    },{
+    },
+    {
       label: props.labelData4,
       data: [0, 0, 0, 0, 0, 0, 0],
       fill: false,
       borderColor: 'pink',
       tension: 0.4,
-      hidden: false // 선의 가시성 상태를 추가합니다.
-    }
-  ]
-});
+    },
+  ],
 
+});
 // 차트 옵션 설정
 const chartOptions = reactive({
   maintainAspectRatio: false,
@@ -95,12 +90,20 @@ const chartOptions = reactive({
 // interval ID를 저장할 변수
 const intervalId = ref(null);
 
+const datasetVisibility = reactive([
+  { visible: true },
+  { visible: true },
+  { visible: true },
+  { visible: true },
+]);
+
 // 차트의 범례 항목을 클릭하여 선의 가시성을 변경하는 메소드
 const toggleLineVisibility = (event) => {
   const datasetIndex = event.element.datasetIndex;
   const chart = event.chart;
-  const dataset = chart.data.datasets[datasetIndex];
-  dataset.hidden = !dataset.hidden;
+  // 가시성 배열을 토글하여 해당 데이터셋의 가시성을 변경
+  datasetVisibility[datasetIndex].visible = !datasetVisibility[datasetIndex].visible;
+  chart.data.datasets[datasetIndex].hidden = !datasetVisibility[datasetIndex].visible;
   chart.update();
 };
 
@@ -116,42 +119,41 @@ onUnmounted(() => {
 
 // 데이터 업데이트
 const updateChartData = () => {
-  if (messages.length > 0) {
-    const length = messages[messages.length - 1].length;
-    // 현재 length 값을 사용하여 차트 데이터를 업데이트하는 코드를 추가합니다.
-    const newDataPoint1 = length; // 예시로 newDataPoint1에 length 값을 할당합니다.
-    const newDataPoint2 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
-    const newDataPoint3 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
-    const newDataPoint4 = Math.floor(Math.random() * 100); // 새로운 데이터 생성
-    // 새로운 데이터 추가
-    const newChartData = {
-      labels: [...chartData.labels.slice(1), ''],
-      datasets: [
-        {
-          ...chartData.datasets[0],
-          data: [...chartData.datasets[0].data.slice(1), newDataPoint1],
-        },
-        {
-          ...chartData.datasets[1],
-          data: [...chartData.datasets[1].data.slice(1), newDataPoint2], // 새로운 데이터 추가
-        },
-        {
-          ...chartData.datasets[2],
-          data: [...chartData.datasets[2].data.slice(1), newDataPoint3], // 새로운 데이터 추가
-        },
-        {
-          ...chartData.datasets[3],
-          data: [...chartData.datasets[3].data.slice(1), newDataPoint4], // 새로운 데이터 추가
-        }
-      ]
-    };
+  // staticsDelta 객체 확인
+  const { send_pkt, recv_pkt, send_data, recv_data } = store.staticsDelta;
+  
+  // 새로운 데이터 추가
+  const newChartData = {
+    labels: [...chartData.labels.slice(1), ''],
+    datasets: chartData.datasets.map((dataset, index) => {
+      let newDataPoint = 0;
+      // index에 따라 데이터 설정
+      switch(index) {
+        case 0:
+          newDataPoint = send_pkt;
+          break;
+        case 1:
+          newDataPoint = recv_pkt;
+          break;
+        case 2:
+          newDataPoint = send_data;
+          break;
+        case 3:
+          newDataPoint = recv_data;
+          break;
+        default:
+          break;
+      }
+      return {
+        ...dataset,
+        data: [...dataset.data.slice(1), newDataPoint]
+      };
+    })
+  };
 
-    // 데이터 반영
-    chartData.labels = newChartData.labels;
-    chartData.datasets[0].data = newChartData.datasets[0].data;
-    chartData.datasets[1].data = newChartData.datasets[1].data;
-    chartData.datasets[2].data = newChartData.datasets[2].data;
-    chartData.datasets[3].data = newChartData.datasets[3].data;
-  }
+  // 데이터 반영
+  chartData.labels = newChartData.labels;
+  chartData.datasets = newChartData.datasets;
 };
+
 </script>
