@@ -2,21 +2,80 @@ import { defineStore } from "pinia";
 
 // 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
+  // 공통 필드
   protocol: string;
   timestamp: number;
-  time_of_day: number;
-  seconds_since_beginning: number;
-  seconds_since_previous: number;
+  time_of_day: string;
+  seconds_since_beginning: string;
+  seconds_since_previous: string;
   source_ip: string;
   destination_ip: string;
   source_port: number;
   destination_port: number;
-  mqtt_type: string;
-  qos: number;
   length: number;
-  flags?: number; // 선택적 필드
-  topic?: string; // 선택적 필드
-  value?: string; // 선택적 필드
+
+  // MQTT 헤더 정보
+  header: {
+    msg_len: number;
+    dup: number;
+    qos: number;
+    retain: number;
+  };
+
+  // MQTT 타입
+  type: string;
+
+  // MQTT CONNECT 정보
+  connect?: {
+    proto_name: string;
+    mqtt_level: string;
+    usernameflag: number;
+    passwordflag: number;
+    willretainflag: number;
+    willQOSflag: number;
+    willflag: number;
+    cleansession: number;
+    reserved: number;
+    keep_alive: number;
+    clientId: string;
+    willtopic?: string;
+    willmsg?: string;
+    username?: string;
+    password?: string;
+  };
+
+  // MQTT CONNACK 정보
+  connack?: {
+    ackflag: number;
+    return_code: string;
+  };
+
+  // MQTT PUBLISH 정보
+  publish?: {
+    topic: string;
+    msgid: string;
+    msgvalue: string;
+  };
+
+  // MQTT PUBACK 정보
+  puback?: {
+    msgid: string;
+  };
+
+  // MQTT PUBREC 정보
+  pubrec?: {
+    msgid: string;
+  };
+
+  // MQTT PUBREL 정보
+  pubrel?: {
+    msgid: string;
+  };
+
+  // MQTT PUBCOMP 정보
+  pubcomp?: {
+    msgid: string;
+  };
 }
 
 export const useWebSocketStore = defineStore("websocket", {
@@ -92,4 +151,3 @@ export const useWebSocketStore = defineStore("websocket", {
       }
     },
   },
-});

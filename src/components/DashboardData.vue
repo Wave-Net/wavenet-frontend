@@ -10,9 +10,9 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import 'primevue/resources/themes/saga-blue/theme.css';
-import 'primevue/resources/primevue.min.css';
-import 'primeicons/primeicons.css';
+import 'primevue/resources/themes/saga-blue/theme.css'; // 테마 스타일링
+import 'primevue/resources/primevue.min.css'; // PrimeVue CSS 파일
+import 'primeicons/primeicons.css'; // PrimeIcons CSS 파일
 import { defineComponent, ref, watch } from 'vue';
 import { useWebSocketStore } from '../store/websocketStore';
 
