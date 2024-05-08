@@ -13,22 +13,38 @@ import Column from 'primevue/column';
 import 'primevue/resources/themes/saga-blue/theme.css'; // 테마 스타일링
 import 'primevue/resources/primevue.min.css'; // PrimeVue CSS 파일
 import 'primeicons/primeicons.css'; // PrimeIcons CSS 파일
+import { defineComponent, ref, watch } from 'vue';
+import { useWebSocketStore } from '../store/websocketStore';
 
-export default {
+export default defineComponent({
   name: 'MyDataTable',
   components: {
     DataTable,
     Column
   },
-  data() {
+  setup() {
+    const store = useWebSocketStore();
+    const products = ref([
+      { name: '패킷 출력 횟수', price: 0, category: 'Category A' },
+      { name: '패킷 입력 횟수', price: 0, category: 'Category B' },
+      { name: '데이터 송신 크기', price: 0, category: 'Category A' },
+      { name: '데이터 수신 크기', price: 0, category: 'Category A' }
+    ]);
+
+    // WebSocket 리스너 설정
+    watch(() => store.totalStatics, (newValue, oldValue) => {
+      if (newValue !== oldValue) {
+        // 새로운 데이터가 도착하면 products 배열을 업데이트
+        Object.keys(newValue).forEach((key, index) => {
+          products.value[index].price = newValue[key];
+        });
+      }
+    });
+
     return {
-      products: [
-        { name: '패킷 입력 횟수', price: 100, category: 'Category A' },
-        { name: '패킷 출력 횟수', price: 200, category: 'Category B' },
-        { name: '데이터 수신 크기', price: 300, category: 'Category A' },
-        { name: '데이터 전송 크기', price: 300, category: 'Category A' }
-      ]
+      products
     };
   }
-};
+});
+
 </script>
