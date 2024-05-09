@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 // 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
   // 공통 필드
+  index: number;
   protocol: string;
   timestamp: number;
   time_of_day: string;
@@ -78,6 +79,7 @@ interface Message {
   };
 }
 
+// 수신된 메시지의 타입을 정의하는 인
 export const useWebSocketStore = defineStore("websocket", {
   state: () => ({
     websocket: null as WebSocket | null,
@@ -105,13 +107,19 @@ export const useWebSocketStore = defineStore("websocket", {
       };
       this.websocket.onmessage = (event) => {
         const receivedData = JSON.parse(event.data) as Message; // 타입 단언 추가
+        receivedData.index += 1;
         receivedData.timestamp = Date.now(); // 메시지 수신 시간 추가
         console.log("받은 데이터:", receivedData);
         if ('total_statics' in receivedData) {
           this.totalStatics = (receivedData as any).total_statics;
           this.staticsDelta = (receivedData as any).statics_delta;
         } else {
+          if ('total_statics' in receivedData) {
+          this.totalStatics = (receivedData as any).total_statics;
+          this.staticsDelta = (receivedData as any).statics_delta;
+        } else {
           this.messages.push(receivedData); // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
+        } // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
         }
       };
       this.websocket.onclose = () => {
@@ -135,6 +143,7 @@ export const useWebSocketStore = defineStore("websocket", {
           type: "start_capture",
           options: options || {},
         };
+        this.messages = [];
         this.websocket.send(JSON.stringify(message));
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
@@ -152,3 +161,4 @@ export const useWebSocketStore = defineStore("websocket", {
     },
   },
 });
+
