@@ -1,41 +1,59 @@
 <template>
   <div class="card">
     <ContextMenu ref="cm" :model="menuModel" @hide="selectedRow = null" />
-    <DataTable :value="messages" id="mytable" size="small" showGridlines scrollable scrollHeight="95vh"
-      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedRowData"
-      @rowContextmenu="onRowContextMenu" rowHover title="더 자세히 보려면 우클릭하세요.">
-      <Column field="rowIndex" header="No.">
-        <template #body="{ index }">
-          {{ index + 1 }}
-        </template>
-      </Column>
+
+    <DataTable
+      :value="messages"
+      id="mytable"
+      size="small"
+      showGridlines
+      scrollable
+      scrollHeight="95vh"
+      tableStyle="min-width: 50rem"
+      contextMenu
+      v-model:contextMenuSelection="selectedRowData"
+      @rowContextmenu="onRowContextMenu"
+      rowHover
+      title="더 자세히 보려면 우클릭하세요."
+    >
+      <Column field="index" header="No."></Column>
       <Column field="seconds_since_beginning" header="Time"></Column>
       <Column field="source_ip" header="Source IP"></Column>
       <Column field="destination_ip" header="Destination IP"></Column>
       <Column field="name" header="Protocol"></Column>
       <Column field="length" header="Len"></Column>
-      <Column field="type" header="Info"></Column> <!-- 수정해야할듯 -->
+      <Column field="type" header="Info"></Column>
+      <!-- 수정해야할듯 -->
     </DataTable>
-    <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw' }">
+    <Dialog
+      v-model:visible="display"
+      :modal="true"
+      header="패킷 다이어그램"
+      :style="{ width: '50vw' }"
+    >
       <PacketDiagram :pkt="selectedRowData" />
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { useWebSocketStore } from '@/store/websocketStore';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import ContextMenu from 'primevue/contextmenu';
-import Dialog from 'primevue/dialog';
-import PacketDiagram from './PacketDiagram.vue';
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useWebSocketStore } from "@/store/websocketStore";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import ContextMenu from "primevue/contextmenu";
+import Dialog from "primevue/dialog";
+import PacketDiagram from "./PacketDiagram.vue";
 
 const websocketStore = useWebSocketStore();
 const cm = ref();
 const selectedRow = ref();
 const menuModel = ref([
-  { label: '패킷 다이어그램', icon: 'pi pi-objects-column', command: () => viewRow(selectedRow) },
+  {
+    label: "패킷 다이어그램",
+    icon: "pi pi-objects-column",
+    command: () => viewRow(selectedRow),
+  },
   // {label: '플로우차트', icon: 'pi pi-sliders-h', command: () => deleteProduct(selectedRow)}
 ]);
 
@@ -61,7 +79,9 @@ const onRowContextMenu = (event) => {
   cm.value.show(event.originalEvent);
 
   //몇번째 인덱스에 위치하는지 찾는 역할로, 각 메세지가 event.data와 동일한지 확인.
-  selectedRow.value = messages.value.findIndex(message => message === event.data);
+  selectedRow.value = messages.value.findIndex(
+    (message) => message === event.data
+  );
   console.log(selectedRow.value);
   selectedRowData.value = messages.value[selectedRow.value]; // 선택한 행의 데이터를 할당합니다.
 };
@@ -72,7 +92,7 @@ const viewRow = (rowIndex) => {
   if (rowIndex !== null) {
     display.value = true;
   } else {
-    console.log('행을 선택해주세요.');
+    console.log("행을 선택해주세요.");
   }
 };
 
