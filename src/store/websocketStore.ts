@@ -114,7 +114,12 @@ export const useWebSocketStore = defineStore("websocket", {
           this.totalStatics = (receivedData as any).total_statics;
           this.staticsDelta = (receivedData as any).statics_delta;
         } else {
+          if ('total_statics' in receivedData) {
+          this.totalStatics = (receivedData as any).total_statics;
+          this.staticsDelta = (receivedData as any).statics_delta;
+        } else {
           this.messages.push(receivedData); // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
+        } // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
         }
       };
       this.websocket.onclose = () => {
@@ -156,3 +161,4 @@ export const useWebSocketStore = defineStore("websocket", {
     },
   },
 });
+
