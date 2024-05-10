@@ -1,27 +1,27 @@
 <!-- //기본적인 페이지 구조를 정의 -->
 <template>
   <Splitter style="height:95vh">
-    <SplitterPanel class="panel1Menubar" size="10">
+    <SplitterPanel class="panel1Menubar" :size="10">
       <Splitter layout="vertical">
-        <SplitterPanel class="panel1Iotaddress" size="1">
+        <SplitterPanel class="panel1Iotaddress" :size="1">
           <IotPrint />
         </SplitterPanel>
-        <SplitterPanel class="panel2Buttonbar" size="1">
+        <SplitterPanel class="panel2Buttonbar" :size="1">
           <MenuButton />
         </SplitterPanel>
-        <SplitterPanel class="panel3Dashboardchart" size="98">
+        <SplitterPanel class="panel3Dashboardchart" :size="98">
           <Splitter style="height:auto" layout="vertical">
-            <SplitterPanel class="panel3-1Graph" size="20">
+            <SplitterPanel class="panel3-1Graph" :size="20">
               <!-- 패널 3-1) 선그래프 -->
               <DashboardGraph :labelData1="'초당 패킷 입력량'" :labelData2="'초당 패킷 출력량'" :labelData3="'초당 데이터 수신량'" :labelData4="'초당 데이터 송신량'" />
               
             </SplitterPanel>
 
-            <SplitterPanel class="panel3-2Data" size="30">
+            <SplitterPanel class="panel3-2Data" :size="30">
               <!-- 패널 3-2) 송수신된 데이터의 값 -->
               <DashboardData  class="dashboard-data"/>
             </SplitterPanel>
-            <SplitterPanel class="panel3-3Time" size="30">
+            <SplitterPanel class="panel3-3Time" :size="30">
               <!-- 패널 3-3) 송수신된 데이터의 1초당 데이터 값 -->
               <DashboardTimeData class="dashboard-data"/>
             </SplitterPanel>
@@ -29,7 +29,7 @@
         </SplitterPanel>
       </Splitter>
     </SplitterPanel>
-    <SplitterPanel class="panel 4 pktlist" size="90">
+    <SplitterPanel class="panel 4 pktlist" :size="90">
       <PacketList />
     </SplitterPanel>
   </Splitter>
