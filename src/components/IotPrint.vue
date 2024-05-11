@@ -7,7 +7,7 @@
     <img class="waveimg" src="@/assets/wavenetLogo.png" alt="wavenet프로그램 로고이미지">
     <p class="adress">{{ iotAddress }}</p>
     <div class="memoryDashboard" style="display: flex; align-items: center;">
-      메모리사용량:
+      메모리:
       <Knob class="memoryCheck" v-model="value" :size="40" valueTemplate="{value}%" /> <!--readonly 안에 넣으면 값 수정할 수 없음.-->
     </div>
   </div>
