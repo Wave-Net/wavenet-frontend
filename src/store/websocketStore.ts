@@ -19,7 +19,6 @@ interface StatMessage {
   };
 }
 
-// 수신된 메시지의 타입을 정의하는 인터페이스
 interface PacketMessage {
   // 공통 필드
   index: number;
@@ -56,7 +55,7 @@ interface PacketMessage {
     willflag: number;
     cleansession: number;
     reserved: number;
-    keep_alive: number;
+    keep_alive?: number;
     clientId: string;
     willtopic?: string;
     willmsg?: string;
@@ -67,34 +66,60 @@ interface PacketMessage {
   // MQTT CONNACK 정보
   connack?: {
     ackflag: number;
-    return_code: string;
+    return_code?: number;
   };
 
   // MQTT PUBLISH 정보
   publish?: {
     topic: string;
-    msgid: string;
+    msgid?: number;
     msgvalue: string;
   };
 
   // MQTT PUBACK 정보
   puback?: {
-    msgid: string;
+    msgid: number;
   };
 
   // MQTT PUBREC 정보
   pubrec?: {
-    msgid: string;
+    msgid: number;
   };
 
   // MQTT PUBREL 정보
   pubrel?: {
-    msgid: string;
+    msgid: number;
   };
 
   // MQTT PUBCOMP 정보
   pubcomp?: {
-    msgid: string;
+    msgid: number;
+  };
+  
+  // MQTT SUBSCRIBE 정보
+  subscribe?: {
+    msgid: number;
+    topic_filters: {
+      topic: string;
+      qos: number;
+    }[];
+  };
+  
+  // MQTT SUBACK 정보
+  suback?: {
+    msgid: number;
+    return_code: number;
+  };
+  
+  // MQTT UNSUBSCRIBE 정보
+  unsubscribe?: {
+    msgid: number;
+    topic_filters: string[];
+  };
+  
+  // MQTT UNSUBACK 정보
+  unsuback?: {
+    msgid: number;
   };
 }
 
