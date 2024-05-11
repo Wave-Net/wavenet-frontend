@@ -2,9 +2,20 @@
   <div class="card">
     <ContextMenu ref="cm" :model="menuModel" @hide="selectedRow = null" />
 
-    <DataTable :value="packetMessages" id="mytable" size="small" showGridlines scrollable scrollHeight="97vh"
-      tableStyle="min-width: 50rem" contextMenu v-model:contextMenuSelection="selectedRowData"
-      @rowContextmenu="onRowContextMenu" rowHover title="더 자세히 보려면 우클릭하세요.">
+    <DataTable
+      :value="packetMessages"
+      id="mytable"
+      size="small"
+      showGridlines
+      scrollable
+      scrollHeight="97vh"
+      tableStyle="min-width: 50rem"
+      contextMenu
+      v-model:contextMenuSelection="selectedRowData"
+      @rowContextmenu="onRowContextMenu"
+      rowHover
+      title="더 자세히 보려면 우클릭하세요."
+    >
       <Column field="index" header="No."></Column>
       <Column field="seconds_since_beginning" header="Time"></Column>
       <Column field="source_ip" header="Source IP"></Column>
@@ -14,7 +25,12 @@
       <Column field="type" header="Info"></Column>
       <!-- 수정해야할듯 -->
     </DataTable>
-    <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw', minWidth: '633.8px' }">
+    <Dialog
+      v-model:visible="display"
+      :modal="true"
+      header="패킷 다이어그램"
+      :style="{ width: '50vw', minWidth: '633.8px' }"
+    >
       <PacketDiagram :pkt="selectedRowData" />
     </Dialog>
   </div>
