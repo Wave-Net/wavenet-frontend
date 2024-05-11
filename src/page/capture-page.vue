@@ -90,7 +90,8 @@ export default {
   padding: 1.5vh;
 }
 .sidebar{
-  width: 360px;
+  width: 370px;
+  min-width: 285px;
   height: 100%;
   box-sizing: border-box;
 }

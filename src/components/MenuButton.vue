@@ -36,12 +36,12 @@ const handleCaptureToggle = () => {
 
 <style>
 .startButton {
-  margin-left: 3.5px;
+  /* margin-left: 3.5px; */
   margin-right: 4.5px;
 }
 
 .dataPrint {
-  margin-right: 3.5px;
+  /* margin-right: 3.5px; */
 }
 
 .p-splitbutton-defaultbutton {
