@@ -8,7 +8,7 @@
         <MenuButton />
       </div>
       <div id="dashboard-graph" class="dashboard-graph">
-        <DashboardGraph />
+        <!-- <DashboardGraph /> -->
       </div> <!--label넣기-->
       <div id="dashboard-data" class="dashboard-data">
         <DashboardData />
@@ -28,7 +28,7 @@
 <script>
 import IotPrint from "../components/IotPrint.vue";
 import MenuButton from "../components/MenuButton.vue";
-import DashboardGraph from '../components/DashboardGraph.vue';
+// import DashboardGraph from '../components/DashboardGraph.vue';
 import DashboardData from '../components/DashboardData.vue';
 import DashboardTimeData from '../components/DashboardTimeData.vue';
 import PacketList from '../components/PacketList.vue';
@@ -37,7 +37,7 @@ export default {
   components: {
     IotPrint,
     MenuButton,
-    DashboardGraph,
+    // DashboardGraph,
     DashboardData,
     DashboardTimeData,
     PacketList,
