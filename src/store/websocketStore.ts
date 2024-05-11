@@ -1,7 +1,26 @@
 import { defineStore } from "pinia";
 
-// 수신된 메시지의 타입을 정의하는 인터페이스
 interface Message {
+  message_type: string;
+}
+
+interface StatMessage {
+  totalStat: {
+    send_pkt: number;
+    recv_pkt: number;
+    send_data: number;
+    recv_data: number;
+  };
+  statDelta: {
+    send_pkt: number;
+    recv_pkt: number;
+    send_data: number;
+    recv_data: number;
+  };
+}
+
+// 수신된 메시지의 타입을 정의하는 인터페이스
+interface PacketMessage {
   // 공통 필드
   index: number;
   protocol: string;
@@ -84,19 +103,9 @@ export const useWebSocketStore = defineStore("websocket", {
   state: () => ({
     websocket: null as WebSocket | null,
     isConnected: false,
-    messages: [] as Message[],
-    totalStatics: {
-      send_pkt: 0,
-      recv_pkt: 0,
-      send_data: 0,
-      recv_data: 0,
-    },
-    staticsDelta: {
-      send_pkt: 0,
-      recv_pkt: 0,
-      send_data: 0,
-      recv_data: 0,
-    },
+    message: {} as Message,
+    packetMessages: [] as PacketMessage[],
+    statMessage: {} as StatMessage
   }),
   actions: {
     connect(url: string) {
@@ -106,20 +115,16 @@ export const useWebSocketStore = defineStore("websocket", {
         console.log("웹소켓 연결됨");
       };
       this.websocket.onmessage = (event) => {
-        const receivedData = JSON.parse(event.data) as Message; // 타입 단언 추가
-        receivedData.index += 1;
-        receivedData.timestamp = Date.now(); // 메시지 수신 시간 추가
-        console.log("받은 데이터:", receivedData);
-        if ('total_statics' in receivedData) {
-          this.totalStatics = (receivedData as any).total_statics;
-          this.staticsDelta = (receivedData as any).statics_delta;
-        } else {
-          if ('total_statics' in receivedData) {
-          this.totalStatics = (receivedData as any).total_statics;
-          this.staticsDelta = (receivedData as any).statics_delta;
-        } else {
-          this.messages.push(receivedData); // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
-        } // totalStatics와 staticsDelta가 아닌 경우에만 messages에 추가
+        const receivedData = JSON.parse(event.data) as Message;
+        if (receivedData.message_type === "stat") {
+          const statMessage = JSON.parse(event.data) as StatMessage;
+          this.statMessage = statMessage;
+          console.log("받은 데이터:", statMessage);
+        }
+        if (receivedData.message_type === "packet") {
+          const packetMessage = JSON.parse(event.data) as PacketMessage;
+          this.packetMessages.push(packetMessage);
+          console.log("받은 데이터:", packetMessage);
         }
       };
       this.websocket.onclose = () => {
@@ -143,7 +148,7 @@ export const useWebSocketStore = defineStore("websocket", {
           type: "start_capture",
           options: options || {},
         };
-        this.messages = [];
+        this.packetMessages = [];
         this.websocket.send(JSON.stringify(message));
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
