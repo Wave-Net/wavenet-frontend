@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" @legendClick="toggleLineVisibility" />
+    <Chart type="line" :data="chartData" :options="chartOptions" class="graph" @legendClick="toggleLineVisibility" />
   </div>
 </template>
 
@@ -141,3 +141,9 @@ const updateChartData = () => {
 };
 
 </script>
+
+<style>
+.graph {
+  height: 100%;
+}
+</style>

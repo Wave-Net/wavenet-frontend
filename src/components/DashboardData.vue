@@ -1,27 +1,17 @@
 <template>
   <div>
-    <DataTable :value="products">
-      <Column field="name"></Column>
-      <Column field="price"></Column>
-    </DataTable>
+    <div v-for="(product, index) in products" :key="index">
+      <div class="title-row">{{ product.name }}: {{ product.price }}</div>
+    </div>
   </div>
 </template>
 
 <script>
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import 'primevue/resources/themes/saga-blue/theme.css'; // 테마 스타일링
-import 'primevue/resources/primevue.min.css'; // PrimeVue CSS 파일
-import 'primeicons/primeicons.css'; // PrimeIcons CSS 파일
 import { defineComponent, ref, watch } from 'vue';
 import { useWebSocketStore } from '../store/websocketStore';
 
 export default defineComponent({
   name: 'MyDataTable',
-  components: {
-    DataTable,
-    Column
-  },
   setup() {
     const store = useWebSocketStore();
     const products = ref([
@@ -46,5 +36,12 @@ export default defineComponent({
     };
   }
 });
-
 </script>
+
+<style>
+.title-row{
+  background-color: white;
+  margin-top: 5px;
+  text-align: center;
+}
+</style>

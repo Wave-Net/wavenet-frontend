@@ -1,22 +1,9 @@
 <template>
   <div>
-    <ToggleButton
-      v-model="captureButtonState"
-      onLabel="중단"
-      offLabel="시작"
-      onIcon="pi pi-stop-circle"
-      offIcon="pi pi-play-circle"
-      class="startButton"
-      @change="handleCaptureToggle"
-    />
-
-    <SplitButton
-      label="데이터내보내기"
-      :model="items"
-      :disabled="captureButtonState"
-      class="dataPrint"
-    >
-      <i class="pi pi-download"> 데이터 내보내기</i>
+    <ToggleButton v-model="captureButtonState" onLabel="중단" offLabel="시작" onIcon="pi pi-stop-circle"
+      offIcon="pi pi-play-circle" class="startButton" @change="handleCaptureToggle" />
+    <SplitButton label="데이터내보내기" :model="items" :disabled="captureButtonState" class="dataPrint">
+      <i class="pi pi-download"><span style="padding-left: 5px;">데이터 내보내기</span></i>
     </SplitButton>
   </div>
 </template>
@@ -49,15 +36,18 @@ const handleCaptureToggle = () => {
 
 <style>
 .startButton {
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: 5px;
+  /* margin-left: 3.5px; */
+  margin-right: 4.5px;
 }
 
 .dataPrint {
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: 5px;
-  margin-right: 5px;
+  /* margin-right: 3.5px; */
+}
+
+.p-splitbutton-defaultbutton {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 </style>
