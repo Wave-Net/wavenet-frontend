@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia';
 import App from './App.vue'
+import router from './router';
+
 
 import PrimeVue from 'primevue/config'; // PrimeVue import 추가
 import 'primevue/resources/themes/saga-blue/theme.css'; // 테마
@@ -14,4 +16,5 @@ const pinia = createPinia();
 createApp(App)
     .use(PrimeVue) //primevue 등록
     .use(pinia)
+    .use(router)
     .mount('#app')
