@@ -13,7 +13,7 @@
             <Splitter style="height:auto" layout="vertical">
               <SplitterPanel class="panel3-1Graph" size="20">
                 <!-- 패널 3-1) 선그래프 -->
-                <DashboardGraph :labelData1="'초당 패킷 입력량'" :labelData2="'초당 패킷 출력량'" :labelData3="'초당 데이터 수신량'" :labelData4="'초당 데이터 송신량'" />
+                <!-- <DashboardGraph :labelData1="'초당 패킷 입력량'" :labelData2="'초당 패킷 출력량'" :labelData3="'초당 데이터 수신량'" :labelData4="'초당 데이터 송신량'" /> -->
                 
               </SplitterPanel>
   
@@ -38,7 +38,7 @@
   <script>
   import IotPrint from "../components/IotPrint.vue";
   import MenuButton from "../components/MenuButton.vue";
-  import DashboardGraph from '../components/DashboardGraph.vue';
+  // import DashboardGraph from '../components/DashboardGraph.vue';
   import DashboardData from '../components/DashboardData.vue';
   import DashboardTimeData from '../components/DashboardTimeData.vue';
   import PacketList from '../components/PacketList.vue';
@@ -50,7 +50,7 @@
     components: {
       IotPrint,
       MenuButton,
-      DashboardGraph,
+      // DashboardGraph,
       DashboardData,
       DashboardTimeData,
       PacketList,

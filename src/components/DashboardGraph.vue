@@ -104,7 +104,7 @@ onUnmounted(() => {
 // 데이터 업데이트
 const updateChartData = () => {
   // staticsDelta 객체 확인
-  const { send_pkt, recv_pkt, send_data, recv_data } = store.staticsDelta;
+  const { send_pkt, recv_pkt, send_data, recv_data } = store.statMessage.statDelta;
   
   // 새로운 데이터 추가
   const newChartData = {
