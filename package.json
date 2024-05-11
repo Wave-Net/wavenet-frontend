@@ -19,7 +19,8 @@
     "primeicons": "^7.0.0",
     "primevue": "^3.51.0",
     "vue": "^3.2.13",
-    "vue-class-component": "^8.0.0-0"
+    "vue-class-component": "^8.0.0-0",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

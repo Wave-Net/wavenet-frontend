@@ -25,12 +25,7 @@
       <Column field="type" header="Info"></Column>
       <!-- 수정해야할듯 -->
     </DataTable>
-    <Dialog
-      v-model:visible="display"
-      :modal="true"
-      header="패킷 다이어그램"
-      :style="{ width: '50vw' }"
-    >
+    <Dialog v-model:visible="display" :modal="true" header="패킷 다이어그램" :style="{ width: '50vw', minWidth: '633.8px' }">
       <PacketDiagram :pkt="selectedRowData" />
     </Dialog>
   </div>
