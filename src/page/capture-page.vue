@@ -9,7 +9,8 @@
       </div>
       <div id="dashboard-graph" class="dashboard-graph">
         <!-- <DashboardGraph /> -->
-      </div> <!--label넣기-->
+      </div>
+      <!--label넣기-->
       <div id="dashboard-data" class="dashboard-data">
         <DashboardData />
       </div>
@@ -29,9 +30,9 @@
 import IotPrint from "../components/IotPrint.vue";
 import MenuButton from "../components/MenuButton.vue";
 // import DashboardGraph from '../components/DashboardGraph.vue';
-import DashboardData from '../components/DashboardData.vue';
-import DashboardTimeData from '../components/DashboardTimeData.vue';
-import PacketList from '../components/PacketList.vue';
+import DashboardData from "../components/DashboardData.vue";
+import DashboardTimeData from "../components/DashboardTimeData.vue";
+import PacketList from "../components/PacketList.vue";
 
 export default {
   components: {
@@ -46,7 +47,7 @@ export default {
 </script>
 
 <style>
-.pkt-list{
+.pkt-list {
   margin-left: 5px;
   background-color: whitesmoke;
   border-radius: 5px;
@@ -57,50 +58,49 @@ export default {
   margin-top: 5px;
   border-radius: 5px;
 }
-.dashboard-timedata{
+.dashboard-timedata {
   box-sizing: border-box;
   height: 153.6px;
   margin-top: 5px;
   border-radius: 5px;
 }
-.dashboard-graph{
+.dashboard-graph {
   box-sizing: border-box;
   height: auto;
   background-color: white;
   margin-top: 5px;
   border-radius: 5px;
 }
-.menu-button-bar{
+.menu-button-bar {
   box-sizing: border-box;
   height: 40px;
   /* background-color: white; */
   margin-top: 5px;
 }
-.iot{
+.iot {
   box-sizing: border-box;
   height: 41px;
   background-color: white;
   margin-bottom: 1%;
   border-radius: 5px;
 }
-.wrap-pktCapture-page{
-  display: flex; 
+.wrap-pktCapture-page {
+  display: flex;
   height: 100vh;
-  background-color: #F0F8FF;
+  background-color: #f0f8ff;
   padding: 1.5vh;
 }
-.sidebar{
+.sidebar {
   width: 370px;
   min-width: 285px;
   height: 100%;
   box-sizing: border-box;
 }
-.container{
+.container {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
 }
-
 
 .dashboard-data thead {
   display: none;
@@ -110,5 +110,4 @@ body {
   margin: 0;
   box-sizing: border-box;
 }
-
 </style>

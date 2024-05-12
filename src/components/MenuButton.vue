@@ -1,34 +1,44 @@
 <template>
   <div>
-    <ToggleButton v-model="captureButtonState" onLabel="중단" offLabel="시작" onIcon="pi pi-stop-circle"
-      offIcon="pi pi-play-circle" class="startButton" @change="handleCaptureToggle" />
-    <SplitButton label="데이터내보내기" :model="items" :disabled="captureButtonState" class="dataPrint">
-      <i class="pi pi-download"><span style="padding-left: 5px;">데이터 내보내기</span></i>
+    <ToggleButton
+      v-model="captureButtonState"
+      onLabel="중단"
+      offLabel="시작"
+      onIcon="pi pi-stop-circle"
+      offIcon="pi pi-play-circle"
+      class="startButton"
+      @change="handleCaptureToggle"
+    />
+    <SplitButton
+      label="데이터내보내기"
+      :model="items"
+      :disabled="captureButtonState"
+      class="dataPrint"
+    >
+      <i class="pi pi-download"
+        ><span style="padding-left: 5px">데이터 내보내기</span></i
+      >
     </SplitButton>
   </div>
 </template>
 
 <script setup>
-import ToggleButton from 'primevue/togglebutton';
-import SplitButton from 'primevue/splitbutton';
-import 'primeicons/primeicons.css'
-import { useWebSocketStore } from '@/store/websocketStore';
-import { ref } from 'vue';
+import ToggleButton from "primevue/togglebutton";
+import SplitButton from "primevue/splitbutton";
+import "primeicons/primeicons.css";
+import { useWebSocketStore } from "@/store/websocketStore";
+import { ref } from "vue";
 
 const websocketStore = useWebSocketStore();
 const captureButtonState = ref(false);
-const items = [
-  { label: "PCAP" },
-  { label: "JSON" },
-  { label: "CSV" }
-];
+const items = [{ label: "PCAP" }, { label: "JSON" }, { label: "CSV" }];
 
 const handleCaptureToggle = () => {
   if (captureButtonState.value) {
-    console.log('capture start');
+    console.log("capture start");
     websocketStore.startCapture();
   } else {
-    console.log('capture stop');
+    console.log("capture stop");
     websocketStore.stopCapture();
   }
 };
