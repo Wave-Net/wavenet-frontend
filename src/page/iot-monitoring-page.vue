@@ -4,7 +4,7 @@
       <template #start>
         <img
           alt="logo"
-          src="https://i.ibb.co/X2BdhfP/Kakao-Talk-20240510-171615462.png"
+          src="@/assets/wavenetLogo.png"
           height="40"
           class="mr-2"
         />
