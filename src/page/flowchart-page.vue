@@ -5,17 +5,20 @@
           <template #opposite="slotProps">
             <small class="p-text-secondary">{{ slotProps.item.date }}</small>
           </template>
-          <template #content="slotProps">
-            {{ slotProps.item.status }}
-            
-          </template>
         </Timeline>
       </div>
+  
+      <!-- 추가된 가로선과 텍스트 -->
+      <div class="timeline-space">
+        <div v-for="index in leftEvents.length" :key="index">
+          <hr class="horizontal-line">
+          <p class="horizontal-line-text">Your text here</p>
+        </div>
+      </div>
+      <!-- 추가된 가로선과 텍스트 -->
+  
       <div class="right-timeline">
         <Timeline :value="rightEvents">
-          <template #content="slotProps">
-            {{ slotProps.item.status }}
-          </template>
         </Timeline>
       </div>
     </div>
@@ -39,7 +42,7 @@
   
       const rightEvents = ref([
         { status: 'Some status 1 (Right)' },
-        {  status: 'Some status 2 (Right)' },
+        { status: 'Some status 2 (Right)' },
         { status: 'Some status 3 (Right)' },
         // Add more right events as needed
       ]);
@@ -50,35 +53,32 @@
   </script>
   
   <style scoped>
- .timeline-container {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-}
-
-.left-timeline,
-.right-timeline {
-  flex: 1;
-  position: relative; /* 추가 */
-}
-
-/* 수평선 추가 */
-.left-timeline::after,
-.right-timeline::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: calc(50% - 30px); /* 타임라인 간격 조절 */
-  height: 2px;
-  background-color: #dee2e6;
-}
-
-.left-timeline::after {
-  right: 0;
-}
-
-.right-timeline::before {
-  left: 0;
-}
-  </style>
+  .timeline-container {
+    display: flex;
+    justify-content: space-between;
+  }
   
+  .left-timeline,
+  .right-timeline {
+    flex: 1;
+  }
+  
+  .timeline-space {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .horizontal-line {
+    width: 100%;
+    border-top: 1px solid black; /* 가로선의 스타일 설정 */
+    margin-bottom: 5px; /* 가로선과 텍스트 사이의 간격 조절 */
+  }
+  
+  .horizontal-line-text {
+    font-size: 12px; /* 텍스트의 사이즈 설정 */
+    margin: 0; /* 디폴트 마진 제거 */
+    margin-bottom: 39px; /* 텍스트 아래쪽 여백 설정 */
+  }
+  </style>
