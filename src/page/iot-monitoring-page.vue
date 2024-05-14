@@ -182,4 +182,5 @@ watchEffect(() => {
 .spacer {
   height: 20px; /* 원하는 여백의 높이로 조정하세요 */
 }
+
 </style>

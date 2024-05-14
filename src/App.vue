@@ -1,6 +1,7 @@
 <template>
-  <router-view />
-  <!--2페이지로 넘어갈때 /capture-page 추가하기--> 
+  <div>
+    <router-view />
+  </div>
 </template>
 
 <script>

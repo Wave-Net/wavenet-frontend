@@ -90,6 +90,9 @@
   </script>
   
   <style scoped>
+
+
+
 .menubar img {
   display: block;
   margin: 0 auto;
@@ -198,5 +201,7 @@
   top: -4.8px;
   transform: scaleX(-1);
 }
+
+
 
   </style>
