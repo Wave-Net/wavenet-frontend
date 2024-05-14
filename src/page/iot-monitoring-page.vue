@@ -4,7 +4,7 @@
         <Menubar :model="menuItems" class="menubar">
       <template #start>
         <div>
-              <img alt="logo" src="https://i.ibb.co/X2BdhfP/Kakao-Talk-20240510-171615462.png" height="40" class="mr-2">
+              <img alt="logo" src="https://i.ibb.co/X2BdhfP/Kakao-Talk-20240510-171615462.png" height="25.6" class="mr-2">
             </div>
       </template>
     </Menubar>
@@ -135,6 +135,13 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+
+.menubar img {
+  display: block;
+  margin: 0 auto;
+}
+
+
 .container {
   width: 100%;
   max-width: 1200px; /* 페이지의 최대 너비를 제한합니다. */
