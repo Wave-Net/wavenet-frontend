@@ -5,13 +5,14 @@ interface Message {
 }
 
 interface StatMessage {
-  totalStat: {
+  total_statistics: {
     send_pkt: number;
     recv_pkt: number;
     send_data: number;
     recv_data: number;
   };
-  statDelta: {
+
+  statistics_delta: {
     send_pkt: number;
     recv_pkt: number;
     send_data: number;
@@ -95,7 +96,7 @@ interface PacketMessage {
   pubcomp?: {
     msgid: number;
   };
-  
+
   // MQTT SUBSCRIBE 정보
   subscribe?: {
     msgid: number;
@@ -104,19 +105,19 @@ interface PacketMessage {
       qos: number;
     }[];
   };
-  
+
   // MQTT SUBACK 정보
   suback?: {
     msgid: number;
     return_code: number;
   };
-  
+
   // MQTT UNSUBSCRIBE 정보
   unsubscribe?: {
     msgid: number;
     topic_filters: string[];
   };
-  
+
   // MQTT UNSUBACK 정보
   unsuback?: {
     msgid: number;
@@ -130,7 +131,7 @@ export const useWebSocketStore = defineStore("websocket", {
     isConnected: false,
     message: {} as Message,
     packetMessages: [] as PacketMessage[],
-    statMessage: {} as StatMessage
+    statMessage: {} as StatMessage,
   }),
   actions: {
     connect(url: string) {
@@ -191,4 +192,3 @@ export const useWebSocketStore = defineStore("websocket", {
     },
   },
 });
-
