@@ -8,7 +8,12 @@
         <MenuButton />
       </div>
       <div id="dashboard-graph" class="dashboard-graph">
-        <DashboardGraph />
+        <DashboardGraph
+          :labelData1="'패킷 입력량'"
+          :labelData2="'패킷 출력량'"
+          :labelData3="'데이터 수신량'"
+          :labelData4="'데이터 송신량'"
+        />
       </div>
       <!--label넣기-->
       <div id="dashboard-data" class="dashboard-data">
