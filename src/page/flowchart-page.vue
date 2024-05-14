@@ -55,6 +55,9 @@
         { date: '2024-05-13', status: '' },
         { date: '2024-05-14', status: '' },
         { date: '2024-05-15', status: '' },
+        { date: '2024-05-15', status: '' },
+        { date: '2024-05-15', status: '' },
+        { date: '2024-05-15', status: '' },
         
         // Add more left events as needed
       ]);
@@ -62,6 +65,9 @@
       const rightEvents = ref([
         { status: 'Some status 1 (Right)' },
         { status: 'Some status 2 (Right)' },
+        { status: 'Some status 3 (Right)' },
+        { status: 'Some status 3 (Right)' },
+        { status: 'Some status 3 (Right)' },
         { status: 'Some status 3 (Right)' },
         // Add more right events as needed
       ]);
@@ -98,7 +104,7 @@
     font-size: 12px;
     margin-top: 2px; /* 제목과 타임라인 간격 조정 */
     position: absolute;
-    top: -10%; /* 타임라인 위에 위치 */
+    top: -22px; /* 타임라인 위에 위치 */
     left: 70%; /* 가운데 정렬 */
   }
 
@@ -107,7 +113,7 @@
     font-size: 12px;
     margin-top: 2px; /* 제목과 타임라인 간격 조정 */
     position: absolute;
-    top: -10%; /* 타임라인 위에 위치 */
+    top: -22px; /* 타임라인 위에 위치 */
     left: -60%; /* 가운데 정렬 */
   }
 
