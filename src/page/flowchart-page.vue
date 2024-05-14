@@ -10,11 +10,17 @@
   
       <!-- 추가된 가로선과 텍스트 -->
       <div class="timeline-space">
-        <div class="line-container" v-for="index in leftEvents.length" :key="index">
-          <hr class="horizontal-line">
-          <div class="horizontal-line-text">Your text here</div>
-        </div>
-      </div>
+  <div class="line-container" v-for="index in leftEvents.length" :key="index">
+    <hr class="horizontal-line">
+    <div class="horizontal-line-text">Your text here</div>
+    <svg class="right-arrow" viewBox="0 0 20 20">
+      <path d="M0 10 L20 10 L10 0 L10 20 Z" />
+    </svg>
+    <svg class="left-arrow" viewBox="0 0 20 20">
+      <path d="M0 10 L20 10 L10 0 L10 20 Z" />
+    </svg>
+  </div>
+</div>
       <!-- 추가된 가로선과 텍스트 -->
   
       <div class="right-timeline">
@@ -36,6 +42,7 @@
         { date: '2024-05-13', status: '' },
         { date: '2024-05-14', status: '' },
         { date: '2024-05-15', status: '' },
+        
         // Add more left events as needed
       ]);
   
@@ -56,6 +63,10 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .line-container {
+  position: relative; /* 추가된 부분 */
+}
 
   .left-timeline >>> .p-timeline-event-opposite {
   padding-right: 20px;
@@ -79,31 +90,10 @@
   .horizontal-line {
   width: 100%;
   border-top: 1px solid black;
+  border-bottom: none;
   margin-bottom: 5px;
-  position: relative; /* 새로 추가된 속성 */
-  z-index: 1; /* 추가 */
-}
-
-.horizontal-line::before {
-  content: "";
-  position: absolute;
-  right: -10px; /* 화살표 머리 위치 조정 */
-  top: -6px; /* 화살표 머리 위치 조정 */
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 10px solid black; /* 화살표 머리 색상 */
-  z-index: 2; /* 추가 */
-}
-
-.horizontal-line::after {
-  content: "";
-  position: absolute;
-  left: -10px; /* 화살표 머리 위치 조정 */
-  top: -6px; /* 화살표 머리 위치 조정 */
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-right: 10px solid black; /* 화살표 머리 색상 */
-  z-index: 2; /* 추가 */
+  position: relative;
+  z-index: 1; /* 수정된 부분 */
 }
   
   .horizontal-line-text {
@@ -113,7 +103,28 @@
     text-align: center;
   }
 
+.right-arrow {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid black;
+  position: absolute;
+  left: calc(100% - 10px);
+  top: -9.6px;
+}
 
 
+.left-arrow {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid black;
+  position: absolute;
+  left: calc(10 - 10px);
+  top: -9.6px;
+  transform: scaleX(-1);
+}
 
   </style>
