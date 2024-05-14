@@ -116,41 +116,44 @@ onUnmounted(() => {
 // 데이터 업데이트
 const updateChartData = () => {
   // staticsDelta 객체 확인
-  const { send_pkt, recv_pkt, send_data, recv_data } =
-    store.statMessage.statDelta;
+  //  if (store.statMessage.statistics_delta) {
+  if (store.statMessage.total_statistics) {
+    const { send_pkt, recv_pkt, send_data, recv_data } =
+      store.statMessage.total_statistics;
 
-  // 새로운 데이터 추가
-  const newChartData = {
-    labels: [...chartData.labels.slice(1), ""],
-    datasets: chartData.datasets.map((dataset, index) => {
-      let newDataPoint = 0;
-      // index에 따라 데이터 설정
-      switch (index) {
-        case 0:
-          newDataPoint = send_pkt;
-          break;
-        case 1:
-          newDataPoint = recv_pkt;
-          break;
-        case 2:
-          newDataPoint = send_data;
-          break;
-        case 3:
-          newDataPoint = recv_data;
-          break;
-        default:
-          break;
-      }
-      return {
-        ...dataset,
-        data: [...dataset.data.slice(1), newDataPoint],
-      };
-    }),
-  };
+    // 새로운 데이터 추가
+    const newChartData = {
+      labels: [...chartData.labels.slice(1), ""],
+      datasets: chartData.datasets.map((dataset, index) => {
+        let newDataPoint = 0;
+        // index에 따라 데이터 설정
+        switch (index) {
+          case 0:
+            newDataPoint = send_pkt;
+            break;
+          case 1:
+            newDataPoint = recv_pkt;
+            break;
+          case 2:
+            newDataPoint = send_data;
+            break;
+          case 3:
+            newDataPoint = recv_data;
+            break;
+          default:
+            break;
+        }
+        return {
+          ...dataset,
+          data: [...dataset.data.slice(1), newDataPoint],
+        };
+      }),
+    };
 
-  // 데이터 반영
-  chartData.labels = newChartData.labels;
-  chartData.datasets = newChartData.datasets;
+    // 데이터 반영
+    chartData.labels = newChartData.labels;
+    chartData.datasets = newChartData.datasets;
+  }
 };
 </script>
 
