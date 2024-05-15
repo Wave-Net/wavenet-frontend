@@ -41,25 +41,22 @@
       </div>
       <div class="tab-content">
         <div v-if="currentTab === 'packets'" class="card">
-          Packet_info
           <Chart
             type="line"
-            :data="chartData"
+            :data="chartDataPacket"
             :options="chartOptions"
             class="graph"
           />
         </div>
         <div v-if="currentTab === 'data'" class="card">
-          Data_info
           <Chart
             type="line"
-            :data="chartData"
+            :data="chartDataByte"
             :options="chartOptions"
             class="graph"
           />
         </div>
         <div v-if="currentTab === 'all'" class="card">
-          All_info
           <Chart
             type="line"
             :data="chartData"
@@ -154,6 +151,52 @@ export default {
         },
       ],
     });
+    const chartDataPacket = reactive({
+      labels: ["", "", "", "", "", "", ""],
+      datasets: [
+        {
+          label: "패킷 송신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "cyan",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+        {
+          label: "패킷 수신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "gray",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+      ],
+    });
+    const chartDataByte = reactive({
+      labels: ["", "", "", "", "", "", ""],
+      datasets: [
+        {
+          label: "데이터 송신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "orange",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+        {
+          label: "데이터 수신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "pink",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+      ],
+    });
 
     // 차트 옵션 설정
     const chartOptions = reactive({
@@ -213,9 +256,66 @@ export default {
           }),
         };
 
+        const newChartDataPacket = {
+          labels: [...chartDataPacket.labels.slice(1), ""],
+          datasets: chartDataPacket.datasets.map((dataset, index) => {
+            let newDataPoint = 0;
+            // index에 따라 데이터 설정
+            switch (index) {
+              case 0:
+                newDataPoint = send_pkt;
+                break;
+              case 1:
+                newDataPoint = recv_pkt;
+                break;
+              default:
+                break;
+            }
+            return {
+              ...dataset,
+              data: [...dataset.data.slice(1), newDataPoint],
+            };
+          }),
+        };
+
+        const newChartDataByte = {
+          labels: [...chartDataByte.labels.slice(1), ""],
+          datasets: chartDataByte.datasets.map((dataset, index) => {
+            let newDataPoint = 0;
+            // index에 따라 데이터 설정
+            switch (index) {
+              case 0:
+                newDataPoint = send_data;
+                break;
+              case 1:
+                newDataPoint = recv_data;
+                break;
+              default:
+                break;
+            }
+            return {
+              ...dataset,
+              data: [...dataset.data.slice(1), newDataPoint],
+            };
+          }),
+        };
+
         // 데이터 반영
         chartData.labels = newChartData.labels;
-        chartData.datasets = newChartData.datasets;
+        chartData.datasets.forEach((dataset, i) => {
+          dataset.data = newChartData.datasets[i].data;
+        });
+
+        // 데이터 반영
+        chartDataPacket.labels = newChartDataPacket.labels;
+        chartDataPacket.datasets.forEach((dataset, i) => {
+          dataset.data = newChartDataPacket.datasets[i].data;
+        });
+
+        chartDataByte.labels = newChartDataByte.labels;
+        chartDataByte.datasets.forEach((dataset, i) => {
+          dataset.data = newChartDataByte.datasets[i].data;
+        });
       }
     };
 
@@ -227,6 +327,8 @@ export default {
       table_data_send,
       chartData,
       chartOptions,
+      chartDataPacket,
+      chartDataByte,
     };
   },
 };
