@@ -7,15 +7,6 @@
       <div id="menu-button-bar" class="menu-button-bar">
         <MenuButton />
       </div>
-      <!--      <div id="dashboard-graph" class="dashboard-graph">
-        <DashboardGraph
-          :labelData1="'패킷 입력량'"
-          :labelData2="'패킷 출력량'"
-          :labelData3="'데이터 수신량'"
-          :labelData4="'데이터 송신량'"
-        />
-      </div> -->
-      <!--label넣기-->
       <div id="dashboard-data" class="dashboard-data">
         <DashboardData
           :labelData1="'패킷 입력량'"
@@ -25,7 +16,12 @@
         />
       </div>
       <div id="dashboard-timedata" class="dashboard-timedata">
-        <DashboardTimeData />
+        <DashboardTimeData
+          :labelData1="'패킷 입력량/초'"
+          :labelData2="'패킷 출력량/초'"
+          :labelData3="'데이터 수신량/초'"
+          :labelData4="'데이터 송신량/초'"
+        />
       </div>
     </div>
     <div id="container" class="container">
@@ -39,7 +35,6 @@
 <script>
 import IotPrint from "../components/IotPrint.vue";
 import MenuButton from "../components/MenuButton.vue";
-//import DashboardGraph from "../components/DashboardGraph.vue";
 import DashboardData from "../components/DashboardData.vue";
 import DashboardTimeData from "../components/DashboardTimeData.vue";
 import PacketList from "../components/PacketList.vue";
@@ -48,7 +43,6 @@ export default {
   components: {
     IotPrint,
     MenuButton,
-    //    DashboardGraph,
     DashboardData,
     DashboardTimeData,
     PacketList,
@@ -67,19 +61,14 @@ export default {
   height: auto;
   margin-top: 5px;
   border-radius: 5px;
+  background-color: white;
 }
 .dashboard-timedata {
   box-sizing: border-box;
   height: auto;
   margin-top: 5px;
   border-radius: 5px;
-}
-.dashboard-graph {
-  box-sizing: border-box;
-  height: auto;
   background-color: white;
-  margin-top: 5px;
-  border-radius: 5px;
 }
 .menu-button-bar {
   box-sizing: border-box;
