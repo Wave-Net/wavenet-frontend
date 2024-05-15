@@ -1,69 +1,69 @@
 ##그래프랑 테이블 합친 코드
 
 <template>
-  <div>
+  <div class="table">
     <div class="dashboard-table">
-      패킷 송신:
+      패킷 송신<br />
       <span>{{ table_pkt_send }}</span>
     </div>
     <div class="dashboard-table">
-      패킷 수신:
+      패킷 수신<br />
       <span>{{ table_pkt_recv }}</span>
     </div>
     <div class="dashboard-table">
-      데이터 송신:
+      데이터 송신<br />
       <span>{{ table_data_send }}</span>
     </div>
     <div class="dashboard-table">
-      데이터 수신:
+      데이터 수신<br />
       <span>{{ table_data_recv }}</span>
     </div>
-    <div class="dashboard-graph">
-      <div class="tab-buttons">
-        <button
-          :class="{ active: currentTab === 'packets' }"
-          @click="currentTab = 'packets'"
-        >
-          Packet
-        </button>
-        <button
-          :class="{ active: currentTab === 'data' }"
-          @click="currentTab = 'data'"
-        >
-          Data
-        </button>
-        <button
-          :class="{ active: currentTab === 'all' }"
-          @click="currentTab = 'all'"
-        >
-          All
-        </button>
+  </div>
+  <div class="dashboard-graph">
+    <div class="tab-buttons">
+      <button
+        :class="{ active: currentTab === 'packets' }"
+        @click="currentTab = 'packets'"
+      >
+        Packet
+      </button>
+      <button
+        :class="{ active: currentTab === 'data' }"
+        @click="currentTab = 'data'"
+      >
+        Data
+      </button>
+      <button
+        :class="{ active: currentTab === 'all' }"
+        @click="currentTab = 'all'"
+      >
+        All
+      </button>
+    </div>
+    <div class="tab-content">
+      <div v-if="currentTab === 'packets'" class="card">
+        <Chart
+          type="line"
+          :data="chartDataPacket"
+          :options="chartOptions"
+          class="graph"
+        />
       </div>
-      <div class="tab-content">
-        <div v-if="currentTab === 'packets'" class="card">
-          <Chart
-            type="line"
-            :data="chartDataPacket"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
-        <div v-if="currentTab === 'data'" class="card">
-          <Chart
-            type="line"
-            :data="chartDataByte"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
-        <div v-if="currentTab === 'all'" class="card">
-          <Chart
-            type="line"
-            :data="chartData"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
+      <div v-if="currentTab === 'data'" class="card">
+        <Chart
+          type="line"
+          :data="chartDataByte"
+          :options="chartOptions"
+          class="graph"
+        />
+      </div>
+      <div v-if="currentTab === 'all'" class="card">
+        <Chart
+          type="line"
+          :data="chartData"
+          :options="chartOptions"
+          class="graph"
+        />
       </div>
     </div>
   </div>
@@ -335,13 +335,27 @@ export default {
 </script>
 
 <style>
+.card {
+  height: auto;
+}
+.tab-content {
+  height: auto;
+}
+.dashboard-graph {
+  height: 100%;
+}
 .dashboard-table {
-  background-color: white;
-  margin-top: 5px;
+  /* background-color: white; */
   text-align: center;
+  width: 50%;
+  float: left;
+  clear: right;
+  font-size: small;
+  box-sizing: border-box;
 }
 .graph {
   height: 100%;
+  background-color: #ffffff;
 }
 
 .tab-buttons button {
@@ -352,9 +366,16 @@ export default {
   padding: 10px 20px;
   transition: background-color 0.3s ease;
   width: 33.33%;
+  font-weight: 600;
+  color: #a6acaf;
 }
 
 .tab-buttons button.active {
-  background-color: #bfe4e8;
+  background-color: #ffffff;
+  border-top: #e5f3f6 solid;
+  border-left: #e5f3f6 solid;
+  border-right: #e5f3f6 solid;
+  font-weight: 900;
+  color: #24292c;
 }
 </style>

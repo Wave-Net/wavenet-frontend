@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="dashboard-table">
-      패킷 송신/초:
+      패킷 송신/초:<br />
       <span>{{ table_time_pkt_send }}</span>
     </div>
     <div class="dashboard-table">
-      패킷 수신/초:
+      패킷 수신/초:<br />
       <span>{{ table_time_pkt_recv }}</span>
     </div>
     <div class="dashboard-table">
-      데이터 송신/초:
+      데이터 송신/초:<br />
       <span>{{ table_time_data_send }}</span>
     </div>
     <div class="dashboard-table">
-      데이터 수신/초:
+      데이터 수신/초:<br />
       <span>{{ table_time_data_recv }}</span>
     </div>
     <div class="dashboard-graph">
