@@ -59,7 +59,9 @@ export default {
   border-radius: 5px;
 }
 .dashboard {
-  flex-grow: 1; /* 남은 공간을 채우도록 설정 */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 .dashboard-data,
 .dashboard-timedata {
@@ -67,6 +69,8 @@ export default {
   margin-top: 5px;
   border-radius: 5px;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 .menu-button-bar {
   flex: 0 0 40px; /* flex-grow, flex-shrink, flex-basis */

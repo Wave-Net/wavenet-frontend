@@ -1,67 +1,71 @@
 <template>
-  <div>
-    <div class="dashboard-table">
-      패킷 송신/초:<br />
-      <span>{{ table_time_pkt_send }}</span>
-    </div>
-    <div class="dashboard-table">
-      패킷 수신/초:<br />
-      <span>{{ table_time_pkt_recv }}</span>
-    </div>
-    <div class="dashboard-table">
-      데이터 송신/초:<br />
-      <span>{{ table_time_data_send }}</span>
-    </div>
-    <div class="dashboard-table">
-      데이터 수신/초:<br />
-      <span>{{ table_time_data_recv }}</span>
-    </div>
-    <div class="dashboard-graph">
-      <div class="tab-buttons">
-        <button
-          :class="{ active: currentTab === 'packets_time' }"
-          @click="currentTab = 'packets_time'"
-        >
-          Packet/sec
-        </button>
-        <button
-          :class="{ active: currentTab === 'data_time' }"
-          @click="currentTab = 'data_time'"
-        >
-          Data/sec
-        </button>
-        <button
-          :class="{ active: currentTab === 'all_time' }"
-          @click="currentTab = 'all_time'"
-        >
-          All/sec
-        </button>
+  <div class="table">
+    <div class="row">
+      <div class="dashboard-table">
+        패킷 송신/초:<br />
+        <span>{{ table_time_pkt_send }}</span>
       </div>
-      <div class="tab-content">
-        <div v-if="currentTab === 'packets_time'" class="card">
-          <Chart
-            type="line"
-            :data="chartDataPacket_time"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
-        <div v-if="currentTab === 'data_time'" class="card">
-          <Chart
-            type="line"
-            :data="chartDataByte_time"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
-        <div v-if="currentTab === 'all_time'" class="card">
-          <Chart
-            type="line"
-            :data="chartData_time"
-            :options="chartOptions"
-            class="graph"
-          />
-        </div>
+      <div class="dashboard-table">
+        패킷 수신/초:<br />
+        <span>{{ table_time_pkt_recv }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="dashboard-table">
+        데이터 송신/초:<br />
+        <span>{{ table_time_data_send }}</span>
+      </div>
+      <div class="dashboard-table">
+        데이터 수신/초:<br />
+        <span>{{ table_time_data_recv }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-graph">
+    <div class="tab-buttons">
+      <button
+        :class="{ active: currentTab === 'packets_time' }"
+        @click="currentTab = 'packets_time'"
+      >
+        Packet/sec
+      </button>
+      <button
+        :class="{ active: currentTab === 'data_time' }"
+        @click="currentTab = 'data_time'"
+      >
+        Data/sec
+      </button>
+      <button
+        :class="{ active: currentTab === 'all_time' }"
+        @click="currentTab = 'all_time'"
+      >
+        All/sec
+      </button>
+    </div>
+    <div class="tab-content">
+      <div v-if="currentTab === 'packets_time'" class="card">
+        <Chart
+          type="line"
+          :data="chartDataPacket_time"
+          :options="chartOptions"
+          class="graph"
+        />
+      </div>
+      <div v-if="currentTab === 'data_time'" class="card">
+        <Chart
+          type="line"
+          :data="chartDataByte_time"
+          :options="chartOptions"
+          class="graph"
+        />
+      </div>
+      <div v-if="currentTab === 'all_time'" class="card">
+        <Chart
+          type="line"
+          :data="chartData_time"
+          :options="chartOptions"
+          class="graph"
+        />
       </div>
     </div>
   </div>

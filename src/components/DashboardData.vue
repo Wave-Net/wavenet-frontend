@@ -2,21 +2,25 @@
 
 <template>
   <div class="table">
-    <div class="dashboard-table">
-      패킷 송신<br />
-      <span>{{ table_pkt_send }}</span>
+    <div class="row">
+      <div class="dashboard-table">
+        패킷 송신<br />
+        <span>{{ table_pkt_send }}</span>
+      </div>
+      <div class="dashboard-table">
+        패킷 수신<br />
+        <span>{{ table_pkt_recv }}</span>
+      </div>
     </div>
-    <div class="dashboard-table">
-      패킷 수신<br />
-      <span>{{ table_pkt_recv }}</span>
-    </div>
-    <div class="dashboard-table">
-      데이터 송신<br />
-      <span>{{ table_data_send }}</span>
-    </div>
-    <div class="dashboard-table">
-      데이터 수신<br />
-      <span>{{ table_data_recv }}</span>
+    <div class="row">
+      <div class="dashboard-table">
+        데이터 송신<br />
+        <span>{{ table_data_send }}</span>
+      </div>
+      <div class="dashboard-table">
+        데이터 수신<br />
+        <span>{{ table_data_recv }}</span>
+      </div>
     </div>
   </div>
   <div class="dashboard-graph">
@@ -336,20 +340,29 @@ export default {
 
 <style>
 .card {
-  height: auto;
-}
-.tab-content {
-  height: auto;
-}
-.dashboard-graph {
   height: 100%;
 }
+.tab-content {
+  flex-grow: 1;
+}
+.dashboard-graph {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.table {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+}
+
 .dashboard-table {
-  /* background-color: white; */
+  flex-basis: 50%;
   text-align: center;
-  width: 50%;
-  float: left;
-  clear: right;
   font-size: small;
   box-sizing: border-box;
 }
