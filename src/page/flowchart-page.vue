@@ -15,7 +15,7 @@
   </div>
   <div class="timeline-container">
     <div class="left-timeline">
-      <h2 class="timeline-title-left">192.168.123.132</h2>
+      <h2 class="timeline-title-left">{{ packetData.length > 0 ? packetData[0].source_ip : 'No data available' }}</h2>
       <Timeline class="left-timeline" :value="leftEvents">
         <template #opposite="slotProps">
           <small class="p-text-secondary">{{ slotProps.item.date }}</small>
@@ -27,23 +27,20 @@
     <div class="timeline-space">
       <div
         class="line-container"
-        v-for="index in leftEvents.length"
-        :key="index"
+        v-for="(packet, index) in packetData" :key="index"
       >
         <hr class="horizontal-line" />
-        <div class="horizontal-line-text">Your text here</div>
-        <svg class="right-arrow" viewBox="0 0 20 20">
-          <path d="M0 10 L20 10 L10 0 L10 20 Z" />
+        <div class="horizontal-line-text">{{ packet.type }}</div>
+        <svg :class="{'right-arrow': packet.source_ip === packetData[0].source_ip, 'left-arrow': packet.source_ip !== packetData[0].source_ip}" viewBox="0 0 20 20">
+    <path d="M0 10 L20 10 L10 0 L10 20 Z" />
         </svg>
-        <svg class="left-arrow" viewBox="0 0 20 20">
-          <path d="M0 10 L20 10 L10 0 L10 20 Z" />
-        </svg>
+        
       </div>
     </div>
     <!-- 추가된 가로선과 텍스트 -->
 
     <div class="right-timeline">
-      <h2 class="timeline-title-right">192.168.123.132</h2>
+      <h2 class="timeline-title-right">{{ packetData.length > 0 ? packetData[0].destination_ip : 'No data available' }}</h2>
       <Timeline class="right-timeline" :value="rightEvents"></Timeline>
     </div>
   </div>
@@ -52,7 +49,7 @@
 <script>
 import Timeline from "primevue/timeline";
 import Menubar from "primevue/menubar";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -64,13 +61,11 @@ export default {
 
 
 const leftEvents = ref([
-  { date: "2024-05-13", status: "" },
-  // Add more left events as needed
+  
 ]);
 
 const rightEvents = ref([
-  { status: "Some status 1 (Right)" },
-  // Add more right events as needed
+  
 ]);
 
 const menuItems = ref([
@@ -96,7 +91,14 @@ const router = useRouter();
       }
     });
 
-
+    watch(packetData, (newValue,) => {
+      // packetData가 변경될 때마다 새로운 타임라인을 추가
+      for (let i = 0; i < newValue.length; i++) {
+        leftEvents.value.push({ date: newValue[i].seconds_since_beginning, status: newValue[i].status });
+        rightEvents.value.push({ status: newValue[i].status });
+      }
+    });
+    
 return { leftEvents, rightEvents, menuItems, packetData};
 },
 };
