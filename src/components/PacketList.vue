@@ -104,7 +104,7 @@ const viewRow = (rowIndex) => {
 const goToFlowchart = (rowIndex) => {
   if (rowIndex !== null) {
     const packetData = JSON.stringify(packetMessages.value);
-    const url = `${window.location.origin}/flowchart-page?packetData=${encodeURIComponent(packetData)}&selectedIndex=${rowIndex}`;
+    const url = `${window.location.origin}/flowchart-page?packetData=${encodeURIComponent(packetData)}`;
     window.open(url, "_blank");
   } else {
     console.log("행을 선택해주세요.");

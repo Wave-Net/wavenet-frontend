@@ -87,20 +87,17 @@ const menuItems = ref([
 
 const router = useRouter();
     const packetData = ref([]);
-    const selectedIndex = ref(null);
 
     onMounted(() => {
       const route = router.currentRoute.value;
       if (route.query.packetData) {
         packetData.value = JSON.parse(decodeURIComponent(route.query.packetData));
-        selectedIndex.value = route.query.selectedIndex;
         console.log("Parsed packet data:", packetData.value);
-        console.log("Selected index:", selectedIndex.value);
       }
     });
 
 
-return { leftEvents, rightEvents, menuItems, packetData, selectedIndex};
+return { leftEvents, rightEvents, menuItems, packetData};
 },
 };
 </script>
