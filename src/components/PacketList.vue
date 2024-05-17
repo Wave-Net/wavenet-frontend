@@ -55,6 +55,11 @@ const menuModel = ref([
     command: () => viewRow(selectedRow),
   },
   // {label: '플로우차트', icon: 'pi pi-sliders-h', command: () => deleteProduct(selectedRow)}
+  {
+    label: "플로우차트",
+    icon: "pi pi-sliders-h",
+    command: () => goToFlowchart(selectedRow),
+  },
 ]);
 
 // Dialog 표시 상태
@@ -95,6 +100,18 @@ const viewRow = (rowIndex) => {
     console.log("행을 선택해주세요.");
   }
 };
+
+const goToFlowchart = (rowIndex) => {
+  if (rowIndex !== null) {
+    const packetData = JSON.stringify(packetMessages.value);
+    const url = `${window.location.origin}/flowchart-page?packetData=${encodeURIComponent(packetData)}`;
+    window.open(url, "_blank");
+  } else {
+    console.log("행을 선택해주세요.");
+  }
+};
+
+
 
 // const deleteProduct = (product) => {
 //   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
