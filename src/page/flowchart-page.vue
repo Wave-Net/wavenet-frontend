@@ -51,8 +51,9 @@
 
 <script>
 import Timeline from "primevue/timeline";
-import { ref } from "vue";
 import Menubar from "primevue/menubar";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -60,41 +61,47 @@ export default {
     Menubar,
   },
   setup() {
-    const leftEvents = ref([
-      { date: "2024-05-13", status: "" },
-      { date: "2024-05-14", status: "" },
-      { date: "2024-05-15", status: "" },
-      { date: "2024-05-15", status: "" },
-      { date: "2024-05-15", status: "" },
-      { date: "2024-05-15", status: "" },
 
-      // Add more left events as needed
-    ]);
 
-    const rightEvents = ref([
-      { status: "Some status 1 (Right)" },
-      { status: "Some status 2 (Right)" },
-      { status: "Some status 3 (Right)" },
-      { status: "Some status 3 (Right)" },
-      { status: "Some status 3 (Right)" },
-      { status: "Some status 3 (Right)" },
-      // Add more right events as needed
-    ]);
+const leftEvents = ref([
+  { date: "2024-05-13", status: "" },
+  // Add more left events as needed
+]);
 
-    const menuItems = ref([
-      {
-        label: "IoT기기",
-      },
-      {
-        label: "Public IP",
-      },
-      {
-        label: "Private IP",
-      },
-    ]);
+const rightEvents = ref([
+  { status: "Some status 1 (Right)" },
+  // Add more right events as needed
+]);
 
-    return { leftEvents, rightEvents, menuItems };
+const menuItems = ref([
+  {
+    label: "IoT기기",
   },
+  {
+    label: "Public IP",
+  },
+  {
+    label: "Private IP",
+  },
+]);
+
+const router = useRouter();
+    const packetData = ref([]);
+    const selectedIndex = ref(null);
+
+    onMounted(() => {
+      const route = router.currentRoute.value;
+      if (route.query.packetData) {
+        packetData.value = JSON.parse(decodeURIComponent(route.query.packetData));
+        selectedIndex.value = route.query.selectedIndex;
+        console.log("Parsed packet data:", packetData.value);
+        console.log("Selected index:", selectedIndex.value);
+      }
+    });
+
+
+return { leftEvents, rightEvents, menuItems, packetData, selectedIndex};
+},
 };
 </script>
 
