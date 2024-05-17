@@ -1,83 +1,90 @@
 <template>
   <div class="container">
-    <Menubar :model="menuItems">
-      <template #start>
-        <img
-          alt="logo"
-          src="@/assets/wavenetLogo.png"
-          height="40"
-          class="mr-2"
-        />
-      </template>
-    </Menubar>
-
+    <div>
+      <Menubar :model="menuItems" class="menubar">
+        <template #start>
+          <img
+            alt="logo"
+            src="@/assets/wavenetLogo.png"
+            height="40"
+            class="mr-2"
+          />
+        </template>
+      </Menubar>
+    </div>
     <div class="spacer"></div>
 
     <div class="chart-container">
-      <OrganizationChart :value="data" class="chart">
-        <template #default="slotProps">
-          <div v-if="slotProps.node.data.image" class="node-header">
-            <img
-              :src="slotProps.node.data.image"
-              :alt="slotProps.node.data.title"
-              class="node-image"
-            />
-          </div>
-          <div v-else class="node-header">{{ slotProps.node.label }}</div>
-          <div
-            class="node-content"
-            :style="{
-              color: slotProps.node.data.is_transmitting ? 'green' : 'red',
-            }"
-          >
-            <div class="node-text">{{ slotProps.node.data.title }}</div>
-            <div>{{ slotProps.node.data.email }}</div>
-          </div>
-        </template>
-      </OrganizationChart>
+      <div>
+        <OrganizationChart :value="data" class="chart">
+          <template #default="slotProps">
+            <div>
+              <div v-if="slotProps.node.data.image" class="node-header">
+                <img
+                  :src="slotProps.node.data.image"
+                  :alt="slotProps.node.data.title"
+                  class="node-image"
+                />
+              </div>
+              <div v-else class="node-header">{{ slotProps.node.label }}</div>
+              <div
+                class="node-content"
+                :style="{
+                  color: slotProps.node.data.is_transmitting ? 'green' : 'red',
+                }"
+              >
+                <div class="node-text">{{ slotProps.node.data.title }}</div>
+                <div>{{ slotProps.node.data.email }}</div>
+              </div>
+            </div>
+          </template>
+        </OrganizationChart>
+      </div>
     </div>
 
-    <DataTable :value="iot" stripedRows class="custom-datatable">
-      <Column field="index" header="#" sortable style="width: 8%"></Column>
-      <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
-      <Column field="ip" header="IP" sortable style="width: 8%"></Column>
-      <Column
-        field="vendor"
-        header="Vendor"
-        sortable
-        style="width: 8%"
-      ></Column>
-      <Column
-        field="hostname"
-        header="Hostname"
-        sortable
-        style="width: 8%"
-      ></Column>
-      <Column
-        field="send_byte"
-        header="송신 바이트"
-        sortable
-        style="width: 8%"
-      ></Column>
-      <Column
-        field="receive_byte"
-        header="수신 바이트"
-        sortable
-        style="width: 8%"
-      ></Column>
-      <Column
-        field="send_packet"
-        header="송신 패킷"
-        sortable
-        style="width: 8%"
-      ></Column>
-      <Column
-        field="receive_packet"
-        header="수신 패킷"
-        sortable
-        style="width: 8%"
-      ></Column>
-    </DataTable>
+    <div>
+      <DataTable :value="iot" stripedRows class="custom-datatable">
+        <Column field="index" header="#" sortable style="width: 8%"></Column>
+        <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
+        <Column field="ip" header="IP" sortable style="width: 8%"></Column>
+        <Column
+          field="vendor"
+          header="Vendor"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="hostname"
+          header="Hostname"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="send_byte"
+          header="송신 바이트"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="receive_byte"
+          header="수신 바이트"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="send_packet"
+          header="송신 패킷"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="receive_packet"
+          header="수신 패킷"
+          sortable
+          style="width: 8%"
+        ></Column>
+      </DataTable>
+    </div>
   </div>
 </template>
 
@@ -144,11 +151,12 @@ function fetchNewData() {
 
 function generateChildNodes(count) {
   const childNodes = [];
-  for (let i = 1; i <= count; i++) {
+  for (let i = 0; i < count; i++) {
     childNodes.push({
-      key: `0-${i}`,
+      key: `0-${i + 1}`,
       data: {
-        title: `${i}`,
+        title: `${i + 1}`,
+        is_transmitting: iot.value[i] ? iot.value[i].is_transmitting : false,
       },
     });
   }
@@ -168,6 +176,11 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+.menubar img {
+  display: block;
+  margin: 0 auto;
+}
+
 .container {
   width: 100%;
   max-width: 1200px; /* 페이지의 최대 너비를 제한합니다. */
