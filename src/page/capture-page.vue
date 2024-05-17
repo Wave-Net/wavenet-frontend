@@ -7,15 +7,23 @@
       <div id="menu-button-bar" class="menu-button-bar">
         <MenuButton />
       </div>
-      <div id="dashboard-graph" class="dashboard-graph">
-        <!-- <DashboardGraph /> -->
-      </div>
-      <!--label넣기-->
-      <div id="dashboard-data" class="dashboard-data">
-        <DashboardData />
-      </div>
-      <div id="dashboard-timedata" class="dashboard-timedata">
-        <DashboardTimeData />
+      <div id="dashboard" class="dashboard">
+        <div id="dashboard-data" class="dashboard-data">
+          <DashboardData
+            :labelData1="'패킷 입력량'"
+            :labelData2="'패킷 출력량'"
+            :labelData3="'데이터 수신량'"
+            :labelData4="'데이터 송신량'"
+          />
+        </div>
+        <div id="dashboard-timedata" class="dashboard-timedata">
+          <DashboardTimeData
+            :labelData1="'패킷 입력량/초'"
+            :labelData2="'패킷 출력량/초'"
+            :labelData3="'데이터 수신량/초'"
+            :labelData4="'데이터 송신량/초'"
+          />
+        </div>
       </div>
     </div>
     <div id="container" class="container">
@@ -29,7 +37,6 @@
 <script>
 import IotPrint from "../components/IotPrint.vue";
 import MenuButton from "../components/MenuButton.vue";
-// import DashboardGraph from '../components/DashboardGraph.vue';
 import DashboardData from "../components/DashboardData.vue";
 import DashboardTimeData from "../components/DashboardTimeData.vue";
 import PacketList from "../components/PacketList.vue";
@@ -38,7 +45,6 @@ export default {
   components: {
     IotPrint,
     MenuButton,
-    // DashboardGraph,
     DashboardData,
     DashboardTimeData,
     PacketList,
@@ -52,34 +58,26 @@ export default {
   background-color: whitesmoke;
   border-radius: 5px;
 }
-.dashboard-data {
-  box-sizing: border-box;
-  height: 153.6px;
-  margin-top: 5px;
-  border-radius: 5px;
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
+.dashboard-data,
 .dashboard-timedata {
-  box-sizing: border-box;
-  height: 153.6px;
+  height: 50%; /* 부모 요소인 .dashboard의 높이를 기준으로 50% */
   margin-top: 5px;
   border-radius: 5px;
-}
-.dashboard-graph {
-  box-sizing: border-box;
-  height: auto;
   background-color: white;
-  margin-top: 5px;
-  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
 .menu-button-bar {
-  box-sizing: border-box;
-  height: 40px;
-  /* background-color: white; */
+  flex: 0 0 40px; /* flex-grow, flex-shrink, flex-basis */
   margin-top: 5px;
 }
 .iot {
-  box-sizing: border-box;
-  height: 41px;
+  flex: 0 0 41px; /* flex-grow, flex-shrink, flex-basis */
   background-color: white;
   margin-bottom: 1%;
   border-radius: 5px;
@@ -91,6 +89,8 @@ export default {
   padding: 1.5vh;
 }
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 370px;
   min-width: 285px;
   height: 100%;

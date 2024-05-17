@@ -1,51 +1,92 @@
 <template>
   <div class="container">
     <div>
-        <Menubar :model="menuItems" class="menubar">
-      <template #start>
-        <div>
-              <img alt="logo" src="https://i.ibb.co/X2BdhfP/Kakao-Talk-20240510-171615462.png" height="25.6" class="mr-2">
-            </div>
-      </template>
-    </Menubar>
+      <Menubar :model="menuItems" class="menubar">
+        <template #start>
+          <img
+            alt="logo"
+            src="@/assets/wavenetLogo.png"
+            height="40"
+            class="mr-2"
+          />
+        </template>
+      </Menubar>
+    </div>
+    <div class="spacer"></div>
 
-          </div>
-          <div class="spacer"></div>
-
-      <div class="chart-container">
-        <div>
-          <OrganizationChart :value="data" class="chart">
-            <template #default="slotProps">
-              <div>
-                <div v-if="slotProps.node.data.image" class="node-header">
-                  <img :src="slotProps.node.data.image" :alt="slotProps.node.data.title" class="node-image" />
-                </div>
-                <div v-else class="node-header">{{ slotProps.node.label }}</div>
-                <div class="node-content" :style="{ color: slotProps.node.data.is_transmitting ? 'green' : 'red' }">
-                  <div class="node-text">{{ slotProps.node.data.title }}</div>
-                  <div>{{ slotProps.node.data.email }}</div>
-                </div>
+    <div class="chart-container">
+      <div>
+        <OrganizationChart :value="data" class="chart">
+          <template #default="slotProps">
+            <div>
+              <div v-if="slotProps.node.data.image" class="node-header">
+                <img
+                  :src="slotProps.node.data.image"
+                  :alt="slotProps.node.data.title"
+                  class="node-image"
+                />
               </div>
-            </template>
-          </OrganizationChart>
-        </div>
+              <div v-else class="node-header">{{ slotProps.node.label }}</div>
+              <div
+                class="node-content"
+                :style="{
+                  color: slotProps.node.data.is_transmitting ? 'green' : 'red',
+                }"
+              >
+                <div class="node-text">{{ slotProps.node.data.title }}</div>
+                <div>{{ slotProps.node.data.email }}</div>
+              </div>
+            </div>
+          </template>
+        </OrganizationChart>
+      </div>
     </div>
 
     <div>
-        <DataTable :value="iot" stripedRows class="custom-datatable">
-          <Column field="index" header="#" sortable style="width: 8%"></Column>
-          <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
-          <Column field="ip" header="IP" sortable style="width: 8%"></Column>
-          <Column field="vendor" header="Vendor" sortable style="width: 8%"></Column>
-          <Column field="hostname" header="Hostname" sortable style="width: 8%"></Column>
-          <Column field="send_byte" header="송신 바이트" sortable style="width: 8%"></Column>
-          <Column field="receive_byte" header="수신 바이트" sortable style="width: 8%"></Column>
-          <Column field="send_packet" header="송신 패킷" sortable style="width: 8%"></Column>
-          <Column field="receive_packet" header="수신 패킷" sortable style="width: 8%"></Column>
-        </DataTable>
+      <DataTable :value="iot" stripedRows class="custom-datatable">
+        <Column field="index" header="#" sortable style="width: 8%"></Column>
+        <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
+        <Column field="ip" header="IP" sortable style="width: 8%"></Column>
+        <Column
+          field="vendor"
+          header="Vendor"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="hostname"
+          header="Hostname"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="send_byte"
+          header="송신 바이트"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="receive_byte"
+          header="수신 바이트"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="send_packet"
+          header="송신 패킷"
+          sortable
+          style="width: 8%"
+        ></Column>
+        <Column
+          field="receive_packet"
+          header="수신 패킷"
+          sortable
+          style="width: 8%"
+        ></Column>
+      </DataTable>
+    </div>
   </div>
-</div>
-  </template>
+</template>
 
 <script setup>
 import { ref, onMounted, watchEffect } from "vue";
@@ -135,12 +176,10 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-
 .menubar img {
   display: block;
   margin: 0 auto;
 }
-
 
 .container {
   width: 100%;
