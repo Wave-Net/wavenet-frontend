@@ -44,7 +44,9 @@ import Column from "primevue/column";
 import ContextMenu from "primevue/contextmenu";
 import Dialog from "primevue/dialog";
 import PacketDiagram from "./PacketDiagram.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const websocketStore = useWebSocketStore();
 const cm = ref();
 const selectedRow = ref();
@@ -55,6 +57,11 @@ const menuModel = ref([
     command: () => viewRow(selectedRow),
   },
   // {label: '플로우차트', icon: 'pi pi-sliders-h', command: () => deleteProduct(selectedRow)}
+  {
+    label: "플로우차트",
+    icon: "pi pi-sliders-h",
+    command: () => goToFlowchart(selectedRow),
+  },
 ]);
 
 // Dialog 표시 상태
@@ -96,6 +103,14 @@ const viewRow = (rowIndex) => {
   }
 };
 
+const goToFlowchart = (rowIndex) => {
+  if (rowIndex !== null) {
+    display.value = true;
+    router.push({ name: "FlowchartView" });
+  } else {
+    console.log("행을 선택해주세요.");
+  }
+};
 // const deleteProduct = (product) => {
 //   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
 // };
