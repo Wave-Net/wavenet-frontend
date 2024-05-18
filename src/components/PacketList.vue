@@ -67,13 +67,24 @@ const display = ref(false);
 
 // 웹소켓 연결
 onMounted(() => {
+  window.addEventListener("beforeunload", handleBeforeUnload);
   websocketStore.connect("ws://localhost:8765");
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 종료
 onUnmounted(() => {
+  window.removeEventListener("beforeunload", handleBeforeUnload);
+  // 패킷 메시지 데이터가 비어 있는 경우 또는 사용자가 확인을 선택한 경우 언마운트를 진행합니다.
   websocketStore.disconnect();
 });
+
+const handleBeforeUnload = (event) => {
+  if (packetMessages.value.length > 0) {
+    // 패킷 메시지 데이터가 존재하는 경우 확인 대화 상자를 표시합니다.
+    event.preventDefault();
+    return;
+  }
+};
 
 // 메시지 목록 가져오기
 const packetMessages = computed(() => websocketStore.packetMessages);
