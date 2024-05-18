@@ -13,6 +13,12 @@
       </template>
     </Menubar>
   </div>
+  <div class="title_space">
+  <div class="time_title">시간</div>
+  <div class="source_title">Source</div>
+  <div class="destination_title">Destination</div>
+</div>
+  <hr class="bottom-border">
   <div class="timeline-container">
     <div class="left-timeline">
       <h2 class="timeline-title-left">{{ packetData.length > 0 ? packetData[0].source_ip : 'No data available' }}</h2>
@@ -44,6 +50,7 @@
       <Timeline class="right-timeline" :value="rightEvents"></Timeline>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -116,10 +123,6 @@ return { leftEvents, rightEvents, menuItems, packetData};
 .menubar img {
   display: block;
   margin: 0 auto;
-}
-
-.menubar {
-  margin-bottom: 30px; /* 여백 크기는 필요에 따라 조정하세요 */
 }
 
 .timeline-title-left {
@@ -217,5 +220,40 @@ return { leftEvents, rightEvents, menuItems, packetData};
   left: calc(10 - 5px);
   top: -4.8px;
   transform: scaleX(-1);
+}
+
+.title_space {
+  height: 30px; /* 빈 공간의 세로 폭 설정 */
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+}
+
+.time_title,
+.source_title,
+.destination_title {
+  display: inline-block;
+
+}
+.time_title {
+  width: 110px;
+  text-align: center;
+}
+
+.source_title {
+width: 90px;
+text-align: center;
+
+}
+
+.destination_title{
+  text-align: right;
+  width: calc(100% - 220px);
+}
+
+.bottom-border {
+  border-top: 1px solid #dee2e6; /* 하단 경계선 스타일 */
+  margin-bottom: 30px; /* 하단 여백 추가 */
+  margin-top: 0px;
 }
 </style>
