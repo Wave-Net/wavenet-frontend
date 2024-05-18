@@ -119,6 +119,314 @@ const iot = ref([
     send_packet: 75,
     receive_packet: 100,
     is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
+  },{
+    index: 2,
+    mac: "AA:BB:CC:DD:EE:FF",
+    ip: "192.168.1.2",
+    vendor: "Vendor B",
+    hostname: "Host 2",
+    send_byte: 150,
+    receive_byte: 250,
+    send_packet: 75,
+    receive_packet: 100,
+    is_transmitting: false,
   },
 ]);
 
@@ -182,31 +490,25 @@ watchEffect(() => {
 }
 
 .container {
-  width: 100%;
-  max-width: 1200px; /* 페이지의 최대 너비를 제한합니다. */
   margin: 0 auto; /* 페이지를 가운데 정렬합니다. */
 }
 
-.chart-container {
-  display: flex;
-  justify-content: center; /* 상위 노드를 가운데 정렬합니다. */
-}
 
 .chart {
-  display: inline-block;
-  text-align: left; /* 하위 노드를 좌측 정렬합니다. */
-  max-width: 100%; /* 최대 너비를 설정합니다. */
-  overflow-x: auto; /* 필요한 경우에만 가로 스크롤을 활성화합니다. */
-  white-space: nowrap; /* 내용이 한 줄로 유지되도록 설정합니다. */
+  overflow-x: auto;
+}
+.chart >>>.p-organizationchart-table > tbody > tr > td {
+  padding:0 0.2rem;
+}
+.chart >>> .p-organizationchart-node-content {
+  padding: 0.5rem; /* 노드 내부 여백을 줄입니다. */
+  flex: 0 0 auto; /* 자식 노드들이 고정된 너비를 가지도록 합니다. */
+
 }
 
 .custom-datatable .p-datatable-tbody > tr > td {
   border-bottom: 1px solid #ccc;
   width: 100%;
-}
-
-.chart .p-organizationchart-node-content {
-  padding: 0.5rem; /* 노드 내부 여백을 줄입니다. */
 }
 
 .node-text {
