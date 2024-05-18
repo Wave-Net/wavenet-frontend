@@ -442,44 +442,28 @@ const menuItems = ref([
   },
 ]);
 
-const data = {
+const data = ref({
   key: "0",
-  data: {
-    image: "https://i.ibb.co/VQGjYtS/laptop.png",
-  },
-  children: generateChildNodes(iot.value.length),
-};
-
-function fetchNewData() {
-  // 데이터를 가져오는 로직을 이곳에 구현합니다.
-  // 현재는 빈 배열을 반환합니다.
-  const newData = [];
-  iot.value = [...iot.value, ...newData];
-}
-
-function generateChildNodes(count) {
-  const childNodes = [];
-  for (let i = 0; i < count; i++) {
-    childNodes.push({
-      key: `0-${i + 1}`,
-      data: {
-        title: `${i + 1}`,
-        is_transmitting: iot.value[i] ? iot.value[i].is_transmitting : false,
-      },
-    });
-  }
-  return childNodes;
-}
-
-// 컴포넌트가 마운트될 때 초기 데이터를 가져오고 조직도의 자식 노드를 동적으로 생성합니다.
-onMounted(() => {
-  fetchNewData();
-  data.children = generateChildNodes(iot.value.length);
+  data: { image: "https://i.ibb.co/VQGjYtS/laptop.png" },
+  children: []
 });
 
-// iot 데이터가 변경될 때마다 조직도의 자식 노드를 업데이트합니다.
+function generateChildNodes(count) {
+  return Array.from({ length: count }, (v, i) => ({
+    key: `0-${i + 1}`,
+    data: {
+      title: `${i + 1}`,
+      is_transmitting: iot.value[i] ? iot.value[i].is_transmitting : false,
+    },
+  }));
+}
+
+onMounted(() => {
+  data.value.children = generateChildNodes(iot.value.length);
+});
+
 watchEffect(() => {
-  data.children = generateChildNodes(iot.value.length);
+  data.value.children = generateChildNodes(iot.value.length);
 });
 </script>
 
@@ -490,20 +474,20 @@ watchEffect(() => {
 }
 
 .container {
-  margin: 0 auto; /* 페이지를 가운데 정렬합니다. */
+  margin: 0 auto;
 }
-
 
 .chart {
   overflow-x: auto;
 }
-.chart >>>.p-organizationchart-table > tbody > tr > td {
-  padding:0 0.2rem;
-}
-.chart >>> .p-organizationchart-node-content {
-  padding: 0.5rem; /* 노드 내부 여백을 줄입니다. */
-  flex: 0 0 auto; /* 자식 노드들이 고정된 너비를 가지도록 합니다. */
 
+.chart >>> .p-organizationchart-table > tbody > tr > td {
+  padding: 0 0.2rem;
+}
+
+.chart >>> .p-organizationchart-node-content {
+  padding: 0.5rem;
+  flex: 0 0 auto;
 }
 
 .custom-datatable .p-datatable-tbody > tr > td {
@@ -512,7 +496,7 @@ watchEffect(() => {
 }
 
 .node-text {
-  font-size: 1rem; /* 노드 텍스트의 폰트 크기를 조절합니다. */
+  font-size: 1rem;
 }
 
 .node-image {
@@ -521,7 +505,6 @@ watchEffect(() => {
 }
 
 .spacer {
-  height: 20px; /* 원하는 여백의 높이로 조정하세요 */
+  height: 20px;
 }
-
 </style>
