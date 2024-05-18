@@ -132,6 +132,7 @@ return { leftEvents, rightEvents, menuItems, packetData};
   position: absolute;
   top: -22px; /* 타임라인 위에 위치 */
   left: 70%; /* 가운데 정렬 */
+  color: #999999;
 }
 
 .timeline-title-right {
@@ -140,7 +141,8 @@ return { leftEvents, rightEvents, menuItems, packetData};
   margin-top: 2px; /* 제목과 타임라인 간격 조정 */
   position: absolute;
   top: -22px; /* 타임라인 위에 위치 */
-  left: -60%; /* 가운데 정렬 */
+  left: -45%; /* 가운데 정렬 */
+  color: #999999;
 }
 
 .left-timeline,
@@ -233,7 +235,7 @@ return { leftEvents, rightEvents, menuItems, packetData};
 .source_title,
 .destination_title {
   display: inline-block;
-
+  color: #999999;
 }
 .time_title {
   width: 110px;
