@@ -67,7 +67,7 @@ const display = ref(false);
 
 // 웹소켓 연결
 onMounted(() => {
-  websocketStore.connect("ws://localhost:8765");
+  websocketStore.connect("ws://localhost:8000/ws");
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 종료
@@ -104,14 +104,14 @@ const viewRow = (rowIndex) => {
 const goToFlowchart = (rowIndex) => {
   if (rowIndex !== null) {
     const packetData = JSON.stringify(packetMessages.value);
-    const url = `${window.location.origin}/flowchart-page?packetData=${encodeURIComponent(packetData)}`;
+    const url = `${
+      window.location.origin
+    }/flowchart-page?packetData=${encodeURIComponent(packetData)}`;
     window.open(url, "_blank");
   } else {
     console.log("행을 선택해주세요.");
   }
 };
-
-
 
 // const deleteProduct = (product) => {
 //   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
