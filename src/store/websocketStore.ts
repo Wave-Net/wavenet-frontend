@@ -2,22 +2,22 @@ import { defineStore } from "pinia";
 
 interface Message {
   message_type: string;
+  type?: string; // 'type' 속성 추가
+}
+
+interface StatDetail {
+  ip: string;
+  stats: {
+    send_pkt: number;
+    recv_pkt: number;
+    send_data: number;
+    recv_data: number;
+  };
 }
 
 interface StatMessage {
-  total_statistics: {
-    send_pkt: number;
-    recv_pkt: number;
-    send_data: number;
-    recv_data: number;
-  };
-
-  statistics_delta: {
-    send_pkt: number;
-    recv_pkt: number;
-    send_data: number;
-    recv_data: number;
-  };
+  type: string;
+  data: StatDetail[];
 }
 
 interface PacketMessage {
@@ -141,8 +141,9 @@ export const useWebSocketStore = defineStore("websocket", {
         console.log("웹소켓 연결됨");
       };
       this.websocket.onmessage = (event) => {
+        console.log(event.data);
         const receivedData = JSON.parse(event.data) as Message;
-        if (receivedData.message_type === "stat") {
+        if (receivedData.type === "stats") {
           const statMessage = JSON.parse(event.data) as StatMessage;
           this.statMessage = statMessage;
           console.log("받은 데이터:", statMessage);
