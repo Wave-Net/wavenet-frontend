@@ -135,34 +135,38 @@ export const useWebSocketStore = defineStore("websocket", {
   }),
   actions: {
     connect(url: string) {
-      this.websocket = new WebSocket(url);
-      this.websocket.onopen = () => {
-        this.isConnected = true;
-        console.log("웹소켓 연결됨");
-      };
-      this.websocket.onmessage = (event) => {
-        const receivedData = JSON.parse(event.data) as Message;
-        if (receivedData.message_type === "stat") {
-          const statMessage = JSON.parse(event.data) as StatMessage;
-          this.statMessage = statMessage;
-          console.log("받은 데이터:", statMessage);
-        }
-        if (receivedData.message_type === "packet") {
-          const packetMessage = JSON.parse(event.data) as PacketMessage;
-          this.packetMessages.push(packetMessage);
-          console.log("받은 데이터:", packetMessage);
-        }
-      };
-      this.websocket.onclose = () => {
-        this.isConnected = false;
-        console.log("웹소켓 연결 종료");
-      };
-      this.websocket.onerror = (error) => {
-        console.error("웹소켓 에러 발생:", error);
-      };
+      if (!this.isConnected) {
+        this.websocket = new WebSocket(url);
+        this.websocket.onopen = () => {
+          this.isConnected = true;
+          console.log("웹소켓 연결됨");
+        };
+        this.websocket.onmessage = (event) => {
+          const receivedData = JSON.parse(event.data) as Message;
+          if (receivedData.message_type === "stat") {
+            const statMessage = JSON.parse(event.data) as StatMessage;
+            this.statMessage = statMessage;
+            console.log("받은 데이터:", statMessage);
+          }
+          if (receivedData.message_type === "packet") {
+            const packetMessage = JSON.parse(event.data) as PacketMessage;
+            this.packetMessages.push(packetMessage);
+            console.log("받은 데이터:", packetMessage);
+          }
+        };
+        this.websocket.onclose = () => {
+          this.isConnected = false;
+          console.log("웹소켓 연결 종료");
+        };
+        this.websocket.onerror = (error) => {
+          console.error("웹소켓 에러 발생:", error);
+        };
+      } else {
+        console.log("웹소켓 이미 연결됨");
+      }
     },
     disconnect() {
-      if (this.websocket) {
+      if (this.isConnected && this.websocket) {
         this.websocket.close();
         this.websocket = null;
         this.isConnected = false;
