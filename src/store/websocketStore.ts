@@ -2,22 +2,22 @@ import { defineStore } from "pinia";
 
 interface Message {
   message_type: string;
+  type?: string; // 'type' 속성 추가
+}
+
+interface StatDetail {
+  ip: string;
+  stats: {
+    send_pkt: number;
+    recv_pkt: number;
+    send_data: number;
+    recv_data: number;
+  };
 }
 
 interface StatMessage {
-  total_statistics: {
-    send_pkt: number;
-    recv_pkt: number;
-    send_data: number;
-    recv_data: number;
-  };
-
-  statistics_delta: {
-    send_pkt: number;
-    recv_pkt: number;
-    send_data: number;
-    recv_data: number;
-  };
+  type: string;
+  data: StatDetail[];
 }
 
 interface PacketMessage {

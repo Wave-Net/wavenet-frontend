@@ -113,10 +113,4 @@ const goToFlowchart = (rowIndex) => {
   }
 };
 
-
-
-
-// const deleteProduct = (product) => {
-//   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
-// };
 </script>
