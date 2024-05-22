@@ -50,7 +50,7 @@
 import Timeline from "primevue/timeline";
 import Menubar from "primevue/menubar";
 import { ref, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
+
 
 export default {
   components: {
@@ -80,15 +80,23 @@ const menuItems = ref([
   },
 ]);
 
-const router = useRouter();
+const getFromLocalStorage = (key) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+};
+
+
     const packetData = ref([]);
 
     onMounted(() => {
-      const route = router.currentRoute.value;
-      if (route.query.packetData) {
-        packetData.value = JSON.parse(decodeURIComponent(route.query.packetData));
-        console.log("Parsed packet data:", packetData.value);
-      }
+      
+        const localStorageData = getFromLocalStorage("filteredPackets");
+        if (localStorageData) {
+          packetData.value = localStorageData;
+          console.log("Packet data from localStorage:", packetData.value);
+        } else {
+          console.log("No packet data available in localStorage.");
+        }
     });
 
     watch(packetData, (newValue,) => {

@@ -101,19 +101,31 @@ const viewRow = (rowIndex) => {
   }
 };
 
+const saveToLocalStorage = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
 const goToFlowchart = (rowIndex) => {
   if (rowIndex !== null) {
-    const packetData = JSON.stringify(packetMessages.value);
-    const url = `${
-      window.location.origin
-    }/flowchart-page?packetData=${encodeURIComponent(packetData)}`;
+    const selectedPacket = packetMessages.value[rowIndex.value];
+    console.log("sel",selectedPacket);
+    const filteredPackets = packetMessages.value.filter(
+      (packet) =>
+      (packet.source_ip === selectedPacket.source_ip || packet.source_ip === selectedPacket.destination_ip) &&
+(packet.destination_ip === selectedPacket.source_ip || packet.destination_ip === selectedPacket.destination_ip)
+    );
+
+    saveToLocalStorage("filteredPackets", filteredPackets);
+
+    const url = `${window.location.origin}/flowchart-page`;
     window.open(url, "_blank");
   } else {
-    console.log("행을 선택해주세요.");
+    if (rowIndex === null) {
+      console.log("행을 선택해주세요.");
+    } else {
+      console.error("유효한 행을 선택해주세요.");
+    }
   }
 };
 
-// const deleteProduct = (product) => {
-//   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
-// };
 </script>
