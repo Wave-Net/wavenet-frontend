@@ -29,7 +29,7 @@
 
     <div class="data-container">
       <div class="data-container-title">Connencted device</div>
-      <DataTable :value="iot" stripedRows class="custom-datatable" :rows="10" paginator>
+      <DataTable :value="iot" class="custom-datatable" :rows="10" paginator>
         <Column field="index" header="#" sortable style="width: 1%"></Column>
         <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
         <Column field="ip" header="IP" sortable style="width: 8%"></Column>
@@ -65,7 +65,7 @@
         ></Column>
         <Column header="Capture" style="text-align: center; width: 1%">
           <template #body="slotProps">
-    <Button class="p-button-rounded p-button-text" @click="viewItem(slotProps.rowIndex)">start</Button>
+            <Button label="start" severity="info" class="custom-button" @click="viewItem(slotProps.rowIndex)"></Button>
   </template>
         </Column>
       </DataTable>
@@ -152,11 +152,18 @@ watch(
 
 <style scoped>
 
+
 .container {
   margin: 0 auto;
   background-color: #F8FAFC;
   min-height: 100vh;
 }
+
+.custom-button {
+  padding: 0.1rem 0.5rem; /* 원하는 패딩 값으로 변경 */
+  font-size: 0.7rem; /* 원하는 폰트 사이즈로 변경 */
+}
+
 
 .chart-container {
   width: 70%;
@@ -219,12 +226,13 @@ watch(
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
   height: 100%; /* 필요한 경우, 높이를 100%로 설정하여 가운데 정렬 보장 */
+  
 }
 
 .custom-datatable >>> .p-datatable-tbody > tr > td {
   border-bottom: 1px solid #e2e8f0;
   width: 100%;
-  padding: 0rem 1rem;
+  padding: 0.3rem 1rem;
   text-align: center;
 }
 
