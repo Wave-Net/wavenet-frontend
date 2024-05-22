@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-
-    <div class="spacer-with-image">
-      <img src="@/assets/wavenetLogo.png" alt="WaveNet Logo" class="logo" />
-      <div class="spacer"></div></div>
-
+<Header_template></Header_template>
     <div class="chart-container">
         <OrganizationChart :value="data" class="chart">
           <template #default="slotProps">
@@ -32,6 +28,7 @@
     </div>
 
     <div class="data-container">
+      <div class="data-container-title">Connencted device</div>
       <DataTable :value="iot" stripedRows class="custom-datatable" :rows="10" paginator>
         <Column field="index" header="#" sortable style="width: 1%"></Column>
         <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
@@ -66,9 +63,9 @@
           sortable
           style="width: 8%"
         ></Column>
-        <Column header="View" style="text-align: center; width: 1%">
+        <Column header="Capture" style="text-align: center; width: 1%">
           <template #body="slotProps">
-    <Button icon="pi pi-eye" class="p-button-rounded p-button-text" @click="viewItem(slotProps.rowIndex)"></Button>
+    <Button class="p-button-rounded p-button-text" @click="viewItem(slotProps.rowIndex)">start</Button>
   </template>
         </Column>
       </DataTable>
@@ -79,6 +76,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useWebSocketStore } from '@/store/websocketStore';
+import Header_template from "@/components/Header_template.vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import OrganizationChart from "primevue/organizationchart";
@@ -147,8 +145,6 @@ watch(
         // 데이터가 변경되지 않았다면 is_transmitting 값을 false로 설정
         data.value.is_transmitting = false;
       }
-      
-      
     }
   },
 );
@@ -163,30 +159,35 @@ watch(
 }
 
 .chart-container {
-  width: 60%;
+  width: 70%;
   background-color: white;
-  border-radius: 5px;
-  margin: 5px auto 5px auto; /* 좌우 마진을 자동으로 설정하여 수평 중앙 정렬 */
-  padding:0px;
-  border: #e2e8f0
+  border-radius: 12px;
+  margin: 5px auto 5px auto;
+  padding: 0px;
+  display: flex; /* Flexbox를 사용하여 내부 요소를 정렬합니다. */
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  border: 1px solid #e2e8f0;
 }
+
 .data-container {
   width: 70%;
   height: 60vh;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 12px;
   margin: 30px auto 0px auto; /* 좌우 마진을 자동으로 설정하여 수평 중앙 정렬 */
-  padding:20px;
-  border: #e2e8f0;
+  padding:10px 20px 20px 20px;
+  border: 1px solid #e2e8f0;
 }
-
+.data-container-title {
+  margin: 5px 0px 15px 0px;
+}
 .chart {
   overflow-x: auto;
-  background-color: white;
-  border-radius : 15px;
   width: 80%;
-  margin: 10px auto;
+  margin: 10px auto 10px auto;
 }
+
 
 .custom-datatable >>> .p-icon {
   width: 0.7rem; /* 선택적으로 아이콘 너비 조절 */
@@ -196,7 +197,6 @@ watch(
 .custom-datatable >>> .p-link {
   font-size: 0.7rem;
 }
-
 
 
 .chart >>> .p-organizationchart-table > tbody > tr > td {
@@ -214,10 +214,22 @@ watch(
   font-size: 0.7rem;
 }
 
+.custom-datatable >>> .p-column-header-content {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 100%; /* 필요한 경우, 높이를 100%로 설정하여 가운데 정렬 보장 */
+}
+
 .custom-datatable >>> .p-datatable-tbody > tr > td {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e2e8f0;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0rem 1rem;
+  text-align: center;
+}
+
+.chart >>> .p-organizationchart-lines[data-pc-section="lines"][style*="visibility: hidden"] {
+  display: none;
 }
 
 .node-text {
@@ -225,23 +237,9 @@ watch(
 }
 
 .node-image {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
 }
 
-.spacer {
-  height: 50px;
-}
 
-.spacer-with-image {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo {
-  width: 50px;
-  height: 50px;
-  margin-left: 20px; /* 로고와 spacer 사이 간격 조정 */
-}
 </style>
