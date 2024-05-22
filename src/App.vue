@@ -1,19 +1,25 @@
 <template>
-  <div>
-    <router-view />
+  <div id="app">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/capture-page">Capture</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
 
-<script>
-import { createApp } from 'vue';
-import router from './router';
+<script setup>
+import { onMounted, onUnmounted } from "vue";
+import { useWebSocketStore } from "./store/websocketStore";
 
-export default {
-  name: 'App',
-  setup() {
-    const app = createApp({});
-    app.use(router);
-    return { app };
-  },
-};
+const websocketStore = useWebSocketStore();
+
+onMounted(() => {
+  websocketStore.connect("ws://localhost:8000/ws");
+});
+
+onUnmounted(() => {
+  websocketStore.disconnect();
+});
+
 </script>
