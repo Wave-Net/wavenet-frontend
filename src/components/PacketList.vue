@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useWebSocketStore } from "@/store/websocketStore";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -54,7 +54,6 @@ const menuModel = ref([
     icon: "pi pi-objects-column",
     command: () => viewRow(selectedRow),
   },
-  // {label: '플로우차트', icon: 'pi pi-sliders-h', command: () => deleteProduct(selectedRow)}
   {
     label: "플로우차트",
     icon: "pi pi-sliders-h",
@@ -62,34 +61,9 @@ const menuModel = ref([
   },
 ]);
 
-// Dialog 표시 상태
 const display = ref(false);
-
-// 웹소켓 연결
-onMounted(() => {
-  window.addEventListener("beforeunload", handleBeforeUnload);
-  websocketStore.connect("ws://localhost:8000/ws");
-});
-
-// 컴포넌트 언마운트 시 웹소켓 연결 종료
-onUnmounted(() => {
-  window.removeEventListener("beforeunload", handleBeforeUnload);
-  // 패킷 메시지 데이터가 비어 있는 경우 또는 사용자가 확인을 선택한 경우 언마운트를 진행합니다.
-  websocketStore.disconnect();
-});
-
-const handleBeforeUnload = (event) => {
-  if (packetMessages.value.length > 0) {
-    // 패킷 메시지 데이터가 존재하는 경우 확인 대화 상자를 표시합니다.
-    event.preventDefault();
-    return;
-  }
-};
-
-// 메시지 목록 가져오기
 const packetMessages = computed(() => websocketStore.packetMessages);
-
-const selectedRowData = ref(null); // 선택한 행의 데이터를 저장할 ref를 생성합니다.
+const selectedRowData = ref(null);
 
 const onRowContextMenu = (event) => {
   cm.value.show(event.originalEvent);
