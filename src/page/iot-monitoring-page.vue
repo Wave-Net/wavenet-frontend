@@ -113,7 +113,6 @@ function generateChildNodes(count) {
 
 onMounted(() => {
   data.value.children = generateChildNodes(iot.value.length);
-  websocketStore.connect('ws://localhost:8000/ws');  // 웹소켓 연결
 });
 
 watch(
