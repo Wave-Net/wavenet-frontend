@@ -68,7 +68,7 @@ const display = ref(false);
 // 웹소켓 연결
 onMounted(() => {
   window.addEventListener("beforeunload", handleBeforeUnload);
-  websocketStore.connect("ws://localhost:8765");
+  websocketStore.connect("ws://localhost:8000/ws");
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 종료
@@ -139,10 +139,4 @@ const goToFlowchart = (rowIndex) => {
   }
 };
 
-
-
-
-// const deleteProduct = (product) => {
-//   // 여기에 행을 플로우차트화 하는 로직을 추가하세요.
-// };
 </script>

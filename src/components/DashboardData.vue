@@ -100,12 +100,14 @@ export default {
     watch(
       () => websocketStore.statMessage,
       (newValue) => {
-        // 새로운 값이 있고, 그 값에 total_statistics가 있는 경우
-        if (newValue && newValue.total_statistics) {
-          table_pkt_recv.value = newValue.total_statistics.send_pkt;
-          table_pkt_send.value = newValue.total_statistics.recv_pkt;
-          table_data_recv.value = newValue.total_statistics.send_data;
-          table_data_send.value = newValue.total_statistics.recv_data;
+        // 새로운 값이 있고, 그 값에 data가 있는 경우
+        if (newValue && newValue.data && newValue.data.length > 0) {
+          const { send_pkt, recv_pkt, send_data, recv_data } =
+            newValue.data[0].stats;
+          table_pkt_recv.value = recv_pkt;
+          table_pkt_send.value = send_pkt;
+          table_data_recv.value = recv_data;
+          table_data_send.value = send_data;
         }
       }
     );
@@ -227,9 +229,13 @@ export default {
     // 데이터 업데이트
     const updateChartData = () => {
       // staticsDelta 객체 확인
-      if (websocketStore.statMessage.total_statistics) {
+      if (
+        websocketStore.statMessage.data &&
+        websocketStore.statMessage.data.length > 0
+      ) {
+        // 0번째 데이터 가져오기 -> 추후에 인덱스로 수정 필요
         const { send_pkt, recv_pkt, send_data, recv_data } =
-          websocketStore.statMessage.total_statistics;
+          websocketStore.statMessage.data[0].stats;
 
         // 새로운 데이터 추가
         const newChartData = {
