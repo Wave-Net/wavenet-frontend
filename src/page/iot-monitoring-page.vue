@@ -65,7 +65,7 @@
         ></Column>
         <Column header="Capture" style="text-align: center; width: 1%">
           <template #body="slotProps">
-            <Button label="start" severity="info" class="custom-button" @click="viewItem(slotProps.rowIndex)"></Button>
+            <Button label="start" severity="info" class="custom-button" @click="viewItem(slotProps.data.index-1)"></Button>
   </template>
         </Column>
       </DataTable>
@@ -86,8 +86,9 @@ const websocketStore = useWebSocketStore();
 
 const viewItem = (index) => {
   const rowData = iot.value[index];
-  // rowData를 이용하여 필요한 작업 수행
-  console.log(rowData);
+   const deviceIp = rowData.ip;
+   console.log(deviceIp);
+   websocketStore.startCapture(deviceIp);
 };
 
 const iot = ref([]);
@@ -148,6 +149,7 @@ watch(
     }
   },
 );
+
 </script>
 
 <style scoped>
