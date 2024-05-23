@@ -84,9 +84,7 @@ export default {
 }
 .wrap-pktCapture-page {
   display: flex;
-  height: 100vh;
-  background-color: #f0f8ff;
-  padding: 1.5vh;
+  height: 100%;
 }
 .sidebar {
   display: flex;
