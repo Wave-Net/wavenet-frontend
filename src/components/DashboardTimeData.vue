@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { useWebSocketStore } from "../store/websocketStore";
+import { useWebSocketStore } from "@/store";
 import { ref, watch, reactive, onMounted, onUnmounted } from "vue";
 import Chart from "primevue/chart";
 

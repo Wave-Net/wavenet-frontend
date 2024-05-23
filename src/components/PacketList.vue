@@ -38,7 +38,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useWebSocketStore } from "@/store/websocketStore";
+import { useWebSocketStore } from "@/store";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ContextMenu from "primevue/contextmenu";

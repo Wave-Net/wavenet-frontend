@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import MainView from "../page/iot-monitoring-page.vue";
-import DashboardView from "../page/capture-page.vue";
-import FlowchartView from "../page/flowchart-page.vue";
+import MainView from "@/page/DeviceMonitoringPage.vue";
+import DashboardView from "@/page/CapturePage.vue";
+import FlowchartView from "@/page/FlowchartPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
