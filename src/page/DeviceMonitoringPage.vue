@@ -1,80 +1,84 @@
 <template>
-  <div class="container">
-    <div class="chart-container">
-      <OrganizationChart :value="data" class="chart">
-        <template #default="slotProps">
-          <div>
-            <div v-if="slotProps.node.data.image" class="node-header">
-              <img
-                :src="slotProps.node.data.image"
-                :alt="slotProps.node.data.title"
-                class="node-image"
-              />
+  <div class="full-view">
+    <HeaderStructure />
+    <div class="container">
+      <div class="chart-container">
+        <OrganizationChart :value="data" class="chart">
+          <template #default="slotProps">
+            <div>
+              <div v-if="slotProps.node.data.image" class="node-header">
+                <img
+                  :src="slotProps.node.data.image"
+                  :alt="slotProps.node.data.title"
+                  class="node-image"
+                />
+              </div>
+
+              <div v-else class="node-header">{{ slotProps.node.label }}</div>
+
+              <div
+                class="node-content"
+                :style="{ color: data.is_transmitting ? 'green' : 'red' }"
+              >
+                <div class="node-text">{{ slotProps.node.data.title }}</div>
+
+                <div>{{ slotProps.node.data.email }}</div>
+              </div>
             </div>
-
-            <div v-else class="node-header">{{ slotProps.node.label }}</div>
-
-            <div
-              class="node-content"
-              :style="{ color: data.is_transmitting ? 'green' : 'red' }"
-            >
-              <div class="node-text">{{ slotProps.node.data.title }}</div>
-
-              <div>{{ slotProps.node.data.email }}</div>
-            </div>
-          </div>
-        </template>
-      </OrganizationChart>
-    </div>
-
-    <div class="data-container">
-      <div class="data-container-title">Connencted device</div>
-      <DataTable :value="iot" class="custom-datatable" :rows="10" paginator>
-        <Column field="index" header="#" sortable style="width: 1%"></Column>
-        <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
-        <Column field="ip" header="IP" sortable style="width: 8%"></Column>
-        <Column
-          field="hostname"
-          header="Hostname"
-          sortable
-          style="width: 8%"
-        ></Column>
-        <Column
-          field="send_byte"
-          header="송신 바이트"
-          sortable
-          style="width: 9%"
-        ></Column>
-        <Column
-          field="receive_byte"
-          header="수신 바이트"
-          sortable
-          style="width: 9%"
-        ></Column>
-        <Column
-          field="send_packet"
-          header="송신 패킷"
-          sortable
-          style="width: 8%"
-        ></Column>
-        <Column
-          field="receive_packet"
-          header="수신 패킷"
-          sortable
-          style="width: 8%"
-        ></Column>
-        <Column header="Capture" style="text-align: center; width: 1%">
-          <template #body="slotProps">
-            <Button
-              label="start"
-              severity="info"
-              class="custom-button"
-              @click="viewItem(slotProps.data.index - 1)"
-            ></Button>
           </template>
-        </Column>
-      </DataTable>
+        </OrganizationChart>
+      </div>
+
+      <div class="data-container">
+        <div class="data-container-title">Connencted device</div>
+        <DataTable :value="iot" class="custom-datatable" :rows="10" paginator>
+          <Column field="index" header="#" sortable style="width: 1%"></Column>
+          <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
+          <Column field="ip" header="IP" sortable style="width: 8%"></Column>
+          <Column
+            field="hostname"
+            header="Hostname"
+            sortable
+            style="width: 8%"
+          ></Column>
+          <Column
+            field="send_byte"
+            header="송신 바이트"
+            sortable
+            style="width: 9%"
+          ></Column>
+          <Column
+            field="receive_byte"
+            header="수신 바이트"
+            sortable
+            style="width: 9%"
+          ></Column>
+          <Column
+            field="send_packet"
+            header="송신 패킷"
+            sortable
+            style="width: 8%"
+          ></Column>
+          <Column
+            field="receive_packet"
+            header="수신 패킷"
+            sortable
+            style="width: 8%"
+          ></Column>
+          <Column header="Capture" style="text-align: center; width: 1%">
+            <template #body="slotProps">
+              <Button
+                label="start"
+                severity="info"
+                class="custom-button"
+                @click="viewItem(slotProps.data.index - 1)"
+              ></Button>
+            </template>
+          </Column>
+        </DataTable>
+      </div>
     </div>
+    <FooterStructure />
   </div>
 </template>
 
@@ -85,6 +89,8 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import OrganizationChart from "primevue/organizationchart";
 import Button from "primevue/button";
+import HeaderStructure from "../components/HeaderStructure.vue";
+import FooterStructure from "../components/FooterStructure.vue";
 
 const websocketStore = useWebSocketStore();
 
@@ -158,9 +164,21 @@ watch(
 </script>
 
 <style scoped>
+.full-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+HeaderStructure {
+  height: 50px;
+}
+FooterStructure {
+  height: 21.6px;
+}
 .container {
-  margin: 0 auto;
-  min-height: 100%;
+  margin: 0;
+  /* min-height: 100%; */
+  flex: 1;
 }
 
 .custom-button {
@@ -174,7 +192,7 @@ watch(
   width: 70%;
   background-color: white;
   border-radius: 12px;
-  margin: 5px auto 5px auto;
+  margin: 0 auto 5px auto;
   padding: 0px;
   display: flex;
   /* Flexbox를 사용하여 내부 요소를 정렬합니다. */

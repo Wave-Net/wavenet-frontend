@@ -1,12 +1,13 @@
 <template>
-  <div id="app-wavenet" class="app-wavenet">
+  <router-view />
+  <!-- <div id="app-wavenet" class="app-wavenet">
     <header>
-      <!-- 헤더 컴포넌트 -->
+      헤더 컴포넌트
       <div class="logo-container">
-        <!-- <img src="@/assets/wavenLo.png" alt="WaveNet Logo" class="logo" /> -->
+        <img src="@/assets/wavenLo.png" alt="WaveNet Logo" class="logo" />
         <img src="@/assets/wavenLogoVer2.png" alt="WaveNet Logo" class="logo" />
       </div>
-      <!-- 아래 nav는 나중에 삭제 할것 -->
+      아래 nav는 나중에 삭제 할것
       <div id="nav">
         <router-link to="/">Home</router-link> |
         <router-link to="/capture-page">Capture</router-link>
@@ -14,15 +15,12 @@
     </header>
 
     <main>
-      <!-- 라우터 뷰 -->
+      라우터 뷰
       <router-view />
     </main>
 
-    <footer>
-      <!-- 푸터 컴포넌트 -->
-      세종대학교 컴퓨터공학과 캡스톤 9조 NetSurfer
-    </footer>
-  </div>
+    
+  </div> -->
 </template>
 
 <script setup>
