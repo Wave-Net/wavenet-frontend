@@ -168,6 +168,7 @@ watch(
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #f8fafc;
 }
 HeaderStructure {
   height: 50px;
