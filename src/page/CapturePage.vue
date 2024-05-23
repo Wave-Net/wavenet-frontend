@@ -1,58 +1,81 @@
 <template>
-  <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
-    <div id="sidebar" class="sidebar">
-      <div id="iot" class="iot">
-        <IotPrint />
-      </div>
-      <div id="menu-button-bar" class="menu-button-bar">
-        <MenuButton />
-      </div>
-      <div id="dashboard" class="dashboard">
-        <div id="dashboard-data" class="dashboard-data">
-          <DashboardData
-            :labelData1="'패킷 입력량'"
-            :labelData2="'패킷 출력량'"
-            :labelData3="'데이터 수신량'"
-            :labelData4="'데이터 송신량'"
-          />
+  <div class="full-view">
+    <HeaderStructure />
+    <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
+      <div id="sidebar" class="sidebar">
+        <div id="iot" class="iot">
+          <IotPrint />
         </div>
-        <div id="dashboard-timedata" class="dashboard-timedata">
-          <DashboardTimeData
-            :labelData1="'패킷 입력량/초'"
-            :labelData2="'패킷 출력량/초'"
-            :labelData3="'데이터 수신량/초'"
-            :labelData4="'데이터 송신량/초'"
-          />
+        <div id="menu-button-bar" class="menu-button-bar">
+          <MenuButton />
+        </div>
+        <div id="dashboard" class="dashboard">
+          <div id="dashboard-data" class="dashboard-data">
+            <DashboardData
+              :labelData1="'패킷 입력량'"
+              :labelData2="'패킷 출력량'"
+              :labelData3="'데이터 수신량'"
+              :labelData4="'데이터 송신량'"
+            />
+          </div>
+          <div id="dashboard-timedata" class="dashboard-timedata">
+            <DashboardTimeData
+              :labelData1="'패킷 입력량/초'"
+              :labelData2="'패킷 출력량/초'"
+              :labelData3="'데이터 수신량/초'"
+              :labelData4="'데이터 송신량/초'"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="container" class="container">
+        <div id="pkt-list" class="pkt-list">
+          <PacketList />
         </div>
       </div>
     </div>
-    <div id="container" class="container">
-      <div id="pkt-list" class="pkt-list">
-        <PacketList />
-      </div>
-    </div>
+    <FooterStructure />
   </div>
 </template>
 
-<script>
-import IotPrint from "../components/IotPrint.vue";
-import MenuButton from "../components/MenuButton.vue";
-import DashboardData from "../components/DashboardData.vue";
-import DashboardTimeData from "../components/DashboardTimeData.vue";
-import PacketList from "../components/PacketList.vue";
+<script setup>
+import { defineAsyncComponent } from "vue";
 
-export default {
-  components: {
-    IotPrint,
-    MenuButton,
-    DashboardData,
-    DashboardTimeData,
-    PacketList,
-  },
-};
+const IotPrint = defineAsyncComponent(() =>
+  import("../components/IotPrint.vue")
+);
+const MenuButton = defineAsyncComponent(() =>
+  import("../components/MenuButton.vue")
+);
+const DashboardData = defineAsyncComponent(() =>
+  import("../components/DashboardData.vue")
+);
+const DashboardTimeData = defineAsyncComponent(() =>
+  import("../components/DashboardTimeData.vue")
+);
+const PacketList = defineAsyncComponent(() =>
+  import("../components/PacketList.vue")
+);
+const HeaderStructure = defineAsyncComponent(() =>
+  import("../components/HeaderStructure.vue")
+);
+const FooterStructure = defineAsyncComponent(() =>
+  import("../components/FooterStructure.vue")
+);
 </script>
 
 <style>
+.full-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+HeaderStructure {
+  height: 50px;
+}
+FooterStructure {
+  height: 21.6px;
+}
 .pkt-list {
   margin-left: 5px;
   background-color: whitesmoke;
@@ -85,6 +108,7 @@ export default {
 .wrap-pktCapture-page {
   display: flex;
   height: 100%;
+  flex: 1;
 }
 .sidebar {
   display: flex;
