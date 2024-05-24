@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import MainView from "@/page/DeviceMonitoringPage.vue";
-import DashboardView from "@/page/CapturePage.vue";
-import FlowchartView from "@/page/FlowchartPage.vue";
+import MainView from "@/pages/DeviceMonitoringPage.vue";
+import DashboardView from "@/pages/CapturePage.vue";
+import FlowchartView from "@/pages/FlowchartPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {

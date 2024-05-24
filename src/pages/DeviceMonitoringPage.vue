@@ -84,7 +84,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { useWebSocketStore } from "@/store";
+import { useWebSocketStore } from "@/stores";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import OrganizationChart from "primevue/organizationchart";

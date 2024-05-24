@@ -26,7 +26,7 @@
 import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
 import "primeicons/primeicons.css";
-import { useWebSocketStore } from "@/store";
+import { useWebSocketStore } from "@/stores";
 import { ref } from "vue";
 
 const websocketStore = useWebSocketStore();
