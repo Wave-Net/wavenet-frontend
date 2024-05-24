@@ -1,27 +1,18 @@
 <template>
-  <div>
-    <Menubar :model="menuItems" class="menubar">
-      <template #start>
-        <div>
-          <img
-            alt="logo"
-            src="https://i.ibb.co/X2BdhfP/Kakao-Talk-20240510-171615462.png"
-            height="25.6"
-            class="mr-2"
-          />
-        </div>
-      </template>
-    </Menubar>
-  </div>
   <div class="title_space">
-  <div class="time_title">시간</div>
-  <div class="source_title">Source</div>
-  <div class="destination_title">Destination</div>
-</div>
-  <hr class="bottom-border">
-  <div class="timeline-container">
+    <div class="time_title">시간</div>
+    <div class="source_title">Source</div>
+    <div class="destination_title">Destination</div>
+  </div>
+  <hr class="bottom-border" />
+  <div
+    class="timeline-container"
+    v-if="filteredPackets && filteredPackets.length > 0"
+  >
     <div class="left-timeline">
-      <h2 class="timeline-title-left">{{ packetData.length > 0 ? packetData[0].source_ip : 'No data available' }}</h2>
+      <h2 class="timeline-title-left">
+        {{ filteredPackets[0].source_ip }}
+      </h2>
       <Timeline class="left-timeline" :value="leftEvents">
         <template #opposite="slotProps">
           <small class="p-text-secondary">{{ slotProps.item.date }}</small>
@@ -33,115 +24,92 @@
     <div class="timeline-space">
       <div
         class="line-container"
-        v-for="(packet, index) in packetData" :key="index"
+        v-for="(packet, index) in filteredPackets"
+        :key="index"
       >
         <hr class="horizontal-line" />
         <div class="horizontal-line-text">{{ packet.type }}</div>
-        <svg :class="{'right-arrow': packet.source_ip === packetData[0].source_ip, 'left-arrow': packet.source_ip !== packetData[0].source_ip}" viewBox="0 0 20 20">
-    <path d="M0 10 L20 10 L10 0 L10 20 Z" />
+        <svg
+          :class="{
+            'right-arrow': packet.source_ip === filteredPackets[0].source_ip,
+            'left-arrow': packet.source_ip !== filteredPackets[0].source_ip,
+          }"
+          viewBox="0 0 20 20"
+        >
+          <path d="M0 10 L20 10 L10 0 L10 20 Z" />
         </svg>
-        
       </div>
     </div>
     <!-- 추가된 가로선과 텍스트 -->
 
     <div class="right-timeline">
-      <h2 class="timeline-title-right">{{ packetData.length > 0 ? packetData[0].destination_ip : 'No data available' }}</h2>
+      <h2 class="timeline-title-right">
+        {{ filteredPackets[0].destination_ip }}
+      </h2>
       <Timeline class="right-timeline" :value="rightEvents"></Timeline>
     </div>
   </div>
-
+  <div v-else>
+    <p>No data available</p>
+  </div>
 </template>
 
 <script>
 import Timeline from "primevue/timeline";
-import Menubar from "primevue/menubar";
-import { ref, onMounted, watch } from "vue";
-
+import { ref, watch } from "vue";
 
 export default {
   components: {
     Timeline,
-    Menubar,
   },
-  setup() {
-
-
-const leftEvents = ref([
-  
-]);
-
-const rightEvents = ref([
-  
-]);
-
-const menuItems = ref([
-  {
-    label: "IoT기기",
+  props: {
+    filteredPackets: Array,
   },
-  {
-    label: "Public IP",
-  },
-  {
-    label: "Private IP",
-  },
-]);
+  setup(props) {
+    const leftEvents = ref([]);
+    const rightEvents = ref([]);
 
-const getFromLocalStorage = (key) => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
-};
-
-
-    const packetData = ref([]);
-
-    onMounted(() => {
-      
-        const localStorageData = getFromLocalStorage("filteredPackets");
-        if (localStorageData) {
-          packetData.value = localStorageData;
-          console.log("Packet data from localStorage:", packetData.value);
-        } else {
-          console.log("No packet data available in localStorage.");
+    watch(
+      () => props.filteredPackets,
+      (newValue) => {
+        if (newValue) {
+          leftEvents.value = [];
+          rightEvents.value = [];
+          for (let i = 0; i < newValue.length; i++) {
+            leftEvents.value.push({
+              date: newValue[i].seconds_since_beginning,
+              status: newValue[i].status,
+            });
+            rightEvents.value.push({ status: newValue[i].status });
+          }
         }
-    });
+      },
+      { immediate: true }
+    );
 
-    watch(packetData, (newValue,) => {
-      // packetData가 변경될 때마다 새로운 타임라인을 추가
-      for (let i = 0; i < newValue.length; i++) {
-        leftEvents.value.push({ date: newValue[i].seconds_since_beginning, status: newValue[i].status });
-        rightEvents.value.push({ status: newValue[i].status });
-      }
-    });
-    
-return { leftEvents, rightEvents, menuItems, packetData};
-},
+    return { leftEvents, rightEvents };
+  },
 };
 </script>
 
 <style scoped>
-.menubar img {
-  display: block;
-  margin: 0 auto;
-}
-
 .timeline-title-left {
-  text-align: center; /* 제목 가운데 정렬 */
+  text-align: center;
   font-size: 12px;
-  margin-top: 2px; /* 제목과 타임라인 간격 조정 */
+  margin-top: 2px;
   position: absolute;
-  top: -22px; /* 타임라인 위에 위치 */
-  left: 70%; /* 가운데 정렬 */
+  top: -22px;
+  left: 70%;
   color: #999999;
 }
 
 .timeline-title-right {
-  text-align: center; /* 제목 가운데 정렬 */
+  text-align: center;
   font-size: 12px;
-  margin-top: 2px; /* 제목과 타임라인 간격 조정 */
+  margin-top: 2px;
   position: absolute;
-  top: -22px; /* 타임라인 위에 위치 */
-  left: -45%; /* 가운데 정렬 */
+  top: -22px;
+  left: -45%;
   color: #999999;
 }
 
@@ -156,14 +124,14 @@ return { leftEvents, rightEvents, menuItems, packetData};
 }
 
 .line-container {
-  position: relative; /* 추가된 부분 */
+  position: relative;
 }
 
 .left-timeline >>> .p-timeline-event-opposite {
   padding-right: 60px;
   padding-left: 30px;
   display: flex;
-  align-items: flex-start; /* 상단 정렬 */
+  align-items: flex-start;
 }
 
 .left-timeline >>> .p-timeline-event-content {
@@ -190,7 +158,7 @@ return { leftEvents, rightEvents, menuItems, packetData};
   border-bottom: none;
   margin-bottom: 5px;
   position: relative;
-  z-index: 1; /* 수정된 부분 */
+  z-index: 1;
 }
 
 .horizontal-line-text {
@@ -225,7 +193,7 @@ return { leftEvents, rightEvents, menuItems, packetData};
 }
 
 .title_space {
-  height: 30px; /* 빈 공간의 세로 폭 설정 */
+  height: 30px;
   background-color: #f8f9fa;
   display: flex;
   align-items: center;
@@ -243,19 +211,18 @@ return { leftEvents, rightEvents, menuItems, packetData};
 }
 
 .source_title {
-width: 90px;
-text-align: center;
-
+  width: 90px;
+  text-align: center;
 }
 
-.destination_title{
+.destination_title {
   text-align: right;
   width: calc(100% - 220px);
 }
 
 .bottom-border {
-  border-top: 1px solid #dee2e6; /* 하단 경계선 스타일 */
-  margin-bottom: 30px; /* 하단 여백 추가 */
+  border-top: 1px solid #dee2e6;
+  margin-bottom: 30px;
   margin-top: 0px;
 }
 </style>

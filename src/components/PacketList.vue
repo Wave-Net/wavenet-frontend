@@ -93,11 +93,13 @@ const saveToLocalStorage = (key, data) => {
 const goToFlowchart = (rowIndex) => {
   if (rowIndex !== null) {
     const selectedPacket = packetMessages.value[rowIndex.value];
-    console.log("sel",selectedPacket);
+    console.log("sel", selectedPacket);
     const filteredPackets = packetMessages.value.filter(
       (packet) =>
-      (packet.source_ip === selectedPacket.source_ip || packet.source_ip === selectedPacket.destination_ip) &&
-(packet.destination_ip === selectedPacket.source_ip || packet.destination_ip === selectedPacket.destination_ip)
+        (packet.source_ip === selectedPacket.source_ip ||
+          packet.source_ip === selectedPacket.destination_ip) &&
+        (packet.destination_ip === selectedPacket.source_ip ||
+          packet.destination_ip === selectedPacket.destination_ip)
     );
 
     saveToLocalStorage("filteredPackets", filteredPackets);
@@ -112,5 +114,4 @@ const goToFlowchart = (rowIndex) => {
     }
   }
 };
-
 </script>
