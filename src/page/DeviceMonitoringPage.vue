@@ -32,50 +32,26 @@
       <div class="data-container">
         <div class="data-container-title">Connencted device</div>
         <DataTable :value="iot" class="custom-datatable" :rows="10" paginator>
-          <Column field="index" header="#" sortable style="width: 1%"></Column>
-          <Column field="mac" header="MAC" sortable style="width: 8%"></Column>
-          <Column field="ip" header="IP" sortable style="width: 8%"></Column>
-          <Column
-            field="hostname"
-            header="Hostname"
-            sortable
-            style="width: 8%"
-          ></Column>
-          <Column
-            field="send_byte"
-            header="송신 바이트"
-            sortable
-            style="width: 9%"
-          ></Column>
-          <Column
-            field="receive_byte"
-            header="수신 바이트"
-            sortable
-            style="width: 9%"
-          ></Column>
-          <Column
-            field="send_packet"
-            header="송신 패킷"
-            sortable
-            style="width: 8%"
-          ></Column>
-          <Column
-            field="receive_packet"
-            header="수신 패킷"
-            sortable
-            style="width: 8%"
-          ></Column>
-          <Column header="Capture" style="text-align: center; width: 1%">
-            <template #body="slotProps">
-              <Button
-                label="start"
-                severity="info"
-                class="custom-button"
-                @click="viewItem(slotProps.data.index - 1)"
-              ></Button>
-            </template>
-          </Column>
-        </DataTable>
+      <template v-for="(column, index) in columns" :key="index">
+        <Column  
+          :field="column.field"
+          :header="column.header"
+          :sortable="column.sortable"
+          :style="column.style"
+        ></Column>
+      </template>
+      <!-- 마지막 컬럼 추가 -->
+      <Column header="Capture" style="text-align: center; width: 1%">
+        <template #body="slotProps">
+          <Button
+            label="start"
+            severity="info"
+            class="custom-button"
+            @click="viewItem(slotProps.data.index - 1)"
+          ></Button>
+        </template>
+      </Column>
+    </DataTable>
       </div>
     </div>
     <FooterStructure />
@@ -84,7 +60,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { useWebSocketStore } from "@/store";
+import { useWebSocketStore } from "@/store/websocket/actions.ts";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import OrganizationChart from "primevue/organizationchart";
@@ -102,6 +78,17 @@ const viewItem = (index) => {
 };
 
 const iot = ref([]);
+
+const columns = ref([
+  { field: "index", header: "#", sortable: true, style: "width: 1%" },
+  { field: "mac", header: "MAC", sortable: true, style: "width: 8%" },
+  { field: "ip", header: "IP", sortable: true, style: "width: 8%" },
+  { field: "hostname", header: "Hostname", sortable: true, style: "width: 8%" },
+  { field: "send_byte", header: "송신 바이트", sortable: true, style: "width: 9%" },
+  { field: "receive_byte", header: "수신 바이트", sortable: true, style: "width: 9%" },
+  { field: "send_packet", header: "송신 패킷", sortable: true, style: "width: 8%" },
+  { field: "receive_packet", header: "수신 패킷", sortable: true, style: "width: 8%" },
+]);
 
 const data = ref({
   key: "0",
@@ -128,7 +115,9 @@ onMounted(() => {
 watch(
   () => websocketStore.statMessage,
   (newStatMessage) => {
+    console.log("실행중1");
     if (newStatMessage && newStatMessage.data) {
+      console.log("실행중");
       iot.value = newStatMessage.data.map((item, index) => ({
         index: index + 1,
         mac: "알 수 없음", // 예시 데이터, 실제 데이터로 교체하세요
