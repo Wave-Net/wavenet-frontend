@@ -198,13 +198,20 @@ FooterStructure {
 
 .data-container {
   width: 70%;
-  height: 60vh;
+  height: 65vh;
   background-color: white;
   border-radius: 12px;
   margin: 30px auto 0px auto;
   /* 좌우 마진을 자동으로 설정하여 수평 중앙 정렬 */
   padding: 10px 20px 20px 20px;
   border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 1400px) {
+  .chart-container,
+  .data-container {
+    width: 100%;
+  }
 }
 
 .data-container-title {
