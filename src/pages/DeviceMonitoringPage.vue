@@ -1,14 +1,34 @@
 <template>
   <TheHeader />
-  <main>
-    <div class="row-lg-1">
-      <div class="col-lg-1">
-        섹션 1
+  <main class="content">
+    <div class="row">
+      <div class="col-9">
+        <Card>
+          <template #title>Simple Card</template>
+          <template #content>
+            <p class="m-0">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Inventore sed consequuntur error repudiandae numquam deserunt
+              quisquam repellat libero asperiores earum nam nobis, culpa ratione
+              quam perferendis esse, cupiditate neque quas!
+            </p>
+          </template>
+        </Card>
       </div>
     </div>
-    <div class="row-lg-3">
-      <div class="col-lg-1">
-        섹션 2
+    <div class="row">
+      <div class="col-9">
+        <Card>
+          <template #title>Simple Card</template>
+          <template #content>
+            <p class="m-0">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Inventore sed consequuntur error repudiandae numquam deserunt
+              quisquam repellat libero asperiores earum nam nobis, culpa ratione
+              quam perferendis esse, cupiditate neque quas!
+            </p>
+          </template>
+        </Card>
       </div>
     </div>
   </main>
@@ -17,7 +37,7 @@
 
 <script setup lang="ts">
 import { TheHeader, TheFooter } from "@/components";
+import Card from "primevue/card";
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

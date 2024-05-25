@@ -5,6 +5,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { useWebSocketStore } from "@/stores";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const websocketStore = useWebSocketStore();
 

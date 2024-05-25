@@ -1,16 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-// 전역 변수
 $primary-color: #2c3e50;
 $secondary-color: #f39c12;
 $background-color: #F5F7FB;
-$font-size-base: 1rem; // 16px
+$font-type-base: 'Poppins';
+$font-size-base: 1rem;
 $font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-bold: 600;
 $font-weight-extra-bold: 700;
 
-// 전역 스타일
 html, body {
   margin: 0;
   padding: 0;
@@ -19,6 +18,8 @@ html, body {
   font-size: $font-size-base;
   font-weight: $font-weight-light;
   background-color: $background-color;
+  overflow: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
