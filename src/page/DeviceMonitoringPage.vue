@@ -32,14 +32,7 @@
       <div class="data-container">
         <div class="data-container-title">Connencted device</div>
         <DataTable :value="iot" class="custom-datatable" :rows="10" paginator>
-      <template v-for="(column, index) in columns" :key="index">
-        <Column  
-          :field="column.field"
-          :header="column.header"
-          :sortable="column.sortable"
-          :style="column.style"
-        ></Column>
-      </template>
+          <Column v-for="(column, index) in columns" :key="index" :field="column.field" :header="column.header" :sortable="column.sortable" :style="column.style" />
       <!-- 마지막 컬럼 추가 -->
       <Column header="Capture" style="text-align: center; width: 1%">
         <template #body="slotProps">
