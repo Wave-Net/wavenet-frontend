@@ -56,7 +56,7 @@ export const deviceData: Device[] = [
     mac: "cc:dd:ff",
     ip: "127.0.0.3",
     hostname: "Unknown",
-    send_byte: 2123327,
+    send_byte: 212332712321312,
     receive_byte: 312123,
     send_packet: 111,
     receive_packet: 233,
