@@ -9,7 +9,7 @@ import { useWebSocketStore } from "@/store";
 const websocketStore = useWebSocketStore();
 
 onMounted(() => {
-  websocketStore.connect("ws://localhost:8000/ws");
+  websocketStore.connect("ws://localhost:8765/ws");
 });
 
 onUnmounted(() => {
