@@ -2,7 +2,7 @@
   <router-view />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { useWebSocketStore } from "@/stores";
 
@@ -16,3 +16,7 @@ onUnmounted(() => {
   websocketStore.disconnect();
 });
 </script>
+
+<style lang="scss">
+@import '@/assets/sass/wavenet.scss';
+</style>
