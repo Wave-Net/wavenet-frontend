@@ -10,6 +10,7 @@ const websocketStore = useWebSocketStore();
 
 onMounted(() => {
   websocketStore.connect("ws://localhost:8000/ws");
+  
 });
 
 onUnmounted(() => {

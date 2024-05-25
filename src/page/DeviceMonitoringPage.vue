@@ -70,11 +70,16 @@ import FooterStructure from "../components/FooterStructure.vue";
 
 const websocketStore = useWebSocketStore();
 
+
+
 const viewItem = (index) => {
   const rowData = iot.value[index];
   const deviceIp = rowData.ip;
   console.log(deviceIp);
-  websocketStore.startCapture(deviceIp);
+
+  const currentUrl = window.location.origin;
+  const newTabUrl = `${currentUrl}/capture-page?deviceIp=${deviceIp}`;
+  window.open(newTabUrl, '_blank');
 };
 
 const iot = ref([]);
@@ -115,9 +120,7 @@ onMounted(() => {
 watch(
   () => websocketStore.statMessage,
   (newStatMessage) => {
-    console.log("실행중1");
     if (newStatMessage && newStatMessage.data) {
-      console.log("실행중");
       iot.value = newStatMessage.data.map((item, index) => ({
         index: index + 1,
         mac: "알 수 없음", // 예시 데이터, 실제 데이터로 교체하세요

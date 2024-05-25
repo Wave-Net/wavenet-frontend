@@ -15,7 +15,7 @@ export const useWebSocketStore = defineStore("websocket", {
         this.websocket.onmessage = (event) => {
           console.log(event.data);
           const receivedData = JSON.parse(event.data) as Message;
-          if (receivedData.message_type === "stat") {
+          if (receivedData.type === "stats") {
             const statMessage = JSON.parse(event.data) as StatMessage;
             this.statMessage = statMessage;
             console.log("받은 데이터:", statMessage);
