@@ -1,23 +1,6 @@
 <template>
   <div class="full-view">
-    <div class="header-buttons-row">
-      <HeaderStructure />
-      <!-- 패널 숨김/표시 버튼 -->
-      <div class="mt-3">
-        <Button @click="togglePanel1">
-          {{ showPanel1 ? "Hide" : "Show" }} Panel 1
-        </Button>
-        <Button @click="togglePanel3" class="ml-2">
-          {{ showPanel3 ? "Hide" : "Show" }} Panel 3
-        </Button>
-        <Button @click="togglePanel4" class="ml-2">
-          {{ showPanel4 ? "Hide" : "Show" }} Panel 4
-        </Button>
-        <Button @click="togglePanel5" class="ml-2">
-          {{ showPanel5 ? "Hide" : "Show" }} Panel 5
-        </Button>
-      </div>
-    </div>
+    <HeaderStructure />
     <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
       <div id="capturepage-container" style="height: 100%">
         <Splitter style="height: 100%; background-color: '#f8fafc'">
@@ -55,7 +38,7 @@
               </div>
             </div>
           </SplitterPanel>
-          <!-- 패널 1이 숨겨져 있을 때 남은 �� 차지하는 패 -->
+          <!-- 패널 1이 숨겨져 있을 때 남은  차지하는 패 -->
           <SplitterPanel :size="showPanel1 ? 80 : 100">
             <Splitter>
               <!-- 패널 5가 숨겨져 있을 때 남은 공간을 차지하는 패널 -->
@@ -63,7 +46,7 @@
                 <Splitter layout="vertical">
                   <!-- 패널 2: 패널 3과 패널 4가 모두 숨겨져 있을 때 남은 공간을 차지함 & 패킷 리스트 출력-->
                   <SplitterPanel
-                    class="flex align-items-center justify-content-center"
+                    class="flex align-items-center justify-content-center panel-scroll"
                     :size="showPanel3 || showPanel4 ? 50 : 100"
                   >
                     <div id="pkt-list" class="pkt-list">
@@ -73,7 +56,6 @@
                         size="small"
                         showGridlines
                         scrollable
-                        scrollHeight="97vh"
                         rowHover
                         title="패킷 정보"
                         @row-click="onRowClick"
@@ -101,7 +83,7 @@
                       <!-- 패널 3: 버튼으로 숨기거나 표시할 수 있음 & 다이어그램 패널-->
                       <SplitterPanel
                         v-if="showPanel3"
-                        class="flex align-items-center justify-content-center"
+                        class="flex align-items-center justify-content-center panel-scroll"
                         :size="showPanel4 ? 20 : 100"
                       >
                         <div v-if="selectedPacket">
@@ -128,14 +110,16 @@
               <!-- 패널 5: 버튼으로 숨기거나 표시할 수 있음 & 플로우차트 표현 -->
               <SplitterPanel
                 v-if="showPanel5"
-                class="flex align-items-center justify-content-center"
+                class="flex align-items-center justify-content-center panel-scroll"
                 :size="50"
               >
-                <div v-if="filteredPackets.length > 0">
-                  <FlowchartPage :value="filteredPackets" />
-                </div>
-                <div v-else>
-                  <p>패킷을 두 번 클릭하여 상세 정보를 확인하세요.</p>
+                <div>
+                  <FlowchartPage
+                    :flowchart_packets="flowchart_packets"
+                    :rowIndex="clickedRowIndex"
+                    :sourceIP="sourceIP"
+                    :destinationIP="destinationIP"
+                  />
                 </div>
               </SplitterPanel>
             </Splitter>
@@ -150,7 +134,7 @@
 import { defineAsyncComponent } from "vue";
 // 비동기적으로 컴포넌트를 로드하면, 해당 컴포넌트가 실제로 렌더링되기 전까지는 로드되지 않습니다. 이는 초기 번들 크기를 줄이고 애플리케이션의 초기 로딩 속도를 개선하는 데 도움
 // 컴포넌트를 동기적으로 가져오면(import IotPrint from '../components/IotPrint.vue'), 해당 컴포넌트 코드는 번들에 포함되어 초기 로딩 시 함께 로드됩니다. 이는 번들 크기를 증시키고 초기 로딩 도를 저하
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import Splitter from "primevue/splitter";
 import SplitterPanel from "primevue/splitterpanel";
 import Button from "primevue/button";
@@ -206,13 +190,18 @@ const togglePanel5 = () => {
   showPanel5.value = !showPanel5.value;
 };
 
-// 다이어그램
-const selectedPacket = ref(null);
-
-// 플로우차트
-const filteredPackets = ref([]);
+// packetMessages가 변경될 때 실행될 watch
+// 중단 - 시작 버튼 누를때 패널3,4,5 닫기 위함
+watch(packetMessages, (newVal) => {
+  if (newVal.length === 0) {
+    showPanel3.value = false;
+    showPanel4.value = false;
+    showPanel5.value = false;
+  }
+});
 
 // 클릭 상태를 저장하는 변수
+// 두번클릭시 한번클릭하는것 이벤트 막기위함
 const lastClickTime = ref(0);
 const doubleClickThreshold = 300; // 더 클릭 간격 임계값 (밀리초)
 
@@ -236,6 +225,9 @@ const onRowClick = (event) => {
   }
 };
 
+// 다이어그램
+const selectedPacket = ref(null);
+
 const handleSingleClick = (event) => {
   // 싱글 클릭 로직
   console.log("싱글 클릭 처리");
@@ -246,19 +238,29 @@ const handleSingleClick = (event) => {
   console.log("Selected Packet:", selectedPacket);
 };
 
+// 플로우차트
+const flowchart_packets = ref(null);
+const clickedRowIndex = ref(null); // 클릭된 행의 인덱스를 저장하기 위한 반응형 참조
+const sourceIP = ref(null);
+const destinationIP = ref(null);
 const handleDoubleClick = (event) => {
   // 더블 클릭 로직
-  const filteredResults = packetMessages.value.filter(
-    (packet) =>
-      (packet.source_ip === event.data.source_ip ||
-        packet.source_ip === event.data.destination_ip) &&
-      (packet.destination_ip === event.data.source_ip ||
-        packet.destination_ip === event.data.destination_ip)
-  );
+  clickedRowIndex.value = event.index; // 클릭한 행의 번호 저장
+  sourceIP.value = event.data.source_ip;
+  destinationIP.value = event.data.destination_ip;
 
-  filteredPackets.value = filteredResults; // 필터링된 패킷을 전역 상태에 저장
-  console.log("필터패킷", filteredPackets);
+  // 더블 클릭 시점의 packetMessages 데이터를 flowchart_packets에 할당
+  flowchart_packets.value = packetMessages.value;
+
   showPanel5.value = true; // 패널 5를 보여줍니다.
+  FlowchartPage.value = {
+    flowchart_packets: flowchart_packets.value,
+    rowIndex: clickedRowIndex.value,
+    sourceIP: sourceIP.value,
+    destinationIP: destinationIP.value,
+  };
+  console.log("더블클릭 이벤트 처리");
+  console.log("Flowchart Packets:", flowchart_packets.value);
 };
 </script>
 
@@ -334,5 +336,8 @@ FooterStructure {
 body {
   margin: 0;
   box-sizing: border-box;
+}
+.panel-scroll {
+  overflow: auto;
 }
 </style>
