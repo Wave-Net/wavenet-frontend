@@ -1,6 +1,23 @@
 <template>
   <div class="full-view">
-    <HeaderStructure />
+    <div class="header-buttons-row">
+      <HeaderStructure />
+      <!-- 패널 숨김/표시 버튼 -->
+      <div class="mt-3">
+        <Button @click="togglePanel1">
+          {{ showPanel1 ? "Hide" : "Show" }} Panel 1
+        </Button>
+        <Button @click="togglePanel3" class="ml-2">
+          {{ showPanel3 ? "Hide" : "Show" }} Panel 3
+        </Button>
+        <Button @click="togglePanel4" class="ml-2">
+          {{ showPanel4 ? "Hide" : "Show" }} Panel 4
+        </Button>
+        <Button @click="togglePanel5" class="ml-2">
+          {{ showPanel5 ? "Hide" : "Show" }} Panel 5
+        </Button>
+      </div>
+    </div>
     <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
       <div id="capturepage-container" style="height: 100%">
         <Splitter style="height: 100%; background-color: '#f8fafc'">
