@@ -37,6 +37,12 @@
       >
         Data
       </button>
+      <button
+        :class="{ active: currentTab === 'all' }"
+        @click="currentTab = 'all'"
+      >
+        All
+      </button>
     </div>
     <div class="tab-content">
       <div v-if="currentTab === 'packets'" class="card">
@@ -51,6 +57,14 @@
         <Chart
           type="line"
           :data="chartDataByte"
+          :options="chartOptions"
+          class="graph"
+        />
+      </div>
+      <div v-if="currentTab === 'all'" class="card">
+        <Chart
+          type="line"
+          :data="chartData"
           :options="chartOptions"
           class="graph"
         />
@@ -102,6 +116,47 @@ export default {
     const updateInterval = 1000;
 
     // 초기 차트 데이터 설정
+    const chartData = reactive({
+      labels: ["", "", "", "", "", "", ""],
+      datasets: [
+        {
+          label: "패킷 송신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "cyan",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+        {
+          label: "패킷 수신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "gray",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+        {
+          label: "데이터 송신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "orange",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+        {
+          label: "데이터 수신",
+          data: [0, 0, 0, 0, 0, 0, 0],
+          fill: false,
+          borderColor: "pink",
+          tension: 0.4,
+          borderWidth: 1,
+          pointRadius: 2,
+        },
+      ],
+    });
     const chartDataPacket = reactive({
       labels: ["", "", "", "", "", "", ""],
       datasets: [
@@ -113,7 +168,6 @@ export default {
           tension: 0.4,
           borderWidth: 1,
           pointRadius: 2,
-          yAxisID: "y",
         },
         {
           label: "패킷 수신",
@@ -123,7 +177,6 @@ export default {
           tension: 0.4,
           borderWidth: 1,
           pointRadius: 2,
-          yAxisID: "y1",
         },
       ],
     });
@@ -155,22 +208,9 @@ export default {
     const chartOptions = reactive({
       maintainAspectRatio: false,
       aspectRatio: 0.6,
+
+      // animation 비활성화
       animation: false,
-      scales: {
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-      },
     });
 
     // interval ID를 저장할 변수
@@ -196,6 +236,35 @@ export default {
         // 0번째 데이터 가져오기 -> 추후에 인덱스로 수정 필요
         const { send_pkt, recv_pkt, send_data, recv_data } =
           websocketStore.statMessage.data[0].stats;
+
+        // 새로운 데이터 추가
+        const newChartData = {
+          labels: [...chartData.labels.slice(1), ""],
+          datasets: chartData.datasets.map((dataset, index) => {
+            let newDataPoint = 0;
+            // index에 따라 데이터 설정
+            switch (index) {
+              case 0:
+                newDataPoint = send_pkt;
+                break;
+              case 1:
+                newDataPoint = recv_pkt;
+                break;
+              case 2:
+                newDataPoint = send_data;
+                break;
+              case 3:
+                newDataPoint = recv_data;
+                break;
+              default:
+                break;
+            }
+            return {
+              ...dataset,
+              data: [...dataset.data.slice(1), newDataPoint],
+            };
+          }),
+        };
 
         const newChartDataPacket = {
           labels: [...chartDataPacket.labels.slice(1), ""],
@@ -242,6 +311,12 @@ export default {
         };
 
         // 데이터 반영
+        chartData.labels = newChartData.labels;
+        chartData.datasets.forEach((dataset, i) => {
+          dataset.data = newChartData.datasets[i].data;
+        });
+
+        // 데이터 반영
         chartDataPacket.labels = newChartDataPacket.labels;
         chartDataPacket.datasets.forEach((dataset, i) => {
           dataset.data = newChartDataPacket.datasets[i].data;
@@ -260,6 +335,7 @@ export default {
       table_pkt_send,
       table_data_recv,
       table_data_send,
+      chartData,
       chartOptions,
       chartDataPacket,
       chartDataByte,
@@ -308,7 +384,7 @@ export default {
   cursor: pointer;
   padding: 10px 20px;
   transition: background-color 0.3s ease;
-  width: 50%;
+  width: 33.33%;
   font-weight: 600;
   color: #a6acaf;
 }
