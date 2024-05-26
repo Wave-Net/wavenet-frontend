@@ -1,11 +1,9 @@
 <template>
   <div ref="overflowStartCenter" class="overflow-start-center">
-    <OrganizationChart :value="data">
+    <OrganizationChart :value="formattedData">
       <template #default="slotProps">
-        <div class="node-content">
-          <i :class="slotProps.node.icon"></i>
-          <span>{{ slotProps.node.label }}</span>
-        </div>
+        <i :class="slotProps.node.icon"></i>
+        <span>{{ slotProps.node.label }}</span>
       </template>
     </OrganizationChart>
   </div>
@@ -13,48 +11,25 @@
 
 <script setup lang="ts">
 import OrganizationChart from "primevue/organizationchart";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineProps, computed } from "vue";
 
-const data = ref({
-  icon: "pi pi-wifi",
-  children: [
-    {
-      label: "1",
-    },
-    {
-      label: "2",
-    },
-    {
-      label: "3",
-    },
-    {
-      label: "4",
-    },
-    {
-      label: "5",
-    },
-    {
-      label: "6",
-    },
-    {
-      label: "7",
-    },
-    {
-      label: "8",
-    },
-    {
-      label: "9",
-    },
-    {
-      label: "10",
-    },
-    {
-      label: "11",
-    },
-    {
-      label: "12",
-    },
-  ],
+interface Device {
+  index: number;
+  is_active: boolean;
+}
+
+const props = defineProps<{
+  deviceData: Device[];
+}>();
+
+const formattedData = computed(() => {
+  return {
+    icon: "pi pi-wifi",
+    children: props.deviceData.map((device) => ({
+      label: `${device.index}`,
+      data: device,
+    })),
+  };
 });
 
 const overflowStartCenter = ref<HTMLDivElement | null>(null);

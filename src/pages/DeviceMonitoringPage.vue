@@ -5,7 +5,7 @@
       <div class="col-12">
         <Card class="diagram-card">
           <template #content>
-            <DeviceDiagram />
+            <DeviceDiagram :deviceData="deviceData" />
           </template>
         </Card>
       </div>
@@ -15,7 +15,7 @@
         <Card class="device-card">
           <template #title>Connected Devices</template>
           <template #content>
-            <DeviceTable :values="deviceData"></DeviceTable>
+            <DeviceTable :values="deviceData" />
           </template>
         </Card>
       </div>
@@ -32,6 +32,7 @@ import { computed } from "vue";
 import { useWebSocketStore } from "@/stores";
 
 const websocketStore = useWebSocketStore();
+
 const deviceData = computed(() => {
   return websocketStore.statMessage.data.map((item, index) => ({
     index: index + 1,
@@ -41,9 +42,10 @@ const deviceData = computed(() => {
     send_pkt: item.stat.send_pkt,
     recv_pkt: item.stat.recv_pkt,
     send_data: item.stat.send_data,
-    recv_data: item.stat.recv_data
+    recv_data: item.stat.recv_data,
   }));
 });
+
 </script>
 
 <style scoped>
