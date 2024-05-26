@@ -1,334 +1,488 @@
 <template>
   <div class="wrap-diagram">
-    <div class="bit-left"></div>
-    <div class="bit-middle" v-for="(item, i) in 6" :key="i"></div>
-    <div class="bit-right"></div>
-
     <div v-if="pkt.name == 'MQTT'">
-      <!-- MQTT_fixed Header -->
-      <p class="key-txt bit-4">
-        Type<br /><span class="val-txt">{{ pkt.type }}</span>
-      </p>
-      <p class="key-txt bit-1">
-        Dup<br /><span class="val-txt">{{ pkt.header.dup }}</span>
-      </p>
-      <p class="key-txt bit-2">
-        QoS<br /><span class="val-txt">{{ pkt.header.qos }}</span>
-      </p>
-      <p class="key-txt bit-1">
-        Retain<br /><span class="val-txt">{{ pkt.header.retain }}</span>
-      </p>
-      <p class="key-txt byte-1">
-        Remaing Len<br /><span class="val-txt">{{ pkt.header.msg_len }}</span>
-      </p>
-
-      <!-- MQTT_CONNECT -->
-      <div v-if="pkt.type == 'CONNECT'">
-        <p class="key-txt byte-2">
-          ProtocolNameLength<br /><span class="val-txt">{{
-            pkt.connect.proto_name.length - 3
-          }}</span>
-        </p>
-        <p class="key-txt byte-4">
-          Protocol<br /><span class="val-txt">{{
-            pkt.connect.proto_name
-          }}</span>
-        </p>
-        <p class="key-txt byte-1">
-          Version<br /><span class="val-txt">{{ pkt.connect.mqtt_level }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          UsernameFlag<br /><span class="val-txt">{{
-            pkt.connect.usernameflag
-          }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          PwFlag<br /><span class="val-txt">{{
-            pkt.connect.passwordflag
-          }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          WillRetainFlag<br /><span class="val-txt">{{
-            pkt.connect.willretainflag
-          }}</span>
-        </p>
-        <p class="key-txt bit-2">
-          WillQosFlag<br /><span class="val-txt">{{
-            pkt.connect.willQOSflag
-          }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          WillFlag<br /><span class="val-txt">{{ pkt.connect.willflag }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          Cleansession<br /><span class="val-txt">{{
-            pkt.connect.cleansession
-          }}</span>
-        </p>
-        <p class="key-txt bit-1">
-          Reserved<br /><span class="val-txt">{{ pkt.connect.reserved }}</span>
-        </p>
-        <p class="key-txt byte-2">
-          KeepAlive<br /><span class="val-txt">{{
-            pkt.connect.keep_alive
-          }}</span>
-        </p>
-        <p class="key-txt byte-2">
-          ClientIdLength<br /><span class="val-txt">{{
-            pkt.connect.clientId.length - 3
-          }}</span>
-        </p>
-        <p class="key-txt byte-non">
-          ClientID ({{ pkt.connect.clientId.length - 3 }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.connect.clientId }}</span
-          >
-        </p>
-        <p v-if="pkt.connect.willflag" class="key-txt byte-non">
-          WillTopic ({{ pkt.connect.willtopic.length }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.connect.willtopic }}</span
-          >
-        </p>
-        <p v-if="pkt.connect.willflag" class="key-txt byte-non">
-          Willmsg ({{ pkt.connect.willmsg.length }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.connect.willmsg }}</span
-          >
-        </p>
-        <p v-if="pkt.connect.usernameflag" class="key-txt byte-non">
-          UserName ({{ pkt.connect.username.length }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.connect.username }}</span
-          >
-        </p>
-        <p v-if="pkt.connect.passwordflag" class="key-txt byte-non">
-          Password ({{ pkt.connect.password.length }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.connect.password }}</span
-          >
-        </p>
-      </div>
-
-      <!-- MQTT_CONNACK -->
-      <div v-if="pkt.type == 'CONNACK'">
-        <p class="key-txt byte-1">
-          AckFlag<br /><span class="val-txt">{{ pkt.connack.ackflag }}</span>
-        </p>
-        <p class="key-txt byte-1">
-          ReturnCode<br /><span class="val-txt">{{
-            pkt.connack.return_code
-          }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_PUBLISH -->
-      <div v-if="pkt.type == 'PUBLISH'">
-        <p class="key-txt byte-2">
-          TopicLen<br /><span class="val-txt">{{
-            pkt.publish.topic.length - 3
-          }}</span>
-        </p>
-        <p class="key-txt byte-non">
-          Topic ({{ pkt.publish.topic.length - 3 }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.publish.topic }}</span
-          >
-        </p>
-        <p v-if="pkt.publish.msgid" class="key-txt byte-2">
-          <!--Qos==0이면 msgid는 없음-->
-          MsgID<br /><span class="val-txt">{{ pkt.publish.msgid }}</span>
-        </p>
-        <p class="key-txt byte-non">
-          Message ({{ pkt.publish.msgvalue.length - 3 }} byte)<br /><span
-            class="val-txt"
-            >{{ pkt.publish.msgvalue }}</span
-          >
-        </p>
-      </div>
-
-      <!-- MQTT_PUBACK -->
-      <div v-if="pkt.type == 'PUBACK'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.puback.msgid }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_PUBREC -->
-      <div v-if="pkt.type == 'PUBREC'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.pubrec.msgid }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_PUBREL -->
-      <div v-if="pkt.type == 'PUBREL'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.pubrel.msgid }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_PUBCOMP -->
-      <div v-if="pkt.type == 'PUBCOMP'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.pubcomp.msgid }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_SUBSCRIBE -->
-      <div v-if="pkt.type == 'SUBSCRIBE'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.subscribe.msgid }}</span>
-        </p>
-        <div v-for="(item, index) in pkt.subscribe.topic_filters" :key="index">
-          <p class="key-txt byte-2">
-            TopicLen<br /><span class="val-txt">{{ item.topic.length }}</span>
-          </p>
-          <p class="key-txt byte-non">
-            Topic ({{ item.topic.length }} byte)<br /><span class="val-txt">{{
-              item.topic
-            }}</span>
-          </p>
-          <p class="key-txt byte-1">
-            Qos<br /><span class="val-txt">{{ item.qos }}</span>
-          </p>
-        </div>
-      </div>
-
-      <!-- MQTT_SUBACK -->
-      <div v-if="pkt.type == 'SUBACK'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.suback.msgid }}</span>
-        </p>
-        <p class="key-txt byte-1">
-          returnCode<br /><span class="val-txt">{{
-            pkt.suback.return_code
-          }}</span>
-        </p>
-      </div>
-
-      <!-- MQTT_UNSUBSCRIBE -->
-      <div v-if="pkt.type == 'UNSUBSCRIBE'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.unsubscribe.msgid }}</span>
-        </p>
+      <!-- MQTT-Fixed-header -->
+      <div class="row-byte">
         <div
-          v-for="(item, index) in pkt.unsubscribe.topic_filters"
-          :key="index"
+          class="text-overlay BL-left BL-top BL-bottom"
+          :style="{ width: '25%' }"
         >
-          <p class="key-txt byte-2">
-            TopicLen<br /><span class="val-txt">{{ item.topic.length }}</span>
+          <p class="title-txt">
+            Type<br /><span class="val-txt">{{ pkt.type }}</span>
           </p>
-          <p class="key-txt byte-non">
-            Topic ({{ item.topic.length }} byte)<br /><span class="val-txt">{{
-              item.topic
+        </div>
+        <div
+          class="text-overlay BL-left BL-top BL-bottom"
+          :style="{ left: '25%', width: '6.25%' }"
+        >
+          <p class="title-txt">
+            Dup<br /><span class="val-txt">{{ pkt.header.dup }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-top BL-bottom"
+          :style="{ left: '31.25%', width: '12.5%' }"
+        >
+          <p class="title-txt">
+            Qos<br /><span class="val-txt">{{ pkt.header.qos }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-top BL-bottom"
+          :style="{ left: '43.75%', width: '6.25%' }"
+        >
+          <p class="title-txt">
+            Retain<br /><span class="val-txt">{{ pkt.header.retain }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-top BL-bottom BL-right"
+          :style="{ left: '50%', width: '50%' }"
+        >
+          <p class="title-txt">
+            Message-Length<br /><span class="val-txt">{{
+              pkt.header.msg_len
             }}</span>
           </p>
         </div>
       </div>
-
-      <!-- MQTT_UNSUBACK -->
-      <div v-if="pkt.type == 'UNSUBACK'">
-        <p class="key-txt byte-2">
-          MsgID<br /><span class="val-txt">{{ pkt.unsuback.msgid }}</span>
-        </p>
+      <!-- MQTT-msgType-header -->
+      <div class="row-byte" v-if="msgtype == 'connect'">
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%' }"
+        >
+          <p class="title-txt">
+            Protocol-Name-length<br /><span class="val-txt">{{
+              pkt[msgtype].proto_name.length - 3
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '36px', height: '72px' }"
+        >
+          <p class="title-txt">
+            Protocol-Name<br /><span class="val-txt">{{
+              pkt[msgtype].proto_name
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '50%', top: '108px' }"
+        >
+          <p class="title-txt">
+            MQTT-Version<br /><span class="val-txt">{{
+              pkt[msgtype].mqtt_level
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '6.25%', left: '50%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Flag<br /><span class="val-txt">{{
+              pkt[msgtype].usernameflag
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '6.25%', left: '56.25%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Flag<br /><span class="val-txt">{{
+              pkt[msgtype].passwordflag
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '6.25%', left: '62.5%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Flag<br /><span class="val-txt">{{
+              pkt[msgtype].willretainflag
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '12.5%', left: '68.75%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Flag<br /><span class="val-txt">{{
+              pkt[msgtype].willQOSflag
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '6.25%', left: '81.25%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Flag<br /><span class="val-txt">{{ pkt[msgtype].willflag }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom"
+          :style="{ width: '6.25%', left: '87.5%', top: '108px' }"
+        >
+          <p class="title-txt">
+            Clean<br /><span class="val-txt">{{
+              pkt[msgtype].cleansession
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '6.25%', left: '93.75%', top: '108px' }"
+        >
+          <p class="title-txt">
+            reserved<br /><span class="val-txt">{{
+              pkt[msgtype].reserved
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '144px' }"
+        >
+          <p class="title-txt">
+            Keep-Alive<br /><span class="val-txt">{{
+              pkt[msgtype].keep_alive
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '180px' }"
+        >
+          <p class="title-txt">
+            Client-ID-Length<br /><span class="val-txt">{{
+              pkt[msgtype].clientId.length - 3
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '216px' }"
+        >
+          <p class="title-txt">
+            Client-ID ({{ pkt[msgtype].clientId.length - 3 }} byte)<br /><span
+              class="val-txt"
+              >{{ pkt[msgtype].clientId }}</span
+            >
+          </p>
+        </div>
+        <div
+          v-if="pkt[msgtype].willflag"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '252px' }"
+        >
+          <p class="title-txt">
+            Will-Topic<br /><span class="val-txt">{{
+              pkt[msgtype].willtopic
+            }}</span>
+          </p>
+        </div>
+        <div
+          v-if="pkt[msgtype].willflag"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '288px' }"
+        >
+          <p class="title-txt">
+            Will-Message<br /><span class="val-txt">{{
+              pkt[msgtype].willmsg
+            }}</span>
+          </p>
+        </div>
+        <div
+          v-if="pkt[msgtype].usernameflag"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{
+            width: '100%',
+            top: pkt[msgtype].willflag ? '324px' : '252px',
+          }"
+        >
+          <p class="title-txt">
+            UserName<br /><span class="val-txt">{{
+              pkt[msgtype].username
+            }}</span>
+          </p>
+        </div>
+        <div
+          v-if="pkt[msgtype].passwordflag"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{
+            width: '100%',
+            top: pkt[msgtype].willflag
+              ? pkt[msgtype].usernameflag
+                ? '350px'
+                : '324px'
+              : pkt[msgtype].usernameflag
+              ? '288px'
+              : '252px',
+          }"
+        >
+          <p class="title-txt">
+            Password<br /><span class="val-txt">{{
+              pkt[msgtype].password
+            }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="row-byte" v-if="msgtype == 'publish'">
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%' }"
+        >
+          <p class="title-txt">
+            Topic-Length<br /><span class="val-txt">{{
+              pkt[msgtype].topic.length - 3
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '36px' }"
+        >
+          <p class="title-txt">
+            Topic ({{ pkt[msgtype].topic.length - 3 }} byte)<br /><span
+              class="val-txt"
+              >{{ pkt[msgtype].topic }}</span
+            >
+          </p>
+        </div>
+        <div
+          v-if="pkt.header.qos == 1 || pkt.header.qos == 2"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%', top: '72px' }"
+        >
+          <p class="title-txt">
+            Message-ID<br /><span class="val-txt">{{
+              pkt[msgtype].msgid
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{
+            width: '100%',
+            top: pkt.header.qos == 0 ? '72px' : '108px',
+          }"
+        >
+          <p class="title-txt">
+            Message ({{ pkt[msgtype].msgvalue.length - 3 }} byte)<br /><span
+              class="val-txt"
+              >{{ pkt[msgtype].msgvalue }}</span
+            >
+          </p>
+        </div>
+      </div>
+      <div class="row-byte" v-if="msgtype == 'connack'">
+        <div class="text-overlay BL-left BL-bottom" :style="{ width: '50%' }">
+          <p class="title-txt">
+            Ack-Flag<br /><span class="val-txt">{{
+              pkt[msgtype].ackflag
+            }}</span>
+          </p>
+        </div>
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '50%', left: '50%' }"
+        >
+          <p class="title-txt">
+            Return-Code<br /><span class="val-txt">{{
+              pkt[msgtype].return_code
+            }}</span>
+          </p>
+        </div>
+      </div>
+      <div
+        class="row-byte"
+        v-if="
+          msgtype == 'puback' ||
+          msgtype == 'pubrec' ||
+          msgtype == 'pubcomp' ||
+          msgtype == 'unsuback' ||
+          msgtype == 'subscribe' ||
+          msgtype == 'suback' ||
+          msgtype == 'unsubscribe'
+        "
+      >
+        <div
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '100%' }"
+        >
+          <p class="title-txt">
+            Message-ID<br /><span class="val-txt">{{
+              pkt[msgtype].msgid
+            }}</span>
+          </p>
+        </div>
+        <div
+          v-if="msgtype == 'suback'"
+          class="text-overlay BL-left BL-bottom BL-right"
+          :style="{ width: '50%', top: '36px' }"
+        >
+          <p class="title-txt">
+            Return-Code<br /><span class="val-txt">{{
+              pkt[msgtype].return_code
+            }}</span>
+          </p>
+        </div>
+        <div v-if="msgtype == 'subscribe' || msgtype == 'unsubscribe'">
+          <div v-for="(item, index) in pkt[msgtype].topic_filters" :key="index">
+            <div
+              class="text-overlay BL-left BL-bottom BL-right"
+              :style="{ width: '100%', top: 36 * (index + 1) + 'px' }"
+            >
+              <p class="title-txt">
+                Topic-Length<br /><span class="val-txt">{{
+                  item.topic.length
+                }}</span>
+              </p>
+            </div>
+            <!-- topic:이 부분 byte 조정 필요 -->
+            <div
+              class="text-overlay BL-left BL-bottom BL-right"
+              :style="{ width: '100%', top: 36 * (index + 2) + 'px' }"
+            >
+              <p class="title-txt">
+                Topic ({{ item.topic.length }} byte)<br /><span
+                  class="val-txt"
+                  >{{ item.topic }}</span
+                >
+              </p>
+            </div>
+            <div
+              v-if="msgtype == 'subscribe'"
+              class="text-overlay BL-left BL-bottom BL-right"
+              :style="{ width: '50%', top: 36 * (index + 3) + 'px' }"
+            >
+              <p class="title-txt">
+                Topic-Qos<br /><span class="val-txt">{{ item.qos }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- NULL-ROW -->
+      <div v-if="msgtype == 'connect'">
+        <div
+          class="null-row"
+          v-for="(item, i) in 6 +
+          pkt[msgtype].willretainflag * 2 +
+          pkt[msgtype].usernameflag +
+          pkt[msgtype].passwordflag"
+          :key="i"
+        ></div>
+      </div>
+      <div v-if="msgtype == 'publish'">
+        <div
+          class="null-row"
+          v-for="(item, i) in pkt.header.qos == 1 || pkt.header.qos == 2
+            ? 3
+            : 2"
+          :key="i"
+        ></div>
+      </div>
+      <div v-if="msgtype == 'publish'">
+        <div
+          class="null-row"
+          v-for="(item, i) in pkt.header.qos == 1 || pkt.header.qos == 2
+            ? 3
+            : 2"
+          :key="i"
+        ></div>
+      </div>
+      <div v-if="msgtype == 'suback'">
+        <div class="null-row"></div>
+      </div>
+      <div v-if="msgtype == 'subscribe' || msgtype == 'unsubscribe'">
+        <div
+          class="null-row"
+          v-for="(item, i) in msgtype == 'subscribe'
+            ? pkt[msgtype].topic_filters.length * 3
+            : pkt[msgtype].topic_filters.length * 2"
+          :key="i"
+        ></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+// pkt.connect.proto_name 이런식으로 접근해서 쓰면 된다.
 export default {
   props: {
     pkt: Object,
   },
+  data() {
+    return {
+      msgtype: "", // msgtype 변수 초기화
+    };
+  },
   mounted() {
     console.log(this.pkt);
   },
-  // 나머지 코드
+  created() {
+    this.msgtype = `${this.pkt.type}`.toLowerCase(); // msgtype 소문자로 변환
+  },
 };
 </script>
 
 <style scoped>
-.key-txt {
-  font-size: 10px;
-  text-align: center;
-  font-style: italic;
+.null-row {
+  display: flex;
+  flex-direction: column;
+  height: 36px;
+  /* width: 100%; */
 }
 .val-txt {
   font-size: 16px;
   font-weight: bold;
   font-style: normal;
 }
-p {
-  float: left;
-  overflow: hidden;
-  box-sizing: border-box;
-  border: 0.1px solid black;
-  padding-left: 1%;
-  padding-right: 1%;
+.title-txt {
+  font-size: 10px;
+  text-align: center;
+  font-style: italic;
   margin: 0;
-  max-width: 100%;
 }
-.bit-1 {
-  width: 12.5%;
+.text-overlay {
+  position: absolute;
   height: 36px;
+  text-align: center;
 }
-.bit-2 {
-  width: 25%;
-  height: 36px;
+.BL-right {
+  border-right: 0.1px solid;
 }
-.bit-4 {
-  width: 50%;
-  height: 36px;
-}
-.byte-1 {
-  width: 100%;
-  height: 36px;
-}
-.byte-2 {
-  width: 100%;
-  height: 72px;
-}
-.byte-4 {
-  width: 100%;
-  height: 144px;
-}
-.byte-non {
-  width: 100%;
-  height: auto;
-}
-.bit-left {
-  box-sizing: border-box;
-  border-bottom: solid 0.1px;
+.BL-left {
   border-left: 0.1px solid;
-  border-right: solid 0.1px;
-  width: 12.5%;
-  float: left;
-  padding-bottom: 2%;
 }
-.bit-middle {
-  box-sizing: border-box;
-  border-bottom: solid 0.1px;
-  border-left: solid 0.1px;
-  border-right: solid 0.1px;
-  width: 12.5%;
-  float: left;
-  padding-bottom: 2%;
+.BL-bottom {
+  border-bottom: 0.1px solid;
 }
-.bit-right {
-  box-sizing: border-box;
-  border-bottom: solid 0.1px;
-  border-left: solid 0.1px;
-  border-right: solid 0.1px;
-  width: 12.5%;
-  float: left;
-  padding-bottom: 2%;
+.BL-top {
+  border-top: 0.1px solid;
 }
-
+.row-byte {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 36px;
+}
 .wrap-diagram {
-  float: none;
   box-sizing: border-box;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 </style>
