@@ -28,6 +28,8 @@
 import { TheHeader, TheFooter, DeviceTable, DeviceDiagram } from "@/components";
 import Card from "primevue/card";
 // import { deviceData } from "@/data/devices";
+// const processedDeviceData = deviceData;
+
 import { watch, ref, computed } from "vue";
 import { useWebSocketStore, websocketTypes } from "@/stores";
 
