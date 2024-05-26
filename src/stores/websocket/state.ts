@@ -5,5 +5,5 @@ export const state = () => ({
   isConnected: false,
   message: {} as Message,
   packetMessages: [] as PacketMessage[],
-  statMessage: {} as StatMessage,
+  statMessage: { type: "", data: [] } as StatMessage,
 });

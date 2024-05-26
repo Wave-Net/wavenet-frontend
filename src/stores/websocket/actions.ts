@@ -13,17 +13,12 @@ export const useWebSocketStore = defineStore("websocket", {
           console.log("웹소켓 연결됨");
         };
         this.websocket.onmessage = (event) => {
-          console.log(event.data);
+          // console.log(event.data);
           const receivedData = JSON.parse(event.data) as Message;
-          if (receivedData.message_type === "stat") {
+          if (receivedData.type === "stats") {
             const statMessage = JSON.parse(event.data) as StatMessage;
             this.statMessage = statMessage;
             console.log("받은 데이터:", statMessage);
-          }
-          if (receivedData.message_type === "packet") {
-            const packetMessage = JSON.parse(event.data) as PacketMessage;
-            this.packetMessages.push(packetMessage);
-            console.log("받은 데이터:", packetMessage);
           }
         };
         this.websocket.onclose = () => {

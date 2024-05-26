@@ -30,10 +30,10 @@ const columns = [
   { field: "mac", header: "MAC", style: { width: "70rem" } },
   { field: "ip", header: "IP", style: { width: "70rem" } },
   { field: "hostname", header: "Hostname", style: { width: "70rem" } },
-  { field: "send_byte", header: "Send Byte", style: { width: "70rem" } },
-  { field: "receive_byte", header: "Receive Byte", style: { width: "70rem" } },
-  { field: "send_packet", header: "Send Packet", style: { width: "70rem" } },
-  { field: "receive_packet", header: "Receive Packet", style: { width: "70rem" } },
+  { field: "send_data", header: "Send Byte", style: { width: "70rem" } },
+  { field: "recv_data", header: "Receive Byte", style: { width: "70rem" } },
+  { field: "send_pkt", header: "Send Packet", style: { width: "70rem" } },
+  { field: "recv_pkt", header: "Receive Packet", style: { width: "70rem" } },
 ];
 </script>
 

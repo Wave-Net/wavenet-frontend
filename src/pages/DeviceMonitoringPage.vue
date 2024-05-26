@@ -26,13 +26,28 @@
 
 <script setup lang="ts">
 import { TheHeader, TheFooter, DeviceTable, DeviceDiagram } from "@/components";
-import { deviceData } from "@/data/devices";
 import Card from "primevue/card";
+import { computed } from "vue";
+import { useWebSocketStore } from "@/stores";
+
+const websocketStore = useWebSocketStore();
+const deviceData = computed(() => {
+  return websocketStore.statMessage.data.map((item) => ({
+    ip: item.device.ip,
+    mac: item.device.mac,
+    hostname: item.device.hostname,
+    send_pkt: item.stat.send_pkt,
+    recv_pkt: item.stat.recv_pkt,
+    send_data: item.stat.send_data,
+    recv_data: item.stat.recv_data
+  }));
+});
 </script>
 
 <style scoped>
 .device-card {
   width: 1160px;
+  height: 458px;
 }
 
 .diagram-card {
