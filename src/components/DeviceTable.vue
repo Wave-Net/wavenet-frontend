@@ -3,7 +3,7 @@
     :value="values"
     removableSort
     scrollable
-    scrollHeight="420px"
+    scrollHeight="380px"
   >
     <Column
       v-for="col of columns"

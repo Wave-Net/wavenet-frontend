@@ -9,7 +9,8 @@ header {
   align-items: center;
   padding: 0 20px;
   z-index: 20;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 main {
@@ -59,6 +60,10 @@ a {
   font-weight: $font-weight-light;
 }
 
+.pi {
+  font-size: 0.8rem;
+}
+
 .row {
   justify-content: center;
 }
@@ -88,7 +93,6 @@ a {
   border-radius: 0.2857rem;
   position: relative;
   width: 100%;
-  margin-bottom: 30px;
   background: #fff;
   box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
   // box-shadow: 0 1px 15px 0 hsla(0, 0%, 48.2%, 0.05);
@@ -107,7 +111,7 @@ a {
 }
 
 .p-card-title {
-  color: #1d253b;
+  color: rgba(34, 42, 66, 0.7);
   font-size: 15px;
 }
 
@@ -244,6 +248,153 @@ a {
 .p-icon {
   display: inline-block;
   height: 12px;
+}
+
+.p-organizationchart-table {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  border-spacing: 0;
+  border-collapse: separate;
+  margin: 0 auto;
+}
+
+.p-organizationchart-table > tbody > tr > td {
+  text-align: center;
+  vertical-align: top;
+  padding: 0 0.75rem;
+}
+
+.p-organizationchart-table > tbody {
+  height: 12px;
+}
+
+.p-organizationchart-node-content {
+  display: inline-block;
+  position: relative;
+}
+
+.p-organizationchart-node-content .p-node-toggler {
+  position: absolute;
+  bottom: -0.75rem;
+  margin-left: -0.75rem;
+  z-index: 2;
+  left: 50%;
+  user-select: none;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  text-decoration: none;
+}
+
+.p-organizationchart-node-content .p-node-toggler .p-node-toggler-icon {
+  position: relative;
+  top: 0.25rem;
+}
+
+.p-organizationchart-line-down {
+  margin: 0 auto;
+  height: 20px;
+  width: 1px;
+}
+
+.p-organizationchart-line-right {
+  border-radius: 0px;
+}
+
+.p-organizationchart-line-left {
+  border-radius: 0;
+}
+
+.p-organizationchart-selectable-node {
+  cursor: pointer;
+}
+
+.p-organizationchart
+  .p-organizationchart-node-content.p-organizationchart-selectable-node:not(
+    .p-highlight
+  ):hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+.p-organizationchart .p-organizationchart-node-content.p-highlight {
+  background: #ecfdf5;
+  color: #047857;
+}
+.p-organizationchart
+  .p-organizationchart-node-content.p-highlight
+  .p-node-toggler
+  i {
+  color: #79f1b8;
+}
+.p-organizationchart .p-organizationchart-line-down {
+  background: #e2e8f0;
+}
+.p-organizationchart .p-organizationchart-line-left {
+  border-right: 1px solid #e2e8f0;
+  border-color: #e2e8f0;
+}
+.p-organizationchart .p-organizationchart-line-top {
+  border-top: 1px solid #e2e8f0;
+  border-color: #e2e8f0;
+}
+.p-organizationchart .p-organizationchart-node-content {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: rgba(34, 42, 66, 0.7);
+  padding: 0 1.125rem 1.125rem 1.125rem;
+  width: 40px;
+}
+.p-organizationchart .p-organizationchart-node-content .p-node-toggler {
+  background: inherit;
+  color: inherit;
+  border-radius: 50%;
+  outline-color: transparent;
+}
+.p-organizationchart
+  .p-organizationchart-node-content
+  .p-node-toggler:focus-visible {
+  outline: 1px solid var(--p-focus-ring-color);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.p-organizationchart .p-organizationchart-node-content {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+}
+.p-organizationchart .p-organizationchart-node-content .p-node-toggler {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s, outline-color 0.2s;
+  border: 1px solid #e2e8f0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.p-organizationchart
+  .p-organizationchart-node-content
+  .p-node-toggler
+  .p-node-toggler-icon {
+  position: static;
+}
+.p-organizationchart .p-organizationchart-node-content:has(.p-node-toggler) {
+  padding: 0.75rem 1rem 1.25rem 1rem;
+}
+.p-organizationchart
+  .p-organizationchart-lines
+  :nth-child(1 of .p-organizationchart-line-left) {
+  border-right: 0 none;
+}
+.p-organizationchart
+  .p-organizationchart-lines
+  :nth-last-child(1 of .p-organizationchart-line-left) {
+  border-top-right-radius: 6px;
+}
+.p-organizationchart
+  .p-organizationchart-lines
+  :nth-child(1 of .p-organizationchart-line-right) {
+  border-left: 1px solid #e2e8f0;
+  border-top-left-radius: 6px;
 }
 
 .logo-container {
