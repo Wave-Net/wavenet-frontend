@@ -32,15 +32,15 @@ defineProps({
 });
 
 const columns = [
-  { field: "index", header: "#", style: { width: "10rem" } },
-  { field: "mac", header: "MAC", style: { width: "70rem" } },
-  { field: "ip", header: "IP", style: { width: "70rem" } },
-  { field: "hostname", header: "Hostname", style: { width: "70rem" } },
-  { field: "send_data", header: "Send Byte", style: { width: "70rem" } },
-  { field: "recv_data", header: "Receive Byte", style: { width: "70rem" } },
-  { field: "send_pkt", header: "Send Packet", style: { width: "70rem" } },
-  { field: "recv_pkt", header: "Receive Packet", style: { width: "70rem" } },
-  { field: "capture", header: "Capture", style: { width: "10rem" }, notSortable: true },
+  { field: "index", header: "#", style: { width: "1rem" } },
+  { field: "mac", header: "MAC", style: { width: "20rem" } },
+  { field: "ip", header: "IP", style: { width: "10rem" } },
+  { field: "hostname", header: "Hostname", style: { width: "10rem" } },
+  { field: "send_data", header: "Send Byte", style: { width: "30rem" } },
+  { field: "recv_data", header: "Receive Byte", style: { width: "30rem" } },
+  { field: "send_pkt", header: "Send Packet", style: { width: "20rem" } },
+  { field: "recv_pkt", header: "Receive Packet", style: { width: "20rem" } },
+  { field: "capture", header: "Capture", style: { width: "1rem" }, notSortable: true },
 ];
 </script>
 
