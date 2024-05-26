@@ -27,7 +27,9 @@ const formattedData = computed(() => {
     icon: "pi pi-wifi",
     children: props.deviceData.map((device) => ({
       label: `${device.index}`,
-      data: device,
+      styleClass: device.is_active
+        ? "bg-teal-100 text-teal-900"
+        : "bg-purple-100 text-purple-900",
     })),
   };
 });
