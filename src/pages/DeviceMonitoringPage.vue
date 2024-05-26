@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { TheHeader, TheFooter, DeviceTable, DeviceDiagram } from "@/components";
 import Card from "primevue/card";
+// import { deviceData } from "@/data/devices";
 import { computed } from "vue";
 import { useWebSocketStore } from "@/stores";
 
