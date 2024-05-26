@@ -35,12 +35,6 @@
       >
         Data/sec
       </button>
-      <button
-        :class="{ active: currentTab === 'all_time' }"
-        @click="currentTab = 'all_time'"
-      >
-        All/sec
-      </button>
     </div>
     <div class="tab-content">
       <div v-if="currentTab === 'packets_time'" class="card">
@@ -55,14 +49,6 @@
         <Chart
           type="line"
           :data="chartDataByte_time"
-          :options="chartOptions"
-          class="graph"
-        />
-      </div>
-      <div v-if="currentTab === 'all_time'" class="card">
-        <Chart
-          type="line"
-          :data="chartData_time"
           :options="chartOptions"
           class="graph"
         />
@@ -111,48 +97,6 @@ export default {
     // 데이터 갱신 간격 (밀리초)
     const updateInterval = 1000;
 
-    // 초기 차트 데이터 설정
-    const chartData_time = reactive({
-      labels: ["", "", "", "", "", "", ""],
-      datasets: [
-        {
-          label: "패킷 송신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "cyan",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "패킷 수신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "gray",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "데이터 송신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "orange",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "데이터 수신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "pink",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-      ],
-    });
     const chartDataPacket_time = reactive({
       labels: ["", "", "", "", "", "", ""],
       datasets: [
@@ -230,33 +174,6 @@ export default {
           websocketStore.statMessage.statistics_delta;
 
         // 새로운 데이터 추가
-        const newChartData_time = {
-          labels: [...chartData_time.labels.slice(1), ""],
-          datasets: chartData_time.datasets.map((dataset, index) => {
-            let newDataPoint_time = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint_time = send_pkt;
-                break;
-              case 1:
-                newDataPoint_time = recv_pkt;
-                break;
-              case 2:
-                newDataPoint_time = send_data;
-                break;
-              case 3:
-                newDataPoint_time = recv_data;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint_time],
-            };
-          }),
-        };
 
         const newChartDataPacket_time = {
           labels: [...chartDataPacket_time.labels.slice(1), ""],
@@ -303,12 +220,6 @@ export default {
         };
 
         // 데이터 반영
-        chartData_time.labels = newChartData_time.labels;
-        chartData_time.datasets.forEach((dataset, i) => {
-          dataset.data = newChartData_time.datasets[i].data;
-        });
-
-        // 데이터 반영
         chartDataPacket_time.labels = newChartDataPacket_time.labels;
         chartDataPacket_time.datasets.forEach((dataset, i) => {
           dataset.data = newChartDataPacket_time.datasets[i].data;
@@ -327,7 +238,6 @@ export default {
       table_time_pkt_send,
       table_time_data_recv,
       table_time_data_send,
-      chartData_time,
       chartOptions,
       chartDataPacket_time,
       chartDataByte_time,
