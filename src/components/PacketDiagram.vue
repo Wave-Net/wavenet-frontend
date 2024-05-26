@@ -416,7 +416,6 @@
 </template>
 
 <script>
-// pkt.connect.proto_name 이런식으로 접근해서 쓰면 된다.
 export default {
   props: {
     pkt: Object,
@@ -426,11 +425,17 @@ export default {
       msgtype: "", // msgtype 변수 초기화
     };
   },
-  mounted() {
-    console.log(this.pkt);
+  // msg-type이 달라질때마다 전에 렌더링된 msgtype이 남아버려서 오류 발생해서 watch사용
+  watch: {
+    pkt(newVal) {
+      this.msgtype = `${newVal.type}`.toLowerCase(); // msgtype 업데이트
+    },
   },
   created() {
-    this.msgtype = `${this.pkt.type}`.toLowerCase(); // msgtype 소문자로 변환
+    this.msgtype = `${this.pkt.type}`.toLowerCase(); // msgtype 초기화
+  },
+  mounted() {
+    console.log(this.pkt);
   },
 };
 </script>
