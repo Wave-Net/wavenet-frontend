@@ -32,7 +32,8 @@ import { useWebSocketStore } from "@/stores";
 
 const websocketStore = useWebSocketStore();
 const deviceData = computed(() => {
-  return websocketStore.statMessage.data.map((item) => ({
+  return websocketStore.statMessage.data.map((item, index) => ({
+    index: index + 1,
     ip: item.device.ip,
     mac: item.device.mac,
     hostname: item.device.hostname,
