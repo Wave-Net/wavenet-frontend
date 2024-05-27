@@ -132,13 +132,16 @@
                 class="flex align-items-center justify-content-center panel-scroll"
                 :size="50"
               >
-                <div>
+                <div v-if="clickedRowIndex">
                   <FlowchartPage
                     :flowchart_packets="flowchart_packets"
                     :rowIndex="clickedRowIndex"
                     :sourceIP="sourceIP"
                     :destinationIP="destinationIP"
                   />
+                </div>
+                <div v-else>
+                  <p>선택된 패킷이 없습니다.</p>
                 </div>
               </SplitterPanel>
             </Splitter>
