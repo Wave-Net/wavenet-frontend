@@ -5,16 +5,16 @@
       <!-- 패널 숨김/표시 버튼 -->
       <div class="mt-3">
         <Button @click="togglePanel1">
-          {{ showPanel1 ? "Hide" : "Show" }} Panel 1
+          {{ showPanel1 ? "Hide" : "Show" }} DashBoard
         </Button>
         <Button @click="togglePanel3" class="ml-2">
-          {{ showPanel3 ? "Hide" : "Show" }} Panel 3
+          {{ showPanel3 ? "Hide" : "Show" }} Diagram
         </Button>
         <Button @click="togglePanel4" class="ml-2">
           {{ showPanel4 ? "Hide" : "Show" }} Panel 4
         </Button>
         <Button @click="togglePanel5" class="ml-2">
-          {{ showPanel5 ? "Hide" : "Show" }} Panel 5
+          {{ showPanel5 ? "Hide" : "Show" }} FlowChart
         </Button>
       </div>
     </div>
@@ -132,13 +132,16 @@
                 class="flex align-items-center justify-content-center panel-scroll"
                 :size="50"
               >
-                <div>
+                <div v-if="clickedRowIndex">
                   <FlowchartPage
                     :flowchart_packets="flowchart_packets"
                     :rowIndex="clickedRowIndex"
                     :sourceIP="sourceIP"
                     :destinationIP="destinationIP"
                   />
+                </div>
+                <div v-else>
+                  <p>선택된 패킷이 없습니다.</p>
                 </div>
               </SplitterPanel>
             </Splitter>
