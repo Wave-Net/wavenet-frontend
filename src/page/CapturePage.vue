@@ -33,7 +33,7 @@
                 <!-- IoT 장비 연결하세요 -->
               </div>
               <div id="menu-button-bar" class="menu-button-bar">
-                <MenuButton />
+                <MenuButton @capture-state-change="updateCaptureButtonState" />
               </div>
               <div id="dashboard" class="dashboard">
                 <div id="dashboard-data" class="dashboard-data">
@@ -42,6 +42,7 @@
                     :labelData2="'패킷 출력량'"
                     :labelData3="'데이터 수신량'"
                     :labelData4="'데이터 송신량'"
+                    :captureButtonState="captureButtonState"
                   />
                 </div>
                 <div id="dashboard-timedata" class="dashboard-timedata">
@@ -50,6 +51,7 @@
                     :labelData2="'패킷 출력량/초'"
                     :labelData3="'데이터 수신량/초'"
                     :labelData4="'데이터 송신량/초'"
+                    :captureButtonState="captureButtonState"
                   />
                 </div>
               </div>
@@ -216,6 +218,12 @@ watch(packetMessages, (newVal) => {
     showPanel5.value = false;
   }
 });
+
+const captureButtonState = ref(false);
+
+const updateCaptureButtonState = (state) => {
+  captureButtonState.value = state;
+};
 
 // 클릭 상태를 저장하는 변수
 // 두번클릭시 한번클릭하는것 이벤트 막기위함
