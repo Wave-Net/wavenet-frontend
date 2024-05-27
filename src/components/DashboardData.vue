@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import { useWebSocketStore } from "@/store";
+import { useWebSocketStore } from "@/stores";
 import { ref, watch, reactive, onMounted, onUnmounted } from "vue";
 import Chart from "primevue/chart";
 
@@ -89,7 +89,7 @@ export default {
       (newValue) => {
         if (newValue && newValue.data && newValue.data.length > 0) {
           const { send_pkt, recv_pkt, send_data, recv_data } =
-            newValue.data[0].stats;
+            newValue.data[0].stat;
           table_pkt_recv.value = recv_pkt;
           table_pkt_send.value = send_pkt;
           table_data_recv.value = recv_data;
@@ -257,7 +257,7 @@ export default {
           websocketStore.statMessage.data.length > 0
         ) {
           const { send_pkt, recv_pkt, send_data, recv_data } =
-            websocketStore.statMessage.data[0].stats;
+            websocketStore.statMessage.data[0].stat;
 
           const maxPacketValue = Math.max(
             ...chartDataPacket.datasets[0].data,

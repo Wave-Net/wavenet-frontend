@@ -1,24 +1,18 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import MainView from "@/page/DeviceMonitoringPage.vue";
-import DashboardView from "@/page/CapturePage.vue";
-import FlowchartView from "@/page/FlowchartPage.vue";
+import DeviceMonitoringPage from "@/pages/DeviceMonitoringPage.vue";
+import CapturePage from "@/pages/CapturePage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
 		name: "home",
-    component: MainView,
+    component: DeviceMonitoringPage,
   },
   {
     path: "/capture-page",
 		name: "capture-page",
-    component: DashboardView,
-  },
-  {
-    path: "/flowchart-page",
-		name: "flowchart-page",
-    component: FlowchartView,
-  },
+    component: CapturePage,
+  }
 ];
 
 const router = createRouter({

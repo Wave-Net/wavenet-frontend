@@ -1,7 +1,7 @@
 <template>
   <div class="full-view">
     <div class="header-buttons-row">
-      <HeaderStructure />
+      <TheHeader />
       <!-- 패널 숨김/표시 버튼 -->
       <div class="mt-3">
         <Button @click="togglePanel1">
@@ -149,7 +149,7 @@
         </Splitter>
       </div>
     </div>
-    <FooterStructure />
+    <TheFooter />
   </div>
 </template>
 <script setup>
@@ -160,18 +160,14 @@ import { ref, computed, watch } from "vue";
 import Splitter from "primevue/splitter";
 import SplitterPanel from "primevue/splitterpanel";
 import Button from "primevue/button";
-import HeaderStructure from "../components/HeaderStructure.vue";
-import FooterStructure from "../components/FooterStructure.vue";
-import { useWebSocketStore } from "@/store";
+import { TheHeader, TheFooter } from "@/components";
+import { useWebSocketStore } from "@/stores";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
 const websocketStore = useWebSocketStore();
 const packetMessages = computed(() => websocketStore.packetMessages);
 
-// const IotPrint = defineAsyncComponent(() =>
-//   import("../components/IotPrint.vue")
-// );
 const MenuButton = defineAsyncComponent(() =>
   import("../components/MenuButton.vue")
 );
