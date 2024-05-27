@@ -1,5 +1,3 @@
-##그래프랑 테이블 합친 코드
-
 <template>
   <div class="table">
     <div class="row">
@@ -37,19 +35,13 @@
       >
         Data
       </button>
-      <button
-        :class="{ active: currentTab === 'all' }"
-        @click="currentTab = 'all'"
-      >
-        All
-      </button>
     </div>
     <div class="tab-content">
       <div v-if="currentTab === 'packets'" class="card">
         <Chart
           type="line"
           :data="chartDataPacket"
-          :options="chartOptions"
+          :options="chartOptionsPacket"
           class="graph"
         />
       </div>
@@ -57,22 +49,13 @@
         <Chart
           type="line"
           :data="chartDataByte"
-          :options="chartOptions"
-          class="graph"
-        />
-      </div>
-      <div v-if="currentTab === 'all'" class="card">
-        <Chart
-          type="line"
-          :data="chartData"
-          :options="chartOptions"
+          :options="chartOptionsByte"
           class="graph"
         />
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import { useWebSocketStore } from "@/store";
 import { ref, watch, reactive, onMounted, onUnmounted } from "vue";
@@ -82,25 +65,28 @@ export default {
   components: {
     Chart,
   },
+  props: {
+    captureButtonState: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
-      currentTab: "packets", // 현재 선택된 탭 인덱스
+      currentTab: "packets",
     };
   },
-  setup() {
+  setup(props) {
     const websocketStore = useWebSocketStore();
 
-    // 각각의 패킷 및 데이터 송/수신 정보를 저장하는 ref를 생성합니다.
     const table_pkt_recv = ref(0);
     const table_pkt_send = ref(0);
     const table_data_recv = ref(0);
     const table_data_send = ref(0);
 
-    // 웹소켓 스토어의 statMessage가 변경될 때마다 실행되는 watch 함수를 설정합니다.
     watch(
       () => websocketStore.statMessage,
       (newValue) => {
-        // 새로운 값이 있고, 그 값에 data가 있는 경우
         if (newValue && newValue.data && newValue.data.length > 0) {
           const { send_pkt, recv_pkt, send_data, recv_data } =
             newValue.data[0].stats;
@@ -112,238 +98,268 @@ export default {
       }
     );
 
-    // 데이터 갱신 간격 (밀리초)
     const updateInterval = 1000;
 
-    // 초기 차트 데이터 설정
-    const chartData = reactive({
-      labels: ["", "", "", "", "", "", ""],
-      datasets: [
-        {
-          label: "패킷 송신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "cyan",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "패킷 수신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "gray",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "데이터 송신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "orange",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-        {
-          label: "데이터 수신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "pink",
-          tension: 0.4,
-          borderWidth: 1,
-          pointRadius: 2,
-        },
-      ],
-    });
     const chartDataPacket = reactive({
-      labels: ["", "", "", "", "", "", ""],
+      labels: Array(60).fill(""),
       datasets: [
         {
           label: "패킷 송신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "cyan",
-          tension: 0.4,
+          data: Array(60).fill(0),
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
         {
           label: "패킷 수신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "gray",
-          tension: 0.4,
+          data: Array(60)
+            .fill(0)
+            .map((value) => -value),
+          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
       ],
     });
     const chartDataByte = reactive({
-      labels: ["", "", "", "", "", "", ""],
+      labels: Array(60).fill(""),
       datasets: [
         {
           label: "데이터 송신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
+          data: Array(60).fill(0),
           borderColor: "orange",
-          tension: 0.4,
+          backgroundColor: "rgba(255, 165, 0, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
         {
           label: "데이터 수신",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
+          data: Array(60)
+            .fill(0)
+            .map((value) => -value),
           borderColor: "pink",
-          tension: 0.4,
+          backgroundColor: "rgba(255, 192, 203, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
       ],
     });
 
-    // 차트 옵션 설정
-    const chartOptions = reactive({
+    const initialPacketYMin = -100;
+    const initialPacketYMax = 100;
+    const initialByteYMin = -1000;
+    const initialByteYMax = 1000;
+
+    const chartOptionsPacket = reactive({
       maintainAspectRatio: false,
       aspectRatio: 0.6,
-
-      // animation 비활성화
       animation: false,
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 20,
+          },
+        },
+        y: {
+          reverse: true,
+          min: initialPacketYMin,
+          max: initialPacketYMax,
+          ticks: {
+            callback: function (value) {
+              return Math.abs(value);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              let label = context.dataset.label || "";
+              if (label) {
+                label += ": 총 ";
+              }
+              if (context.raw < 0) {
+                label += Math.abs(context.raw);
+              } else {
+                label += context.raw;
+              }
+              label += " 개";
+              return label;
+            },
+          },
+        },
+      },
     });
 
-    // interval ID를 저장할 변수
+    const chartOptionsByte = reactive({
+      maintainAspectRatio: false,
+      aspectRatio: 0.6,
+      animation: false,
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 20,
+          },
+        },
+        y: {
+          reverse: true,
+          min: initialByteYMin,
+          max: initialByteYMax,
+          ticks: {
+            callback: function (value) {
+              return Math.abs(value);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              let label = context.dataset.label || "";
+              if (label) {
+                label += ": 총 ";
+              }
+              if (context.raw < 0) {
+                label += Math.abs(context.raw);
+              } else {
+                label += context.raw;
+              }
+              label += " Byte";
+              return label;
+            },
+          },
+        },
+      },
+    });
+
     const intervalId = ref(null);
 
     onMounted(() => {
-      // interval 설정
       intervalId.value = setInterval(updateChartData, updateInterval);
     });
 
-    // 컴포넌트가 제거될 때 interval 해제
     onUnmounted(() => {
       clearInterval(intervalId.value);
     });
 
-    // 데이터 업데이트
     const updateChartData = () => {
-      // staticsDelta 객체 확인
-      if (
-        websocketStore.statMessage.data &&
-        websocketStore.statMessage.data.length > 0
-      ) {
-        // 0번째 데이터 가져오기 -> 추후에 인덱스로 수정 필요
-        const { send_pkt, recv_pkt, send_data, recv_data } =
-          websocketStore.statMessage.data[0].stats;
+      if (props.captureButtonState) {
+        if (
+          websocketStore.statMessage.data &&
+          websocketStore.statMessage.data.length > 0
+        ) {
+          const { send_pkt, recv_pkt, send_data, recv_data } =
+            websocketStore.statMessage.data[0].stats;
 
-        // 새로운 데이터 추가
-        const newChartData = {
-          labels: [...chartData.labels.slice(1), ""],
-          datasets: chartData.datasets.map((dataset, index) => {
-            let newDataPoint = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint = send_pkt;
-                break;
-              case 1:
-                newDataPoint = recv_pkt;
-                break;
-              case 2:
-                newDataPoint = send_data;
-                break;
-              case 3:
-                newDataPoint = recv_data;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint],
-            };
-          }),
-        };
+          const maxPacketValue = Math.max(
+            ...chartDataPacket.datasets[0].data,
+            ...chartDataPacket.datasets[1].data.map(Math.abs)
+          );
+          const minPacketValue = Math.min(
+            ...chartDataPacket.datasets[0].data,
+            ...chartDataPacket.datasets[1].data.map(Math.abs)
+          );
 
-        const newChartDataPacket = {
-          labels: [...chartDataPacket.labels.slice(1), ""],
-          datasets: chartDataPacket.datasets.map((dataset, index) => {
-            let newDataPoint = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint = send_pkt;
-                break;
-              case 1:
-                newDataPoint = recv_pkt;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint],
-            };
-          }),
-        };
+          const maxByteValue = Math.max(
+            ...chartDataByte.datasets[0].data,
+            ...chartDataByte.datasets[1].data.map(Math.abs)
+          );
+          const minByteValue = Math.min(
+            ...chartDataByte.datasets[0].data,
+            ...chartDataByte.datasets[1].data.map(Math.abs)
+          );
 
-        const newChartDataByte = {
-          labels: [...chartDataByte.labels.slice(1), ""],
-          datasets: chartDataByte.datasets.map((dataset, index) => {
-            let newDataPoint = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint = send_data;
-                break;
-              case 1:
-                newDataPoint = recv_data;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint],
-            };
-          }),
-        };
+          if (
+            maxPacketValue > chartOptionsPacket.scales.y.max ||
+            minPacketValue < Math.abs(chartOptionsPacket.scales.y.min)
+          ) {
+            const newMax = Math.ceil(maxPacketValue / 10) * 10;
+            const newMin = -newMax;
+            chartOptionsPacket.scales.y.max = newMax;
+            chartOptionsPacket.scales.y.min = newMin;
+          }
 
-        // 데이터 반영
-        chartData.labels = newChartData.labels;
-        chartData.datasets.forEach((dataset, i) => {
-          dataset.data = newChartData.datasets[i].data;
-        });
+          if (
+            maxByteValue > chartOptionsByte.scales.y.max ||
+            minByteValue < Math.abs(chartOptionsByte.scales.y.min)
+          ) {
+            const newMax = Math.ceil(maxByteValue / 10) * 10;
+            const newMin = -newMax;
+            chartOptionsByte.scales.y.max = newMax;
+            chartOptionsByte.scales.y.min = newMin;
+          }
 
-        // 데이터 반영
-        chartDataPacket.labels = newChartDataPacket.labels;
-        chartDataPacket.datasets.forEach((dataset, i) => {
-          dataset.data = newChartDataPacket.datasets[i].data;
-        });
+          const newChartDataPacket = {
+            labels: [...chartDataPacket.labels.slice(1), ""],
+            datasets: chartDataPacket.datasets.map((dataset, index) => {
+              let newDataPoint = 0;
+              switch (index) {
+                case 0:
+                  newDataPoint = send_pkt;
+                  break;
+                case 1:
+                  newDataPoint = -recv_pkt;
+                  break;
+                default:
+                  break;
+              }
+              return {
+                ...dataset,
+                data: [...dataset.data.slice(1), newDataPoint],
+              };
+            }),
+          };
 
-        chartDataByte.labels = newChartDataByte.labels;
-        chartDataByte.datasets.forEach((dataset, i) => {
-          dataset.data = newChartDataByte.datasets[i].data;
-        });
+          const newChartDataByte = {
+            labels: [...chartDataByte.labels.slice(1), ""],
+            datasets: chartDataByte.datasets.map((dataset, index) => {
+              let newDataPoint = 0;
+              switch (index) {
+                case 0:
+                  newDataPoint = send_data;
+                  break;
+                case 1:
+                  newDataPoint = -recv_data;
+                  break;
+                default:
+                  break;
+              }
+              return {
+                ...dataset,
+                data: [...dataset.data.slice(1), newDataPoint],
+              };
+            }),
+          };
+
+          chartDataPacket.labels = newChartDataPacket.labels;
+          chartDataPacket.datasets = newChartDataPacket.datasets;
+          chartDataByte.labels = newChartDataByte.labels;
+          chartDataByte.datasets = newChartDataByte.datasets;
+        }
       }
     };
 
-    // 각각의 ref를 반환하여 템플릿에서 사용할 수 있게 합니다.
     return {
       table_pkt_recv,
       table_pkt_send,
       table_data_recv,
       table_data_send,
-      chartData,
-      chartOptions,
       chartDataPacket,
       chartDataByte,
+      chartOptionsPacket,
+      chartOptionsByte,
     };
   },
 };
 </script>
-
 <style>
 .card {
   height: 100%;
@@ -384,7 +400,7 @@ export default {
   cursor: pointer;
   padding: 10px 20px;
   transition: background-color 0.3s ease;
-  width: 33.33%;
+  width: 50%;
   font-weight: 600;
   color: #a6acaf;
 }
