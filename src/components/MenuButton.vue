@@ -27,7 +27,9 @@ import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
 import "primeicons/primeicons.css";
 import { useWebSocketStore } from "@/store";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+
+const emit = defineEmits(["capture-state-change"]);
 
 const websocketStore = useWebSocketStore();
 const captureButtonState = ref(false);
@@ -41,6 +43,8 @@ const handleCaptureToggle = () => {
     console.log("capture stop");
     websocketStore.stopCapture();
   }
+  //capture-state-change 이벤트를 발생시켜 상위 컴포넌트인 Capture.vue에 captureButtonState의 변경 사항을 알립니다.
+  emit("capture-state-change", captureButtonState.value);
 };
 </script>
 
