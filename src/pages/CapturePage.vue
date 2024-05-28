@@ -2,15 +2,15 @@
   <TheHeader />
   <main class="content">
     <Splitter id="splitter-1" style="width: 100%; height: 640px;">
-      <SplitterPanel id="splitter-1-panel-1" class="flex align-items-center justify-content-center p-1" :size="15">
+      <SplitterPanel id="splitter-1-panel-1" :size="15">
         Panel 1
       </SplitterPanel>
       <!-- 중간 패널 (수직 Splitter 포함) -->
-      <SplitterPanel id="splitter-1-panel-2" class="flex align-items-center justify-content-center" :size="85">
+      <SplitterPanel id="splitter-1-panel-2" :size="85">
         <Splitter id="splitter-2" style="width: 100%; height: 100%">
-          <SplitterPanel id="splitter-2-panel-1" class="flex align-items-center justify-content-center" :size="80">
+          <SplitterPanel id="splitter-2-panel-1" :size="80">
             <Splitter id="splitter-3" style="width: 100%; height: 100%" layout="vertical">
-              <SplitterPanel id="splitter-3-panel-1" class="flex align-items-center justify-content-center" :size="70">
+              <SplitterPanel id="splitter-3-panel-1" :size="70">
                 <!-- Panel 2 -->
                 <DataTable :value="packetMessages" removableSort scrollable rowHover>
                   <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"
@@ -19,19 +19,19 @@
                 </DataTable>
               </SplitterPanel>
               <!-- 하단 패널 (수평 Splitter 포함) -->
-              <SplitterPanel id="splitter-3-panel-2" class="flex align-items-center justify-content-center" :size="30">
+              <SplitterPanel id="splitter-3-panel-2" :size="30">
                 <Splitter id="splitter-4" style="width: 100%; height: 100%">
-                  <SplitterPanel id="splitter-4-panel-1" class="flex align-items-center justify-content-center">
+                  <SplitterPanel id="splitter-4-panel-1">
                     Panel 3
                   </SplitterPanel>
-                  <SplitterPanel id="splitter-4-panel-2" class="flex align-items-center justify-content-center">
+                  <SplitterPanel id="splitter-4-panel-2">
                     Panel 4
                   </SplitterPanel>
                 </Splitter>
               </SplitterPanel>
             </Splitter>
           </SplitterPanel>
-          <SplitterPanel id="splitter-2-panel-2" class="flex align-items-center justify-content-center" :size="20">
+          <SplitterPanel id="splitter-2-panel-2" :size="20">
             Panel 5
           </SplitterPanel>
         </Splitter>
