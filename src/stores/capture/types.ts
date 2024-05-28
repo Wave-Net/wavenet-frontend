@@ -3,12 +3,6 @@ export interface Message {
   data: string;
 }
 
-export interface Device {
-  ip: string;
-  mac: string;
-  hostname: string;
-}
-
 export interface StatInfo {
   send_pkt: number;
   recv_pkt: number;
@@ -16,14 +10,9 @@ export interface StatInfo {
   recv_data: number;
 }
 
-export interface StatMessageData {
-  device: Device;
-  stat: StatInfo;
-}
-
 export interface StatMessage {
   type: string;
-  data: StatMessageData[];
+  data: StatInfo;
 }
 
 export interface PacketMessage {
