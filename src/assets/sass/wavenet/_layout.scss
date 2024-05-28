@@ -18,7 +18,9 @@ main {
   flex: 1;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 footer {
@@ -82,9 +84,37 @@ a {
 
 .p-splitter {
   border: none;
-  background: transparent;
-  border-radius: 0px;
+  background: #ffffff;
   color: #495057;
+  box-shadow: 0 1px 15px 0 hsla(0, 0%, 48.2%, 0.05);
+}
+
+.p-splitter-horizontal > .p-splitter-gutter {
+  cursor: ew-resize;
+  width: .5rem;
+}
+
+.p-splitter-vertical > .p-splitter-gutter {
+  cursor: ns-resize;
+  height: .5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  font-family: $font-type-base, sans-serif;
+  border: 0;
+  border-radius: 0.2857rem;
+  position: relative;
+  width: 100%;
+  background: #fff;
+  margin: 3px;
+  box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .p-card {
@@ -109,6 +139,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  padding: 2%;
 }
 
 .p-card,
