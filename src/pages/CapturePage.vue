@@ -46,6 +46,19 @@
 import { TheHeader, TheFooter } from "@/components";
 import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";
+import { onMounted, onUnmounted } from "vue";
+import { useCaptureStore } from "@/stores"
+
+const captureStore = useCaptureStore();
+
+onMounted(() => {
+  captureStore.connect();
+  
+});
+
+onUnmounted(() => {
+  captureStore.disconnect();
+});
 </script>
 
 <style scoped></style>
