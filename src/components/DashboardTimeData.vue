@@ -1,55 +1,30 @@
 <template>
-  <div class="table">
-    <div class="row">
-      <div class="dashboard-table">
-        패킷 송신/초:<br />
-        <span>{{ table_time_pkt_send }}</span>
-      </div>
-      <div class="dashboard-table">
-        패킷 수신/초:<br />
-        <span>{{ table_time_pkt_recv }}</span>
-      </div>
+  <div class="dashboard-graph card">
+    <div class="dropdown-container">
+      <select v-model="selectedGraph" @change="onGraphChange">
+        <option
+          v-for="option in graphOptions"
+          :value="option.value"
+          :key="option.value"
+        >
+          {{ option.label }}
+        </option>
+      </select>
     </div>
-    <div class="row">
-      <div class="dashboard-table">
-        데이터 송신/초:<br />
-        <span>{{ table_time_data_send }}</span>
-      </div>
-      <div class="dashboard-table">
-        데이터 수신/초:<br />
-        <span>{{ table_time_data_recv }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="dashboard-graph">
-    <div class="tab-buttons">
-      <button
-        :class="{ active: currentTab === 'packets_time' }"
-        @click="currentTab = 'packets_time'"
-      >
-        Packet/sec
-      </button>
-      <button
-        :class="{ active: currentTab === 'data_time' }"
-        @click="currentTab = 'data_time'"
-      >
-        Data/sec
-      </button>
-    </div>
-    <div class="tab-content">
-      <div v-if="currentTab === 'packets_time'" class="card">
+    <div class="graph-content">
+      <div v-if="selectedGraph === 'packets_time'">
         <Chart
           type="line"
           :data="chartDataPacket_time"
-          :options="chartOptions"
+          :options="chartOptionsPacket_time"
           class="graph"
         />
       </div>
-      <div v-if="currentTab === 'data_time'" class="card">
+      <div v-if="selectedGraph === 'data_time'">
         <Chart
           type="line"
           :data="chartDataByte_time"
-          :options="chartOptions"
+          :options="chartOptionsByte_time"
           class="graph"
         />
       </div>
@@ -59,189 +34,363 @@
 
 <script>
 import { useWebSocketStore } from "@/stores";
-import { ref, watch, reactive, onMounted, onUnmounted } from "vue";
+import { ref, watchEffect, reactive, onMounted, onUnmounted } from "vue";
 import Chart from "primevue/chart";
 
 export default {
   components: {
     Chart,
   },
-  data() {
-    return {
-      currentTab: "packets_time", // 현재 선택된 탭 인덱스
-    };
+  props: {
+    captureButtonState: {
+      type: Boolean,
+      required: true,
+    },
   },
-  setup() {
+  setup(props) {
     const websocketStore = useWebSocketStore();
 
-    // 각각의 패킷 및 데이터 송/수신 정보를 저장하는 ref를 생성합니다.
     const table_time_pkt_recv = ref(0);
     const table_time_pkt_send = ref(0);
     const table_time_data_recv = ref(0);
     const table_time_data_send = ref(0);
 
-    // 웹소켓 스토어의 statMessage가 변경될 때마다 실행되는 watch 함수를 설정합니다.
-    watch(
-      () => websocketStore.statMessage,
-      (newValue) => {
-        // 새로운 값이 있고, 그 값에 total_statistics가 있는 경우
-        if (newValue && newValue.statistics_delta) {
-          table_time_pkt_recv.value = newValue.statistics_delta.send_pkt;
-          table_time_pkt_send.value = newValue.statistics_delta.recv_pkt;
-          table_time_data_recv.value = newValue.statistics_delta.send_data;
-          table_time_data_send.value = newValue.statistics_delta.recv_data;
-        }
-      }
-    );
+    const selectedGraph = ref("packets_time");
+    const graphOptions = [
+      { label: "Packet/sec", value: "packets_time" },
+      { label: "Data/sec", value: "data_time" },
+    ];
 
-    // 데이터 갱신 간격 (밀리초)
+    const onGraphChange = () => {
+      // 그래프 변경 시 수행할 로직 작성
+    };
+
+    let oldValue = {
+      recv_data: 0,
+      send_data: 0,
+      recv_pkt: 0,
+      send_pkt: 0,
+    };
+    let isFirstRun = true;
+
+    watchEffect(() => {
+      if (props.captureButtonState) {
+        const newValue = websocketStore.statMessage;
+        if (newValue.data && newValue.data.length > 0) {
+          if (isFirstRun) {
+            isFirstRun = false;
+          } else {
+            table_time_data_recv.value =
+              newValue.data[0].stats.recv_data - oldValue.recv_data;
+            table_time_data_send.value =
+              newValue.data[0].stats.send_data - oldValue.send_data;
+            table_time_pkt_recv.value =
+              newValue.data[0].stats.recv_pkt - oldValue.recv_pkt;
+            table_time_pkt_send.value =
+              newValue.data[0].stats.send_pkt - oldValue.send_pkt;
+          }
+
+          oldValue = {
+            recv_data: newValue.data[0].stats.recv_data,
+            send_data: newValue.data[0].stats.send_data,
+            recv_pkt: newValue.data[0].stats.recv_pkt,
+            send_pkt: newValue.data[0].stats.send_pkt,
+          };
+        }
+      } else {
+        oldValue = {
+          recv_data: 0,
+          send_data: 0,
+          recv_pkt: 0,
+          send_pkt: 0,
+        };
+        isFirstRun = true;
+      }
+    });
+
     const updateInterval = 1000;
 
     const chartDataPacket_time = reactive({
-      labels: ["", "", "", "", "", "", ""],
+      labels: Array(60).fill(""),
       datasets: [
         {
           label: "패킷 송신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "cyan",
-          tension: 0.4,
+          data: Array(60).fill(0),
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
         {
           label: "패킷 수신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
-          borderColor: "gray",
-          tension: 0.4,
+          data: Array(60)
+            .fill(0)
+            .map((value) => -value),
+          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
       ],
     });
     const chartDataByte_time = reactive({
-      labels: ["", "", "", "", "", "", ""],
+      labels: Array(60).fill(""),
       datasets: [
         {
           label: "데이터 송신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
+          data: Array(60).fill(0),
           borderColor: "orange",
-          tension: 0.4,
+          backgroundColor: "rgba(255, 165, 0, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
         {
           label: "데이터 수신/초",
-          data: [0, 0, 0, 0, 0, 0, 0],
-          fill: false,
+          data: Array(60)
+            .fill(0)
+            .map((value) => -value),
           borderColor: "pink",
-          tension: 0.4,
+          backgroundColor: "rgba(255, 192, 203, 0.2)",
+          fill: true,
           borderWidth: 1,
-          pointRadius: 2,
+          pointRadius: 0,
         },
       ],
     });
 
-    // 차트 옵션 설정
-    const chartOptions = reactive({
+    const initialPacketTimeYMin = -100;
+    const initialPacketTimeYMax = 100;
+    const initialByteTimeYMin = -1000;
+    const initialByteTimeYMax = 1000;
+
+    const chartOptionsPacket_time = reactive({
       maintainAspectRatio: false,
       aspectRatio: 0.6,
-
-      // animation 비활성화
       animation: false,
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 20,
+          },
+        },
+        y: {
+          reverse: true,
+          min: initialPacketTimeYMin,
+          max: initialPacketTimeYMax,
+          ticks: {
+            callback: function (value) {
+              return Math.abs(value);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              let label = context.dataset.label || "";
+              if (label) {
+                label += ": ";
+              }
+              if (context.raw < 0) {
+                label += Math.abs(context.raw);
+              } else {
+                label += context.raw;
+              }
+              label += " 개/초";
+              return label;
+            },
+          },
+        },
+      },
     });
 
-    // interval ID를 저장할 변수
+    const chartOptionsByte_time = reactive({
+      maintainAspectRatio: false,
+      aspectRatio: 0.6,
+      animation: false,
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 20,
+          },
+        },
+        y: {
+          reverse: true,
+          min: initialByteTimeYMin,
+          max: initialByteTimeYMax,
+          ticks: {
+            callback: function (value) {
+              return Math.abs(value);
+            },
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              let label = context.dataset.label || "";
+              if (label) {
+                label += ": ";
+              }
+              if (context.raw < 0) {
+                label += Math.abs(context.raw);
+              } else {
+                label += context.raw;
+              }
+              label += " Byte/초";
+              return label;
+            },
+          },
+        },
+      },
+    });
+
     const intervalId = ref(null);
 
     onMounted(() => {
-      // interval 설정
       intervalId.value = setInterval(updateChartData, updateInterval);
     });
 
-    // 컴포넌트가 제거될 때 interval 해제
     onUnmounted(() => {
       clearInterval(intervalId.value);
     });
 
-    // 데이터 업데이트
     const updateChartData = () => {
-      // staticsDelta 객체 확인
-      if (websocketStore.statMessage.statistics_delta) {
-        const { send_pkt, recv_pkt, send_data, recv_data } =
-          websocketStore.statMessage.statistics_delta;
+      if (props.captureButtonState) {
+        if (websocketStore.statMessage.data) {
+          const maxPacketValue_time = Math.max(
+            ...chartDataPacket_time.datasets[0].data,
+            ...chartDataPacket_time.datasets[1].data.map(Math.abs)
+          );
+          const minPacketValue_time = Math.min(
+            ...chartDataPacket_time.datasets[0].data,
+            ...chartDataPacket_time.datasets[1].data.map(Math.abs)
+          );
 
-        // 새로운 데이터 추가
+          const maxByteValue_time = Math.max(
+            ...chartDataByte_time.datasets[0].data,
+            ...chartDataByte_time.datasets[1].data.map(Math.abs)
+          );
+          const minByteValue_time = Math.min(
+            ...chartDataByte_time.datasets[0].data,
+            ...chartDataByte_time.datasets[1].data.map(Math.abs)
+          );
 
-        const newChartDataPacket_time = {
-          labels: [...chartDataPacket_time.labels.slice(1), ""],
-          datasets: chartDataPacket_time.datasets.map((dataset, index) => {
-            let newDataPoint_time = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint_time = send_pkt;
-                break;
-              case 1:
-                newDataPoint_time = recv_pkt;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint_time],
-            };
-          }),
-        };
+          if (
+            maxPacketValue_time > chartOptionsPacket_time.scales.y.max ||
+            minPacketValue_time < Math.abs(chartOptionsPacket_time.scales.y.min)
+          ) {
+            const newMax = Math.ceil(maxPacketValue_time / 10) * 10;
+            const newMin = -newMax;
+            chartOptionsPacket_time.scales.y.max = newMax;
+            chartOptionsPacket_time.scales.y.min = newMin;
+          }
 
-        const newChartDataByte_time = {
-          labels: [...chartDataByte_time.labels.slice(1), ""],
-          datasets: chartDataByte_time.datasets.map((dataset, index) => {
-            let newDataPoint_time = 0;
-            // index에 따라 데이터 설정
-            switch (index) {
-              case 0:
-                newDataPoint_time = send_data;
-                break;
-              case 1:
-                newDataPoint_time = recv_data;
-                break;
-              default:
-                break;
-            }
-            return {
-              ...dataset,
-              data: [...dataset.data.slice(1), newDataPoint_time],
-            };
-          }),
-        };
+          if (
+            maxByteValue_time > chartOptionsByte_time.scales.y.max ||
+            minByteValue_time < Math.abs(chartOptionsByte_time.scales.y.min)
+          ) {
+            const newMax = Math.ceil(maxByteValue_time / 10) * 10;
+            const newMin = -newMax;
+            chartOptionsByte_time.scales.y.max = newMax;
+            chartOptionsByte_time.scales.y.min = newMin;
+          }
 
-        // 데이터 반영
-        chartDataPacket_time.labels = newChartDataPacket_time.labels;
-        chartDataPacket_time.datasets.forEach((dataset, i) => {
-          dataset.data = newChartDataPacket_time.datasets[i].data;
-        });
+          const newChartDataPacket_time = {
+            labels: [...chartDataPacket_time.labels.slice(1), ""],
+            datasets: chartDataPacket_time.datasets.map((dataset, index) => {
+              let newDataPoint = 0;
+              switch (index) {
+                case 0:
+                  newDataPoint = table_time_pkt_send.value;
+                  break;
+                case 1:
+                  newDataPoint = -table_time_pkt_recv.value;
+                  break;
+                default:
+                  break;
+              }
+              return {
+                ...dataset,
+                data: [...dataset.data.slice(1), newDataPoint],
+              };
+            }),
+          };
 
-        chartDataByte_time.labels = newChartDataByte_time.labels;
-        chartDataByte_time.datasets.forEach((dataset, i) => {
-          dataset.data = newChartDataByte_time.datasets[i].data;
-        });
+          const newChartDataByte_time = {
+            labels: [...chartDataByte_time.labels.slice(1), ""],
+            datasets: chartDataByte_time.datasets.map((dataset, index) => {
+              let newDataPoint = 0;
+              switch (index) {
+                case 0:
+                  newDataPoint = table_time_data_send.value;
+                  break;
+                case 1:
+                  newDataPoint = -table_time_data_recv.value;
+                  break;
+                default:
+                  break;
+              }
+              return {
+                ...dataset,
+                data: [...dataset.data.slice(1), newDataPoint],
+              };
+            }),
+          };
+
+          chartDataPacket_time.labels = newChartDataPacket_time.labels;
+          chartDataPacket_time.datasets = newChartDataPacket_time.datasets;
+          chartDataByte_time.labels = newChartDataByte_time.labels;
+          chartDataByte_time.datasets = newChartDataByte_time.datasets;
+        }
       }
     };
 
-    // 각각의 ref를 반환하여 템플릿에서 사용할 수 있게 합니다.
     return {
       table_time_pkt_recv,
       table_time_pkt_send,
       table_time_data_recv,
       table_time_data_send,
-      chartOptions,
       chartDataPacket_time,
       chartDataByte_time,
+      chartOptionsPacket_time,
+      chartOptionsByte_time,
+      selectedGraph,
+      graphOptions,
+      onGraphChange,
     };
   },
 };
 </script>
+
+<style>
+.card {
+  height: 100%;
+}
+.graph-content {
+  height: 100%;
+}
+.dashboard-graph {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.graph {
+  height: 100%;
+}
+
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+select {
+  border: none;
+  margin: 3px;
+}
+</style>

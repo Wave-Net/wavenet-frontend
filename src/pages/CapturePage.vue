@@ -1,156 +1,146 @@
 <template>
-  <div class="full-view">
-    <div class="header-buttons-row">
-      <TheHeader />
-      <!-- 패널 숨김/표시 버튼 -->
-      <div class="mt-3">
-        <Button @click="togglePanel1">
-          {{ showPanel1 ? "Hide" : "Show" }} DashBoard
-        </Button>
-        <Button @click="togglePanel3" class="ml-2">
-          {{ showPanel3 ? "Hide" : "Show" }} Diagram
-        </Button>
-        <Button @click="togglePanel4" class="ml-2">
-          {{ showPanel4 ? "Hide" : "Show" }} Panel 4
-        </Button>
-        <Button @click="togglePanel5" class="ml-2">
-          {{ showPanel5 ? "Hide" : "Show" }} FlowChart
-        </Button>
-      </div>
+  <TheHeader />
+  <!-- 패널 숨김/표시 버튼 -->
+  <div style="position: relative">
+    <div class="panel-button-box">
+      <Button style="margin: 0 3px" @click="togglePanel1">
+        {{ showPanel1 ? "Hide" : "Show" }} DashBoard
+      </Button>
+      <Button style="margin: 0 3px" @click="togglePanel3" class="ml-2">
+        {{ showPanel3 ? "Hide" : "Show" }} Diagram
+      </Button>
+      <Button style="margin: 0 3px" @click="togglePanel4" class="ml-2">
+        {{ showPanel4 ? "Hide" : "Show" }} Panel 4
+      </Button>
+      <Button style="margin: 0 3px" @click="togglePanel5" class="ml-2">
+        {{ showPanel5 ? "Hide" : "Show" }} FlowChart
+      </Button>
     </div>
-    <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
-      <div id="capturepage-container" style="height: 100%">
-        <Splitter style="height: 100%; background-color: '#f8fafc'">
-          <!-- 패널 1: 버튼으로 숨기거나 표시할 수 있음 & 사이드바(시작/중단버튼, 대시보드)-->
+  </div>
+  <div id="wrap-pktCapture-page" class="wrap-pktCapture-page">
+    <div id="capturepage-container" style="display: flex; height: 100%">
+      <!-- 패널 1: 버튼으로 숨기거나 표시할 수 있음 & 사이드바(시작/중단버튼, 대시보드)-->
+      <div
+        v-if="showPanel1"
+        class="flex align-items-center justify-content-center"
+        style="width: 232px; box-sizing: border-box"
+      >
+        <div id="sidebar" class="sidebar">
+          <div id="menu-button-bar" class="menu-button-bar">
+            <MenuButton @capture-state-change="updateCaptureButtonState" />
+          </div>
+          <div id="dashboard" class="dashboard">
+            <div id="dashboard-data" class="dashboard-data">
+              <DashboardData
+                :labelData1="'패킷 입력량'"
+                :labelData2="'패킷 출력량'"
+                :labelData3="'데이터 수신량'"
+                :labelData4="'데이터 송신량'"
+                :captureButtonState="captureButtonState"
+              />
+            </div>
+            <div id="dashboard-timedata" class="dashboard-timedata">
+              <DashboardTimeData
+                :labelData1="'패킷 입력량/초'"
+                :labelData2="'패킷 출력량/초'"
+                :labelData3="'데이터 수신량/초'"
+                :labelData4="'데이터 송신량/초'"
+                :captureButtonState="captureButtonState"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 패널 2, 3, 4를 감싸는 SplitterPanel -->
+      <SplitterPanel
+        :size="
+          showPanel1 && showPanel5
+            ? 'calc(100% - 682px)'
+            : showPanel1
+            ? 'calc(100% - 232px)'
+            : showPanel5
+            ? 'calc(100% - 450px)'
+            : '100%'
+        "
+      >
+        <Splitter layout="vertical">
+          <!-- 패널 2: 패킷 리스트 출력 -->
           <SplitterPanel
-            v-if="showPanel1"
-            class="flex align-items-center justify-content-center"
-            :size="20"
-            :minSize="10"
+            class="flex align-items-center justify-content-center panel-scroll"
+            :size="showPanel3 || showPanel4 ? 50 : 100"
           >
-            <div id="sidebar" class="sidebar">
-              <div id="iot" class="iot">
-                <!-- IoT 장비 연결하세요 -->
-              </div>
-              <div id="menu-button-bar" class="menu-button-bar">
-                <MenuButton @capture-state-change="updateCaptureButtonState" />
-              </div>
-              <div id="dashboard" class="dashboard">
-                <div id="dashboard-data" class="dashboard-data">
-                  <DashboardData
-                    :labelData1="'패킷 입력량'"
-                    :labelData2="'패킷 출력량'"
-                    :labelData3="'데이터 수신량'"
-                    :labelData4="'데이터 송신량'"
-                    :captureButtonState="captureButtonState"
-                  />
-                </div>
-                <div id="dashboard-timedata" class="dashboard-timedata">
-                  <DashboardTimeData
-                    :labelData1="'패킷 입력량/초'"
-                    :labelData2="'패킷 출력량/초'"
-                    :labelData3="'데이터 수신량/초'"
-                    :labelData4="'데이터 송신량/초'"
-                    :captureButtonState="captureButtonState"
-                  />
-                </div>
-              </div>
+            <div id="pkt-list" class="pkt-list">
+              <DataTable
+                :value="packetMessages"
+                id="listTable"
+                size="small"
+                showGridlines
+                scrollable
+                rowHover
+                title="패킷 정보"
+                @row-click="onRowClick"
+              >
+                <Column field="index" header="No."></Column>
+                <Column field="seconds_since_beginning" header="Time"></Column>
+                <Column field="source_ip" header="Source IP"></Column>
+                <Column field="destination_ip" header="Destination IP"></Column>
+                <Column field="name" header="Protocol"></Column>
+                <Column field="length" header="Len"></Column>
+                <Column field="type" header="Info"></Column>
+              </DataTable>
             </div>
           </SplitterPanel>
-          <!-- 패널 1이 숨겨져 있을 때 남은  차지하는 패 -->
-          <SplitterPanel :size="showPanel1 ? 80 : 100">
+
+          <!-- 패널 3과 패널 4를 감싸는 패널: 패널 3과 패널 4가 모두 숨겨져 있을 때 제거됨 -->
+          <SplitterPanel v-if="showPanel3 || showPanel4" :size="50">
             <Splitter>
-              <!-- 패널 5가 숨겨져 있을 때 남은 공간을 차지하는 패널 -->
-              <SplitterPanel :size="showPanel5 ? 50 : 100">
-                <Splitter layout="vertical">
-                  <!-- 패널 2: 패널 3과 패널 4가 모두 숨겨져 있을 때 남은 공간을 차지함 & 패킷 리스트 출력-->
-                  <SplitterPanel
-                    class="flex align-items-center justify-content-center panel-scroll"
-                    :size="showPanel3 || showPanel4 ? 50 : 100"
-                  >
-                    <div id="pkt-list" class="pkt-list">
-                      <DataTable
-                        :value="packetMessages"
-                        id="listTable"
-                        size="small"
-                        showGridlines
-                        scrollable
-                        rowHover
-                        title="패킷 정보"
-                        @row-click="onRowClick"
-                      >
-                        <Column field="index" header="No."></Column>
-                        <Column
-                          field="seconds_since_beginning"
-                          header="Time"
-                        ></Column>
-                        <Column field="source_ip" header="Source IP"></Column>
-                        <Column
-                          field="destination_ip"
-                          header="Destination IP"
-                        ></Column>
-                        <Column field="name" header="Protocol"></Column>
-                        <Column field="length" header="Len"></Column>
-                        <Column field="type" header="Info"></Column>
-                      </DataTable>
-                    </div>
-                  </SplitterPanel>
-
-                  <!-- 패널 3과 패널 4를 감싸는 패널: 패널 3과 패널 4가 모두 숨겨져 있을 때 제거됨 -->
-                  <SplitterPanel v-if="showPanel3 || showPanel4" :size="50">
-                    <Splitter>
-                      <!-- 패널 3: 버튼으로 숨기거나 표시할 수 있음 & 다이어그램 패널-->
-                      <SplitterPanel
-                        v-if="showPanel3"
-                        class="flex align-items-center justify-content-center panel-scroll"
-                        :size="showPanel4 ? 20 : 100"
-                      >
-                        <div v-if="selectedPacket">
-                          <PacketDiagram :pkt="selectedPacket" />
-                        </div>
-                        <div v-else>
-                          <p>선택된 패킷이 없습니다.</p>
-                        </div>
-                      </SplitterPanel>
-
-                      <!-- 패널 4: 버튼으로 숨기거나 표시할 수 있음 & raw-data 출력 할 예정-->
-                      <SplitterPanel
-                        v-if="showPanel4"
-                        class="flex align-items-center justify-content-center"
-                        :size="showPanel3 ? 80 : 100"
-                      >
-                        Panel 4
-                      </SplitterPanel>
-                    </Splitter>
-                  </SplitterPanel>
-                </Splitter>
-              </SplitterPanel>
-
-              <!-- 패널 5: 버튼으로 숨기거나 표시할 수 있음 & 플로우차트 표현 -->
+              <!-- 패널 3: 버튼으로 숨기거나 표시할 수 있음 & 다이어그램 패널-->
               <SplitterPanel
-                v-if="showPanel5"
+                v-if="showPanel3"
                 class="flex align-items-center justify-content-center panel-scroll"
-                :size="50"
+                :size="showPanel4 ? 20 : 100"
               >
-                <div v-if="clickedRowIndex">
-                  <FlowchartPage
-                    :flowchart_packets="flowchart_packets"
-                    :rowIndex="clickedRowIndex"
-                    :sourceIP="sourceIP"
-                    :destinationIP="destinationIP"
-                  />
+                <div v-if="selectedPacket">
+                  <PacketDiagram :pkt="selectedPacket" />
                 </div>
                 <div v-else>
                   <p>선택된 패킷이 없습니다.</p>
                 </div>
               </SplitterPanel>
+
+              <!-- 패널 4: 버튼으로 숨기거나 표시할 수 있음 & raw-data 출력 할 예정-->
+              <SplitterPanel
+                v-if="showPanel4"
+                class="flex align-items-center justify-content-center"
+                :size="showPanel3 ? 80 : 100"
+              >
+                Panel 4
+              </SplitterPanel>
             </Splitter>
           </SplitterPanel>
         </Splitter>
+      </SplitterPanel>
+      <!-- 패널 5: 버튼으로 숨기거나 표시할 수 있음 & 플로우차트 표현 -->
+      <div
+        v-if="showPanel5"
+        class="flex align-items-center justify-content-center panel-scroll"
+        style="width: 450px; box-sizing: border-box"
+      >
+        <div v-if="clickedRowIndex">
+          <FlowchartPage
+            :flowchart_packets="flowchart_packets"
+            :rowIndex="clickedRowIndex"
+            :sourceIP="sourceIP"
+            :destinationIP="destinationIP"
+          />
+        </div>
+        <div v-else>
+          <p>선택된 패킷이 없습니다.</p>
+        </div>
       </div>
     </div>
-    <TheFooter />
   </div>
+  <TheFooter />
 </template>
 <script setup>
 import { defineAsyncComponent } from "vue";
@@ -289,22 +279,6 @@ const handleDoubleClick = (event) => {
 </script>
 
 <style>
-.header-buttons-row {
-  display: flex;
-  flex-direction: row;
-}
-.full-view {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: #f8fafc;
-}
-HeaderStructure {
-  height: 50px;
-}
-FooterStructure {
-  height: 21.6px;
-}
 .pkt-list {
   /* border-radius: 5px; */
   /* min-width: 805px; */
@@ -325,25 +299,19 @@ FooterStructure {
 }
 .menu-button-bar {
   flex: 0 0 40px; /* flex-grow, flex-shrink, flex-basis */
-  margin-top: 5px;
-}
-.iot {
-  flex: 0 0 41px; /* flex-grow, flex-shrink, flex-basis */
-  /* background-color: white; */
-  margin-bottom: 1%;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .wrap-pktCapture-page {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* padding: 1.5vh; */
 }
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: auto;
-  min-width: 285px;
+  width: 232px;
   height: 100%;
   box-sizing: border-box;
 }
@@ -363,5 +331,22 @@ body {
 }
 .panel-scroll {
   overflow: auto;
+}
+.panel-button-box {
+  position: absolute;
+  z-index: 21;
+  right: 0;
+  top: -50px;
+  height: 50px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin: 0 3px;
+}
+.p-splitter {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: inherit !important;
 }
 </style>
