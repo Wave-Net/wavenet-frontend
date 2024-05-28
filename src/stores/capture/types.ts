@@ -1,32 +1,25 @@
 export interface Message {
   type: string;
-  data: string;
+  data?: any;
 }
 
-export interface StatInfo {
+export interface StatMessage {
   send_pkt: number;
   recv_pkt: number;
   send_data: number;
   recv_data: number;
 }
 
-export interface StatMessage {
-  type: string;
-  data: StatInfo;
-}
-
 export interface PacketMessage {
   // 공통 필드
   index: number;
-  protocol: string;
+  layer: string;
   timestamp: number;
   time_of_day: string;
   seconds_since_beginning: string;
   seconds_since_previous: string;
-  source_ip: string;
-  destination_ip: string;
-  source_port: number;
-  destination_port: number;
+  src: string;
+  dst: string;
   length: number;
 
   // MQTT 헤더 정보
@@ -38,7 +31,7 @@ export interface PacketMessage {
   };
 
   // MQTT 타입
-  type: string;
+  mqtt_type: string;
 
   // MQTT CONNECT 정보
   connect?: {
