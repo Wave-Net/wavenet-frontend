@@ -27,10 +27,20 @@
 <script setup lang="ts">
 import { TheHeader, TheFooter, DeviceTable, DeviceDiagram } from "@/components";
 import Card from "primevue/card";
-import { watch, ref, computed } from "vue";
-import { useWebSocketStore, websocketTypes } from "@/stores";
+import { watch, ref, computed, onMounted, onUnmounted } from "vue";
+import { useMonitorStore, monitorMessageTypes } from "@/stores";
 
-const websocketStore = useWebSocketStore();
+const monitorStore = useMonitorStore();
+
+onMounted(() => {
+  monitorStore.connect();
+  
+});
+
+onUnmounted(() => {
+  monitorStore.disconnect();
+});
+
 const deviceData = ref([]);
 
 const isActive = (newItem, oldItem) => {
@@ -42,7 +52,7 @@ const isActive = (newItem, oldItem) => {
   ) : true;
 };
 
-const isAllStatsZero = (stat: websocketTypes.StatInfo) => {
+const isAllStatsZero = (stat: monitorMessageTypes.StatInfo) => {
   return stat.send_pkt === 0 &&
          stat.recv_pkt === 0 &&
          stat.send_data === 0 &&
@@ -59,7 +69,7 @@ const updateDeviceData = (newData, oldData) => {
 };
 
 watch(
-  () => websocketStore.statMessage.data,
+  () => monitorStore.monitorMessage.data,
   (newData, oldData) => {
     deviceData.value = updateDeviceData(newData, oldData);
   }
