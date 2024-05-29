@@ -3,6 +3,7 @@
     :value="packetMessages"
     removableSort
     scrollable
+    :scroll-height="props.scrollableHeight"
     rowHover
     @row-click="handleRowClick"
   >
@@ -18,11 +19,18 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import { defineEmits, defineProps } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 import { useCaptureStore } from "@/stores";
 import { computed } from "vue";
+
+const props = defineProps({
+  scrollableHeight: {
+    type: String,
+    required: true,
+  },
+});
 
 const captureStore = useCaptureStore();
 const packetMessages = computed(() => captureStore.packetMessages);
@@ -37,9 +45,9 @@ const columns = [
   { field: "type", header: "Info" },
 ];
 
-const emit = defineEmits(['row-click']);
+const emit = defineEmits(["row-click"]);
 
 const handleRowClick = (event) => {
-  emit('row-click', event);
+  emit("row-click", event);
 };
 </script>

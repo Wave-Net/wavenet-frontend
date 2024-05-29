@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-button">
+  <div class="menu-button-container">
     <ToggleButton
       v-model="captureButtonState"
       onLabel="Stop"
@@ -36,18 +36,15 @@ const handleCaptureToggle = () => {
 </script>
 
 <style scoped>
-.menu-button {
+.menu-button-container {
   display: flex;
-  gap: 10px;
+  gap: 6px;
 }
 
 .p-component,
 .p-component * {
   box-sizing: border-box;
   font-size: 13px;
-}
-
-.p-split-button {
-  padding: 0.2rem 0.3rem;
+  /* padding: 0.3rem 0.4rem; */
 }
 </style>
