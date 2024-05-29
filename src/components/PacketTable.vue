@@ -37,9 +37,9 @@ const columns = [
   { field: "type", header: "Info" },
 ];
 
-const emit = defineEmits(['rowClicked']);
+const emit = defineEmits(['row-click']);
 
 const handleRowClick = (event) => {
-  emit('rowClicked', event);
+  emit('row-click', event);
 };
 </script>

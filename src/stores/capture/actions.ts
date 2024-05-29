@@ -7,7 +7,7 @@ export const useCaptureStore = defineStore("websocket", {
   actions: {
     connect() {
       if (!this.isConnected) {
-        this.websocket = new WebSocket('http://localhost:8000/capture');
+        this.websocket = new WebSocket("http://localhost:8000/capture");
         this.websocket.onopen = () => {
           this.isConnected = true;
           console.log("패킷캡쳐 웹소켓 연결됨");
@@ -44,6 +44,7 @@ export const useCaptureStore = defineStore("websocket", {
     },
     startCapture(device_ip: String) {
       if (this.websocket && this.isConnected) {
+        console.log("start capture");
         this.packetMessages = [];
         const message = {
           type: "start_capture",
@@ -56,6 +57,7 @@ export const useCaptureStore = defineStore("websocket", {
     },
     stopCapture() {
       if (this.websocket && this.isConnected) {
+        console.log("stop capture");
         const message = {
           type: "stop_capture",
         };

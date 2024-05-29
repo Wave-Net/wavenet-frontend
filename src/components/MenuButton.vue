@@ -1,0 +1,53 @@
+<template>
+  <div class="menu-button">
+    <ToggleButton
+      v-model="captureButtonState"
+      onLabel="Stop"
+      offLabel="Start"
+      @change="handleCaptureToggle"
+    />
+    <SplitButton label="Save" :model="items" :disabled="captureButtonState" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import "primeicons/primeicons.css";
+import ToggleButton from "primevue/togglebutton";
+import SplitButton from "primevue/splitbutton";
+import { useCaptureStore } from "@/stores";
+import { ref, defineEmits } from "vue";
+
+const emit = defineEmits(["capture-state-change"]);
+
+const captureStore = useCaptureStore();
+const captureButtonState = ref(false);
+const items = [{ label: "PCAP" }, { label: "JSON" }, { label: "CSV" }];
+
+const handleCaptureToggle = () => {
+  if (captureButtonState.value) {
+    console.log("capture start");
+    captureStore.startCapture("127.0.0.1");
+  } else {
+    console.log("capture stop");
+    captureStore.stopCapture();
+  }
+  emit("capture-state-change", captureButtonState.value);
+};
+</script>
+
+<style scoped>
+.menu-button {
+  display: flex;
+  gap: 10px;
+}
+
+.p-component,
+.p-component * {
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+.p-split-button {
+  padding: 0.2rem 0.3rem;
+}
+</style>
