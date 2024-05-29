@@ -7,16 +7,11 @@
         <div class="row mt-1 mb-2">
           <MenuButton />
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <div class="col-12">
             <PacketGraph />
           </div>
         </div>
-        <div class="row">
-          <div class="col-12">
-            number
-          </div>
-        </div>    
       </SplitterPanel>
       <SplitterPanel id="splitter-1-panel-2" :size="85">
         <Splitter id="splitter-2" style="width: 100%; height: 100%">
