@@ -2,14 +2,14 @@
   <TheHeader />
   <main class="content">
     <Splitter id="splitter-1" style="width: 100%; height: 640px">
-      <SplitterPanel id="splitter-1-panel-1" class="panel-1" :size="15">
+      <SplitterPanel id="splitter-1-panel-1" class="panel-1 p-1" :size="15">
         <!-- Panel 1 -->
         <div class="row mt-1 mb-2">
           <MenuButton />
         </div>
         <div class="row">
           <div class="col-12">
-            graph
+            <PacketGraph />
           </div>
         </div>
         <div class="row">
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { TheHeader, TheFooter, PacketTable, MenuButton } from "@/components";
+import { TheHeader, TheFooter, PacketTable, MenuButton, PacketGraph } from "@/components";
 import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";
 

@@ -21,7 +21,7 @@ export const useCaptureStore = defineStore("websocket", {
           } else if (receivedData.type === "stat") {
             const statMessage = receivedData.data;
             console.log(statMessage);
-            this.statMessages.push(statMessage);
+            this.statMessage = statMessage;
           }
         };
         this.websocket.onclose = () => {
