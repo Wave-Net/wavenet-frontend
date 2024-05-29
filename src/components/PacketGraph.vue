@@ -94,6 +94,22 @@ watch(dataMax, (newMax) => {
   packetLenChartOptions.scales.y.max = newMax;
 });
 
+watch(
+  () => captureStore.isCapturing,
+  (newVal) => {
+    if (newVal) {
+      recvPktArray.value = Array(MAX_LENGTH).fill(0);
+      sendPktArray.value = Array(MAX_LENGTH).fill(0);
+      recvDataArray.value = Array(MAX_LENGTH).fill(0);
+      sendDataArray.value = Array(MAX_LENGTH).fill(0);
+      totalStat.recvPkt = 0;
+      totalStat.sendPkt = 0;
+      totalStat.recvData = 0;
+      totalStat.sendData = 0;
+    }
+  }
+);
+
 const baseDataset = {
   fill: true,
   borderWidth: 1,

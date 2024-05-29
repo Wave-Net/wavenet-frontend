@@ -46,6 +46,7 @@ export const useCaptureStore = defineStore("websocket", {
       if (this.websocket && this.isConnected) {
         console.log("start capture");
         this.packetMessages = [];
+        this.isCapturing = true;
         const message = {
           type: "start_capture",
           data: device_ip,
@@ -62,6 +63,7 @@ export const useCaptureStore = defineStore("websocket", {
           type: "stop_capture",
         };
         this.websocket.send(JSON.stringify(message));
+        this.isCapturing = false;
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
       }
