@@ -1,22 +1,24 @@
 <template>
-  <Chart
-    type="line"
-    :data="packetCntChartData"
-    :options="chartOptions"
-    class="graph"
-  />
-  <Chart
-    type="line"
-    :data="packetLenChartData"
-    :options="chartOptions"
-    class="graph"
-  />
+  <div class="graph-container">
+    <Chart
+      type="line"
+      :data="packetCntChartData"
+      :options="packetCntChartOptions"
+      class="graph"
+    />
+    <Chart
+      type="line"
+      :data="packetLenChartData"
+      :options="packetLenChartOptions"
+      class="graph"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import Chart from "primevue/chart";
 import { useCaptureStore } from "@/stores";
-import { watch, computed, ref } from "vue";
+import { watch, computed, ref, Ref } from "vue";
 
 const captureStore = useCaptureStore();
 const MAX_LENGTH = 60;
@@ -26,23 +28,37 @@ const recvPktArray = ref(Array(MAX_LENGTH).fill(0));
 const sendDataArray = ref(Array(MAX_LENGTH).fill(0));
 const recvDataArray = ref(Array(MAX_LENGTH).fill(0));
 
-const updateArray = (array: any, value: number) => {
+const pktMax = ref(0);
+const dataMax = ref(0);
+
+const updateArray = (array: any, value: number, maxValue: Ref<number>) => {
   const newArray =
     array.value.length >= MAX_LENGTH ? array.value.slice(1) : [...array.value];
   array.value = [...newArray, value];
+  maxValue.value = Math.max(...array.value.map(Math.abs));
 };
 
 watch(
   () => captureStore.statMessage,
   (newStatMessage) => {
     if (newStatMessage) {
-      updateArray(sendPktArray, newStatMessage.send_pkt);
-      updateArray(recvPktArray, newStatMessage.recv_pkt);
-      updateArray(sendDataArray, newStatMessage.send_data);
-      updateArray(recvDataArray, newStatMessage.recv_data);
+      updateArray(sendPktArray, newStatMessage.send_pkt, pktMax);
+      updateArray(recvPktArray, newStatMessage.recv_pkt, pktMax);
+      updateArray(sendDataArray, newStatMessage.send_data, dataMax);
+      updateArray(recvDataArray, newStatMessage.recv_data, dataMax);
     }
   }
 );
+
+watch(pktMax, (newMax) => {
+  packetCntChartOptions.scales.y.min = -newMax;
+  packetCntChartOptions.scales.y.max = newMax;
+});
+
+watch(dataMax, (newMax) => {
+  packetLenChartOptions.scales.y.min = -newMax;
+  packetLenChartOptions.scales.y.max = newMax;
+});
 
 const baseDataset = {
   fill: true,
@@ -94,10 +110,55 @@ const packetLenChartData = computed(() => {
   };
 });
 
-const chartOptions = {
+const baseChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  aspectRatio: 0.6,
+  animation: false,
+  plugins: {
+    legend: {
+      display: true,
+    },
+  },
+};
+
+const packetCntChartOptions = {
+  ...baseChartOptions,
+  scales: {
+    x: {
+      display: false,
+      grid: {
+        display: true,
+      },
+    },
+    y: {
+      display: false,
+      min: -1,
+      max: 1,
+    },
+  },
+};
+
+const packetLenChartOptions = {
+  ...baseChartOptions,
+  scales: {
+    x: {
+      display: false,
+      grid: {
+        display: true,
+      },
+    },
+    y: {
+      display: false,
+      min: -1,
+      max: 1,
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.graph-container {
+  width: 180px;
+}
+</style>
