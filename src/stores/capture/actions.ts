@@ -48,7 +48,7 @@ export const useCaptureStore = defineStore("websocket", {
         this.packetMessages = [];
         const message = {
           type: "start_capture",
-          device_ip: device_ip,
+          data: device_ip,
         };
         this.websocket.send(JSON.stringify(message));
       } else {

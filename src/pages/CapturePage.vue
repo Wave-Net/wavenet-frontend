@@ -4,7 +4,7 @@
     <Splitter id="splitter-1" style="width: 100%; height: 640px">
       <SplitterPanel id="splitter-1-panel-1" class="panel-1 p-1" :size="15">
         <div class="row mt-1 mb-2">
-          <MenuButton />
+          <MenuButton :device-ip="deviceIp" />
         </div>
         <div class="row mt-2">
           <div class="col-12">
@@ -23,7 +23,7 @@
             >
               <SplitterPanel id="splitter-3-panel-1" :size="70">
                 <PacketTable
-                  :scrollableHeight="packetTableHeight"
+                  :scrollable-height="packetTableHeight"
                   @row-click="onRowClick"
                 />
               </SplitterPanel>
@@ -61,9 +61,12 @@ import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useCaptureStore } from "@/stores";
+import { useRoute } from "vue-router";
 
 const captureStore = useCaptureStore();
 const packetTableHeight = ref("70%");
+const route = useRoute();
+const deviceIp = ref(route.query.device_ip as string || "");
 
 onMounted(() => {
   captureStore.connect();

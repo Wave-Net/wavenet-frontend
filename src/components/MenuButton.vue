@@ -15,9 +15,15 @@ import "primeicons/primeicons.css";
 import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
 import { useCaptureStore } from "@/stores";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, defineProps } from "vue";
 
 const emit = defineEmits(["capture-state-change"]);
+const props = defineProps({
+  deviceIp: {
+    type: String,
+    required: true,
+  },
+});
 
 const captureStore = useCaptureStore();
 const captureButtonState = ref(false);
@@ -26,7 +32,7 @@ const items = [{ label: "PCAP" }, { label: "JSON" }, { label: "CSV" }];
 const handleCaptureToggle = () => {
   if (captureButtonState.value) {
     console.log("capture start");
-    captureStore.startCapture("127.0.0.1");
+    captureStore.startCapture(props.deviceIp);
   } else {
     console.log("capture stop");
     captureStore.stopCapture();
