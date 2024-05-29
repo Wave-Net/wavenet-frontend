@@ -205,7 +205,7 @@ const packetLenChartOptions = {
   text-align: left;
   padding-left: 0.3rem;
   padding-right: 0.75rem;
-  padding-bottom: 1.45rem;
+  padding-bottom: 1rem;
   border: 1px solid #e2e8f0;
   border-width: 0 0 1px 0;
   color: rgba(34, 42, 66, 0.7);
