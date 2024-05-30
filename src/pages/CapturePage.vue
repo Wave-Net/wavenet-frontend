@@ -29,8 +29,11 @@
               </SplitterPanel>
               <SplitterPanel id="splitter-3-panel-2" :size="30">
                 <Splitter id="splitter-4" style="width: 100%; height: 100%">
-                  <SplitterPanel id="splitter-4-panel-1">
-                    Panel 3
+                  <SplitterPanel
+                    id="splitter-4-panel-1"
+                    style="height: 100%; overflow-y: auto"
+                  >
+                    <PacketDiagram v-if="clickPacket" :pkt="clickPacket" />
                   </SplitterPanel>
                   <SplitterPanel id="splitter-4-panel-2">
                     Panel 4
@@ -39,8 +42,16 @@
               </SplitterPanel>
             </Splitter>
           </SplitterPanel>
-          <SplitterPanel id="splitter-2-panel-2" :size="20">
-            Panel 5
+          <SplitterPanel
+            id="splitter-2-panel-2"
+            :size="20"
+            style="height: 100%; overflow-y: auto"
+          >
+            <PacketFlowChart
+              :flowchart_packets="flowchartPacket"
+              :sourceIP="sourceIP"
+              :destinationIP="destinationIP"
+            />
           </SplitterPanel>
         </Splitter>
       </SplitterPanel>
@@ -56,6 +67,8 @@ import {
   PacketTable,
   MenuButton,
   PacketGraph,
+  PacketDiagram,
+  PacketFlowChart,
 } from "@/components";
 import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";
@@ -66,7 +79,7 @@ import { useRoute } from "vue-router";
 const captureStore = useCaptureStore();
 const packetTableHeight = ref("70%");
 const route = useRoute();
-const deviceIp = ref(route.query.device_ip as string || "");
+const deviceIp = ref((route.query.device_ip as string) || "");
 
 onMounted(() => {
   captureStore.connect();
@@ -87,8 +100,18 @@ const updatePacketTableHeight = () => {
   }
 };
 
+const clickPacket = ref(null);
+const sourceIP = ref<string | null>(null);
+const destinationIP = ref<string | null>(null);
+const flowchartPacket = ref([]);
+
 const onRowClick = (event: any) => {
   console.log(event.data);
+  clickPacket.value = event.data;
+
+  sourceIP.value = event.data.src;
+  destinationIP.value = event.data.dst;
+  flowchartPacket.value = captureStore.packetMessages; // 웹소켓 스토어에서 메세지 배열을 저장
 };
 </script>
 

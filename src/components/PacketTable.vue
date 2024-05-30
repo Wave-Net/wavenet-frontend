@@ -42,7 +42,7 @@ const columns = [
   { field: "dst", header: "Dst" },
   { field: "layer", header: "Protocol" },
   { field: "length", header: "Len", sortable: true },
-  { field: "type", header: "Info" },
+  { field: "mqtt_type", header: "Info" },
 ];
 
 const emit = defineEmits(["row-click"]);
