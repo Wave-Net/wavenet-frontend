@@ -29,8 +29,11 @@
               </SplitterPanel>
               <SplitterPanel id="splitter-3-panel-2" :size="30">
                 <Splitter id="splitter-4" style="width: 100%; height: 100%">
-                  <SplitterPanel id="splitter-4-panel-1">
-                    Panel 3
+                  <SplitterPanel
+                    id="splitter-4-panel-1"
+                    style="height: 100%; overflow-y: auto"
+                  >
+                    <PacketDiagram v-if="clickPacket" :pkt="clickPacket" />
                   </SplitterPanel>
                   <SplitterPanel id="splitter-4-panel-2">
                     Panel 4
@@ -40,7 +43,7 @@
             </Splitter>
           </SplitterPanel>
           <SplitterPanel id="splitter-2-panel-2" :size="20">
-            Panel 5
+            Panel 5 플로우차트
           </SplitterPanel>
         </Splitter>
       </SplitterPanel>
@@ -56,6 +59,8 @@ import {
   PacketTable,
   MenuButton,
   PacketGraph,
+  PacketDiagram,
+  PacketFlowChart,
 } from "@/components";
 import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";
@@ -66,7 +71,7 @@ import { useRoute } from "vue-router";
 const captureStore = useCaptureStore();
 const packetTableHeight = ref("70%");
 const route = useRoute();
-const deviceIp = ref(route.query.device_ip as string || "");
+const deviceIp = ref((route.query.device_ip as string) || "");
 
 onMounted(() => {
   captureStore.connect();
@@ -87,8 +92,10 @@ const updatePacketTableHeight = () => {
   }
 };
 
+const clickPacket = ref(null);
 const onRowClick = (event: any) => {
   console.log(event.data);
+  clickPacket.value = event.data;
 };
 </script>
 
