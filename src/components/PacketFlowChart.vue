@@ -127,7 +127,7 @@ export default {
   content: "";
   position: absolute;
   width: 50%;
-  border: solid rgb(162, 214, 238);
+  border: solid #7bc2d0;
   top: -17.5px;
   bottom: -17.5px;
 }
@@ -165,7 +165,7 @@ export default {
   display: flex;
   flex-direction: column;
   background: #d6d6d6e4;
-  color: rgb(104, 104, 104);
+  color: rgb(48, 48, 48);
   border-radius: 25px;
   padding: 10px;
 }
@@ -174,6 +174,7 @@ export default {
 .title {
   color: rgb(114, 158, 179);
   position: relative;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Timeline dot */
@@ -184,7 +185,7 @@ export default {
   height: 10px;
   background: white;
   border-radius: 50%;
-  border: 3px solid rgb(162, 214, 238);
+  border: 3px solid #7bc2d0;
 }
 
 /* Arrow */
@@ -196,25 +197,27 @@ export default {
 }
 /* 동그라미 */
 .flow-msg.left > .info > .title::before {
-  left: -35px;
-  top: 6px;
+  left: -32.5px;
+  top: 12.5px;
 }
 /* 화살표 */
 .flow-msg.left > .info > .title::after {
-  left: -20.6px;
-  top: 5.7px;
-  border-color: transparent transparent transparent rgb(162, 214, 238);
+  left: -21px;
+  top: 10px;
+  border-width: 8px 0px 8px 10px; /* 오른쪽 방향의 border-width를 늘림 */
+  border-color: transparent transparent transparent #7bc2d0;
 }
 
 .flow-msg.right > .info > .title::before {
-  right: -35px;
-  top: 6px;
+  right: -32.4px;
+  top: 12.5px;
 }
 
 .flow-msg.right > .info > .title::after {
-  right: -20px;
-  top: 5px;
-  border-color: transparent rgb(162, 214, 238) transparent transparent;
+  right: -21px;
+  top: 9.5px;
+  border-width: 8px 10px 8px 0; /* 오른쪽 방향의 border-width를 늘림 */
+  border-color: transparent #7bc2d0 transparent transparent;
 }
 
 .flow-msg.right > .info > .title {
@@ -223,7 +226,7 @@ export default {
 
 /* Removing the border if it is the first Flow Msg */
 .flow-msg-group:first-child::before {
-  top: -15px;
+  top: -51px;
 }
 
 .flow-msg-group.left:first-child::before {
@@ -252,16 +255,22 @@ export default {
   justify-content: space-between;
   max-width: 480px;
   position: sticky;
-  top: 30px;
+  top: 0px;
   z-index: 1;
+  padding: 5px 5px 0.2px 5px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  background-color: white;
 }
 .title-ip {
-  background-color: rgb(162, 214, 238);
+  background-color: #7bc2d0;
   text-align: center;
   border-radius: 10px;
   padding: 5px;
 }
 .info-content {
   max-width: 400px;
+  font-family: "Poppins", sans-serif;
 }
 </style>

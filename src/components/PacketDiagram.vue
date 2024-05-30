@@ -1,4 +1,25 @@
 <template>
+  <div
+    :style="{
+      width: '100%',
+      height: '18px',
+      display: 'flex',
+    }"
+  >
+    <div class="byte-style byte-style-left"></div>
+    <div
+      v-for="index in 7"
+      :key="index"
+      class="byte-style-center byte-style"
+    ></div>
+    <div class="byte-style byte-style-left"></div>
+    <div
+      v-for="index in 6"
+      :key="index"
+      class="byte-style-center byte-style"
+    ></div>
+    <div class="byte-style-right byte-style"></div>
+  </div>
   <div class="wrap-diagram">
     <div v-if="pkt.layer == 'MQTT'">
       <!-- MQTT-Fixed-header -->
@@ -444,6 +465,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.byte-style-right {
+  background-image: linear-gradient(to top, black 50%, transparent 25%),
+    linear-gradient(to top, black 90%, transparent 20%);
+  background-size: 1.1px 100%;
+  background-position: left, right;
+  background-repeat: no-repeat;
+}
+.byte-style-left {
+  background-image: linear-gradient(to top, black 90%, transparent 20%);
+  background-size: 1.1px 100%;
+  background-position: left;
+  background-repeat: no-repeat;
+}
+.byte-style-center {
+  background-image: linear-gradient(to top, black 50%, transparent 25%);
+  background-size: 1.1px 100%;
+  background-position: left;
+  background-repeat: no-repeat;
+}
+.byte-style {
+  height: 18px;
+  width: 6.25%;
+}
 .null-row {
   display: flex;
   flex-direction: column;
@@ -486,6 +530,7 @@ onMounted(() => {
   height: 36px;
 }
 .wrap-diagram {
+  font-family: "Poppins", sans-serif;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
