@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { state } from "./state";
 import { MonitorMessage } from "./types";
 
-export const useMonitorStore = defineStore("websocket", {
+export const useMonitorStore = defineStore("monitor", {
   state: state,
   actions: {
     connect() {

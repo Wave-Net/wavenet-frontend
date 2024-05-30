@@ -6,7 +6,12 @@
       offLabel="Start"
       @change="handleCaptureToggle"
     />
-    <SplitButton label="Save" :model="items" :disabled="captureButtonState" />
+    <SplitButton
+      label="Save"
+      :model="items"
+      :disabled="captureButtonState || !captureStore.packetMessages.length"
+      @click="handleSplitButtonClick"
+    />
   </div>
 </template>
 
@@ -15,9 +20,8 @@ import "primeicons/primeicons.css";
 import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
 import { useCaptureStore } from "@/stores";
-import { ref, defineEmits, defineProps } from "vue";
+import { ref, defineProps } from "vue";
 
-const emit = defineEmits(["capture-state-change"]);
 const props = defineProps({
   deviceIp: {
     type: String,
@@ -27,7 +31,11 @@ const props = defineProps({
 
 const captureStore = useCaptureStore();
 const captureButtonState = ref(false);
-const items = [{ label: "PCAP" }, { label: "JSON" }, { label: "CSV" }];
+const items = [
+  { label: "PCAP", command: () => handleDownload("pcap") },
+  { label: "JSON", command: () => handleDownload("json") },
+  { label: "CSV", command: () => handleDownload("csv") }
+];
 
 const handleCaptureToggle = () => {
   if (captureButtonState.value) {
@@ -37,7 +45,14 @@ const handleCaptureToggle = () => {
     console.log("capture stop");
     captureStore.stopCapture();
   }
-  emit("capture-state-change", captureButtonState.value);
+};
+
+const handleSplitButtonClick = () => {
+  captureStore.downloadPacketFile(props.deviceIp, "pcap");
+};
+
+const handleDownload = (format: string) => {
+  captureStore.downloadPacketFile(props.deviceIp, format);
 };
 </script>
 
