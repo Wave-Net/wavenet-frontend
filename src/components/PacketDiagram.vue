@@ -20,6 +20,7 @@
     ></div>
     <div class="byte-style-right byte-style"></div>
   </div>
+
   <div class="wrap-diagram">
     <div v-if="pkt.layer == 'MQTT'">
       <!-- MQTT-Fixed-header -->

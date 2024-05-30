@@ -8,7 +8,7 @@
         class="graph"
       />
       <div class="graph-value-container">
-        <div class="p-1">Packets</div>
+        <div class="p-1">Packet</div>
         <div class="p-1">
           Recv: {{ totalStat.recvPkt }}<br />
           Send: {{ totalStat.sendPkt }}
@@ -23,7 +23,7 @@
         class="graph"
       />
       <div class="graph-value-container">
-        <div class="p-1">Datas</div>
+        <div class="p-1">Data</div>
         <div class="p-1">
           Recv: {{ totalStat.recvData }}<br />
           Send: {{ totalStat.sendData }}
