@@ -7,20 +7,21 @@ export const useCaptureStore = defineStore("websocket", {
   actions: {
     connect() {
       if (!this.isConnected) {
-        this.websocket = new WebSocket('http://localhost:8000/capture');
+        this.websocket = new WebSocket("http://localhost:8000/capture");
         this.websocket.onopen = () => {
           this.isConnected = true;
           console.log("패킷캡쳐 웹소켓 연결됨");
         };
         this.websocket.onmessage = (event) => {
-          console.log(event.data);
+          // console.log(event.data);
           const receivedData = JSON.parse(event.data) as Message;
           if (receivedData.type === "packet") {
-            const packetMessage = JSON.parse(event.data) as PacketMessage;
+            const packetMessage = receivedData.data;
             this.packetMessages.push(packetMessage);
           } else if (receivedData.type === "stat") {
-            const statMessage = JSON.parse(event.data) as StatMessage;
-            this.statMessages.push(statMessage);
+            const statMessage = receivedData.data;
+            console.log(statMessage);
+            this.statMessage = statMessage;
           }
         };
         this.websocket.onclose = () => {
@@ -43,10 +44,12 @@ export const useCaptureStore = defineStore("websocket", {
     },
     startCapture(device_ip: String) {
       if (this.websocket && this.isConnected) {
+        console.log("start capture");
         this.packetMessages = [];
+        this.isCapturing = true;
         const message = {
           type: "start_capture",
-          device_ip: device_ip,
+          data: device_ip,
         };
         this.websocket.send(JSON.stringify(message));
       } else {
@@ -55,10 +58,12 @@ export const useCaptureStore = defineStore("websocket", {
     },
     stopCapture() {
       if (this.websocket && this.isConnected) {
+        console.log("stop capture");
         const message = {
           type: "stop_capture",
         };
         this.websocket.send(JSON.stringify(message));
+        this.isCapturing = false;
       } else {
         console.error("WebSocket 연결이 되어있지 않습니다.");
       }

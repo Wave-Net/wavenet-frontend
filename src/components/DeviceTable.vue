@@ -40,8 +40,23 @@ const columns = [
   { field: "recv_data", header: "Recv Byte", style: { width: "161.14px" } },
   { field: "send_pkt", header: "Send Packet", style: { width: "120.86px" } },
   { field: "recv_pkt", header: "Recv Packet", style: { width: "120.86px" } },
-  { field: "capture", header: "Capture", style: { width: "40.29px" }, notSortable: true },
+  {
+    field: "capture",
+    header: "Capture",
+    style: { width: "40.29px" },
+    notSortable: true,
+  },
 ];
 </script>
 
-<style scoped></style>
+<style scoped>
+.p-component,
+.p-component * {
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.p-button {
+  padding: 0.3rem 0.4rem;
+}
+</style>
