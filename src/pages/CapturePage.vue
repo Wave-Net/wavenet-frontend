@@ -42,8 +42,16 @@
               </SplitterPanel>
             </Splitter>
           </SplitterPanel>
-          <SplitterPanel id="splitter-2-panel-2" :size="20">
-            Panel 5 플로우차트
+          <SplitterPanel
+            id="splitter-2-panel-2"
+            :size="20"
+            style="height: 100%; overflow-y: auto"
+          >
+            <PacketFlowChart
+              :flowchart_packets="flowchartPacket"
+              :sourceIP="sourceIP"
+              :destinationIP="destinationIP"
+            />
           </SplitterPanel>
         </Splitter>
       </SplitterPanel>
@@ -93,9 +101,17 @@ const updatePacketTableHeight = () => {
 };
 
 const clickPacket = ref(null);
+const sourceIP = ref<string | null>(null);
+const destinationIP = ref<string | null>(null);
+const flowchartPacket = ref([]);
+
 const onRowClick = (event: any) => {
   console.log(event.data);
   clickPacket.value = event.data;
+
+  sourceIP.value = event.data.src;
+  destinationIP.value = event.data.dst;
+  flowchartPacket.value = captureStore.packetMessages; // 웹소켓 스토어에서 메세지 배열을 저장
 };
 </script>
 
