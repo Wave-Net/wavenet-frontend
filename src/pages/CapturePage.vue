@@ -7,9 +7,7 @@
           <MenuButton :device-ip="deviceIp" />
         </div>
         <div class="row mt-2">
-          <div class="col-12">
-            <PacketGraph />
-          </div>
+          <PacketGraph />
         </div>
       </SplitterPanel>
       <SplitterPanel id="splitter-1-panel-2" :size="85">
