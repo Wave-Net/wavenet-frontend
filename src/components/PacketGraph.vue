@@ -63,21 +63,42 @@ const updateTotal = (newStatMessage: any) => {
   totalStat.sendData += newStatMessage.send_data;
 };
 
-const updateArray = (array: any, value: number, maxValue: Ref<number>) => {
+const updateArray = (array: any, value: number) => {
   const newArray =
     array.value.length >= MAX_LENGTH ? array.value.slice(1) : [...array.value];
   array.value = [...newArray, value];
-  maxValue.value = Math.max(...array.value.map(Math.abs));
+};
+
+const updateArraysAndMax = (
+  recvArray: Ref<number[]>,
+  sendArray: Ref<number[]>,
+  recvValue: number,
+  sendValue: number
+) => {
+  updateArray(recvArray, recvValue);
+  updateArray(sendArray, sendValue);
+  return Math.max(
+    ...recvArray.value.map(Math.abs),
+    ...sendArray.value.map(Math.abs)
+  );
 };
 
 watch(
   () => captureStore.statMessage,
   (newStatMessage) => {
     if (newStatMessage) {
-      updateArray(recvPktArray, newStatMessage.recv_pkt, pktMax);
-      updateArray(sendPktArray, newStatMessage.send_pkt, pktMax);
-      updateArray(recvDataArray, newStatMessage.recv_data, dataMax);
-      updateArray(sendDataArray, newStatMessage.send_data, dataMax);
+      pktMax.value = updateArraysAndMax(
+        recvPktArray,
+        sendPktArray,
+        newStatMessage.recv_pkt,
+        newStatMessage.send_pkt
+      );
+      dataMax.value = updateArraysAndMax(
+        recvDataArray,
+        sendDataArray,
+        newStatMessage.recv_data,
+        newStatMessage.send_data
+      );
 
       updateTotal(newStatMessage);
     }
