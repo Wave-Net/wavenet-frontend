@@ -23,6 +23,8 @@
                 <PacketTable
                   :scrollable-height="packetTableHeight"
                   @row-click="onRowClick"
+                  :highlightedIndex="highlightedIndex"
+                  :highlightedFlowchartIndex="highlightedFlowchartIndex"
                 />
               </SplitterPanel>
               <SplitterPanel id="splitter-3-panel-2" :size="30">
@@ -49,6 +51,8 @@
               :flowchart_packets="flowchartPacket"
               :sourceIP="sourceIP"
               :destinationIP="destinationIP"
+              @packetIndexSelected="handlePacketHighlight"
+              :highlightedIndex="highlightedFlowchartIndex"
             />
           </SplitterPanel>
         </Splitter>
@@ -102,6 +106,8 @@ const clickPacket = ref(null);
 const sourceIP = ref<string | null>(null);
 const destinationIP = ref<string | null>(null);
 const flowchartPacket = ref([]);
+const highlightedIndex = ref<number | null>(null);
+const highlightedFlowchartIndex = ref<number | null>(null);
 
 const onRowClick = (event: any) => {
   console.log(event.data);
@@ -110,6 +116,26 @@ const onRowClick = (event: any) => {
   sourceIP.value = event.data.src;
   destinationIP.value = event.data.dst;
   flowchartPacket.value = captureStore.packetMessages; // 웹소켓 스토어에서 메세지 배열을 저장
+
+  // 클릭된 행이 이미 하이라이트된 행인지 확인
+  if (highlightedIndex.value === event.data.index) {
+    highlightedIndex.value = null; // 하이라이트 해제
+    highlightedFlowchartIndex.value = null; // flowchart 하이라이트 해제
+  } else {
+    highlightedIndex.value = event.data.index; // 새로운 하이라이트 설정
+    highlightedFlowchartIndex.value = event.data.index; // flowchart 하이라이트 설정
+  }
+};
+
+const handlePacketHighlight = (index: number) => {
+  if (highlightedIndex.value === index) {
+    highlightedIndex.value = null; // 하이라이트 해제
+    highlightedFlowchartIndex.value = null; // flowchart 하이라이트 해제
+  } else {
+    highlightedIndex.value = index; // 새로운 하이라이트 설정
+    highlightedFlowchartIndex.value = index; // flowchart 하이라이트 설정
+  }
+  console.log("INDEX", index);
 };
 </script>
 

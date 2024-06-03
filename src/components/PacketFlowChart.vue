@@ -16,42 +16,54 @@
             :key="packetIndex"
             :class="['flow-msg', group.direction]"
           >
-            <div class="info">
+            <div
+              class="info"
+              @click="emitPacketIndex(packet.index)"
+              :class="{ highlight: isHighlighted(packet.index) }"
+            >
               <h3 class="title">{{ packet.mqtt_type }}</h3>
 
               <div class="info-content">
-                <p>Time : {{ packet.seconds_since_beginning }}</p>
+                <p class="font-size-small">
+                  Time : {{ packet.seconds_since_beginning }}
+                </p>
                 <div v-if="packet.mqtt_type == 'CONNECT'">
-                  <p v-if="packet.connect.willtopic">
+                  <p v-if="packet.connect.willtopic" class="font-size-small">
                     Will Topic : {{ packet.connect.willtopic }}
                   </p>
-                  <p v-if="packet.connect.willmsg">
+                  <p v-if="packet.connect.willmsg" class="font-size-small">
                     Will Message: {{ packet.connect.willmsg }}
                   </p>
                 </div>
                 <div v-if="packet.mqtt_type == 'CONNACK'">
-                  <p>Return Code : {{ packet.connack.return_code }}</p>
+                  <p class="font-size-small">
+                    Return Code : {{ packet.connack.return_code }}
+                  </p>
                 </div>
                 <div v-if="packet.mqtt_type == 'PUBLISH'">
-                  <p>Topic : {{ packet.publish.topic }}</p>
+                  <p class="font-size-small">
+                    Topic : {{ packet.publish.topic }}
+                  </p>
                 </div>
                 <div v-if="packet.mqtt_type == 'SUBSCRIBE'">
                   <div
                     v-for="(item, index) in packet.subscribe.topic_filters"
                     :key="index"
                   >
-                    <p class="">Topic : {{ item.topic }}</p>
+                    <p class="font-size-small">Topic : {{ item.topic }}</p>
                   </div>
                 </div>
                 <div v-if="packet.mqtt_type == 'SUBACK'">
-                  <p>Return Code : {{ packet.suback.return_code }}</p>
+                  <p class="font-size-small">
+                    Return Code : {{ packet.suback.return_code }}
+                  </p>
                 </div>
                 <div v-if="packet.mqtt_type == 'UNSUBSCRIBE'">
                   <div
                     v-for="(item, index) in packet.unsubscribe.topic_filters"
                     :key="index"
                   >
-                    <p class="">Topic : {{ item.topic }}</p>
+                    <p class="font-size-small">Topic : {{ item.topic }}</p>
                   </div>
                 </div>
               </div>
@@ -69,6 +81,15 @@ export default {
     flowchart_packets: Array,
     sourceIP: String,
     destinationIP: String,
+    highlightedIndex: Number,
+  },
+  methods: {
+    emitPacketIndex(index) {
+      this.$emit("packetIndexSelected", index);
+    },
+    isHighlighted(index) {
+      return this.highlightedIndex === index;
+    },
   },
   computed: {
     groupedFlowchartPackets() {
@@ -168,6 +189,10 @@ export default {
   color: rgb(48, 48, 48);
   border-radius: 25px;
   padding: 10px;
+  /* font-size: 10px; */
+}
+.info.highlight {
+  background-color: #7bc2d045; /* Info 하이라이트 스타일 */
 }
 
 /* Title of the Flow Msg */
@@ -175,6 +200,7 @@ export default {
   color: rgb(114, 158, 179);
   position: relative;
   font-family: "Poppins", sans-serif;
+  font-size: medium;
 }
 
 /* Timeline dot */
@@ -272,5 +298,8 @@ export default {
 .info-content {
   max-width: 400px;
   font-family: "Poppins", sans-serif;
+}
+.font-size-small {
+  font-size: small;
 }
 </style>
