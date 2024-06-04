@@ -2,21 +2,15 @@
   <div class="accordion">
     <div
       v-for="(item, index) in accordionItems"
-      :key="index"
+      :key="item.id"
       class="accordion-item"
     >
       <div class="accordion-header" @click="toggle(index)">
         {{ item.title }}
       </div>
       <div v-if="item.isOpen" class="accordion-content">
-        <div v-if="item.title === 'MQ Telemetry TransPort'">
-          <MQTTContent />
-        </div>
-        <div v-else-if="item.title === 'Constrained Application Protocol'">
-          <CoAPContent />
-        </div>
-        <div v-else>
-          {{ item.content }}
+        <div>
+          <!-- {{ item.content }} -->
         </div>
       </div>
     </div>
@@ -24,14 +18,7 @@
 </template>
 
 <script>
-import MQTTContent from "./protocol/MQTT.vue";
-import CoAPContent from "./protocol/CoAP.vue";
-
 export default {
-  components: {
-    MQTTContent,
-    CoAPContent,
-  },
   props: {
     pkt: {
       type: Object,
@@ -46,51 +33,52 @@ export default {
   created() {
     this.setAccordionItems();
   },
+  watch: {
+    pkt: {
+      deep: true,
+      handler() {
+        this.setAccordionItems();
+      },
+    },
+  },
   methods: {
     setAccordionItems() {
-      if (this.pkt.layer === "MQTT") {
-        this.accordionItems = [
-          {
-            title: "Ethernet",
-            content: "Content for section 1",
+      let idCounter = 0;
+      this.accordionItems = Object.entries(this.pkt.layers).map(
+        ([key, value]) => {
+          let title = "";
+          switch (key) {
+            case "ETH":
+              title = "Ethernet";
+              break;
+            case "IP":
+              title = "Internet Protocol Version 4";
+              break;
+            case "TCP":
+              title = "Transmission Control Protocol";
+              break;
+            case "UDP":
+              title = "User Datagram Protocol";
+              break;
+            case "MQTT":
+              title = "MQ Telemetry TransPort";
+              break;
+            case "CoAP":
+              title = "Constrained Application Protocol";
+              break;
+            default:
+              title = key;
+              break;
+          }
+
+          return {
+            id: idCounter++, // 동적으로 ID 추가
+            title,
+            content: `Content for ${title}: ${value.details}`,
             isOpen: false,
-          },
-          {
-            title: "Internet Protocol Version 4",
-            content: "Content for section 2",
-            isOpen: false,
-          },
-          {
-            title: "Transmission Control Protocol",
-            content: "Content for section 3",
-            isOpen: false,
-          },
-          { title: "MQ Telemetry TransPort", content: "", isOpen: false },
-        ];
-      } else if (this.pkt.layer === "CoAP") {
-        this.accordionItems = [
-          {
-            title: "Ethernet",
-            content: "Content for section 1",
-            isOpen: false,
-          },
-          {
-            title: "Internet Protocol Version 4",
-            content: "Content for section 2",
-            isOpen: false,
-          },
-          {
-            title: "User Datagram Protocol",
-            content: "Content for section 3",
-            isOpen: false,
-          },
-          {
-            title: "Constrained Application Protocol",
-            content: "",
-            isOpen: false,
-          },
-        ];
-      }
+          };
+        }
+      );
     },
     toggle(index) {
       this.accordionItems[index].isOpen = !this.accordionItems[index].isOpen;

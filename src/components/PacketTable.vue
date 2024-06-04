@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, watch } from "vue";
+import { defineEmits, defineProps } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { useCaptureStore } from "@/stores";
@@ -69,14 +69,14 @@ const rowClass = (data) => {
   return "";
 };
 
-// Watch for changes in highlightedIndex and highlightedFlowchartIndex
-watch(
-  () => [props.highlightedIndex, props.highlightedFlowchartIndex],
-  ([newIndex, newFlowchartIndex]) => {
-    console.log("highlightedIndex changed to:", newIndex);
-    console.log("highlightedFlowchartIndex changed to:", newFlowchartIndex);
-  }
-);
+// // Watch for changes in highlightedIndex and highlightedFlowchartIndex
+// watch(
+//   () => [props.highlightedIndex, props.highlightedFlowchartIndex],
+//   ([newIndex, newFlowchartIndex]) => {
+//     console.log("highlightedIndex changed to:", newIndex);
+//     console.log("highlightedFlowchartIndex changed to:", newFlowchartIndex);
+//   }
+// );
 </script>
 
 <style>

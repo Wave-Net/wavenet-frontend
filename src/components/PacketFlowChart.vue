@@ -16,12 +16,16 @@
             :key="packetIndex"
             :class="['flow-msg', group.direction]"
           >
+            <!-- MQTT FLOW CHART -->
             <div
               class="info"
               @click="emitPacketIndex(packet.index)"
               :class="{ highlight: isHighlighted(packet.index) }"
+              v-if="packet.layer == 'MQTT'"
             >
-              <h3 class="title">{{ packet.mqtt_type }}</h3>
+              <h3 class="title">
+                {{ packet.mqtt_type }}
+              </h3>
 
               <div class="info-content">
                 <p class="font-size-small">
@@ -65,6 +69,30 @@
                   >
                     <p class="font-size-small">Topic : {{ item.topic }}</p>
                   </div>
+                </div>
+              </div>
+            </div>
+            <!-- CoAP FLOW CHART -->
+            <div
+              class="info"
+              @click="emitPacketIndex(packet.index)"
+              :class="{ highlight: isHighlighted(packet.index) }"
+              v-if="packet.layer == 'CoAP'"
+            >
+              <h3 class="title">
+                <!-- {{ packet.code }} -->
+                {{ packet.message_id }}
+              </h3>
+
+              <div class="info-content">
+                <p class="font-size-small">
+                  Time : {{ packet.seconds_since_beginning }}
+                </p>
+                <div v-if="packet.code">
+                  <p class="font-size-small">Code : {{ packet.code }}</p>
+                </div>
+                <div v-if="packet.token">
+                  <p class="font-size-small">Token : {{ packet.token }}</p>
                 </div>
               </div>
             </div>
