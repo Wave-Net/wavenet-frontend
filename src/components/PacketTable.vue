@@ -15,7 +15,16 @@
       :header="col.header"
       :style="col.style"
       :sortable="col.sortable"
-    />
+    >
+      <template #body="slotProps">
+        <span v-if="col.field === 'dynamicField'">
+          {{ getDynamicFieldValue(slotProps.data) }}
+        </span>
+        <span v-else>
+          {{ getValue(slotProps.data, col.field) }}
+        </span>
+      </template>
+    </Column>
   </DataTable>
 </template>
 
@@ -55,8 +64,7 @@ const columns = [
   { field: "layers.IP.src.value", header: "Src" },
   { field: "layers.IP.dst.value", header: "Dst" },
   { field: "info.protocol", header: "Protocol" },
-  // { field: "length", header: "Len", sortable: true },
-  // { field: "mqtt_type", header: "Info" },
+  { field: "dynamicField", header: "Info" }, // 동적 필드 추가
 ];
 
 const emit = defineEmits(["row-click"]);
@@ -66,7 +74,6 @@ const handleRowClick = (event) => {
 };
 
 const rowClass = (data) => {
-  console.log("이거먼데", data.info.index);
   if (data.info.index === props.highlightedIndex) {
     return "highlight";
   } else if (data.info.index === props.highlightedFlowchartIndex) {
@@ -75,15 +82,20 @@ const rowClass = (data) => {
   return "";
 };
 
-// //하이라이트 인덱스 확인 코드
-// // Watch for changes in highlightedIndex and highlightedFlowchartIndex
-// watch(
-//   () => [props.highlightedIndex, props.highlightedFlowchartIndex],
-//   ([newIndex, newFlowchartIndex]) => {
-//     console.log("highlightedIndex changed to:", newIndex);
-//     console.log("highlightedFlowchartIndex changed to:", newFlowchartIndex);
-//   }
-// );
+// 객체에서 중첩된 필드 값을 가져오는 함수
+const getValue = (obj, path) => {
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
+};
+
+// 조건에 따라 동적 필드 값을 가져오는 함수
+const getDynamicFieldValue = (data) => {
+  if (data.info.protocol === "mqtt") {
+    return getValue(data, "layers.MQTT.msgtype.value");
+  } else if (data.info.protocol === "coap") {
+    return getValue(data, "layers.COAP.code.value");
+  }
+  return "";
+};
 </script>
 
 <style>
