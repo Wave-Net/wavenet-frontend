@@ -51,8 +51,10 @@ const openPanels = ref<string[]>([]);
 const toggle = (key: string) => {
   if (openPanels.value.includes(key)) {
     openPanels.value = openPanels.value.filter((panel) => panel !== key);
+    eventBus.emit("highlightField", key, false); // emit event to remove highlight
   } else {
     openPanels.value.push(key);
+    eventBus.emit("highlightField", key, true); // emit event to highlight
   }
 };
 
