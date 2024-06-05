@@ -11,12 +11,21 @@
             openPanels.includes(key) ? 'pi pi-angle-down' : 'pi pi-angle-right'
           "
         ></i>
-        {{ key }}
+        <span :class="{ 'bold-text': !openPanels.includes(key) }">{{
+          getHeaderName(key)
+        }}</span>
+        <span class="original-title">({{ key }})</span>
       </div>
       <div v-if="openPanels.includes(key)" class="accordion-content">
-        <div><strong>Value:</strong> {{ field.value }}</div>
-        <div><strong>Raw Bytes:</strong> {{ field.raw_bytes }}</div>
-        <div><strong>ASCII:</strong> {{ field.ascii }}</div>
+        <div>
+          Value : <span class="medium-text">{{ field.value }}</span>
+        </div>
+        <div>
+          Raw Bytes : <span class="medium-text">{{ field.raw_bytes }}</span>
+        </div>
+        <div>
+          ASCII : <span class="medium-text">{{ field.ascii }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -34,7 +43,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 console.log(props);
 
 const openPanels = ref<string[]>([]);
@@ -46,9 +54,30 @@ const toggle = (key: string) => {
     openPanels.value.push(key);
   }
 };
+
+const headerNameMap = {
+  dst: "Destination",
+  src: "Source",
+  type: "Type",
+  version: "Version",
+  id: "Identification",
+  flags: "Flags",
+  frag_offset: "Fragment Offset",
+  ttl: "Time to Live",
+  checksum: "Header Checksum",
+};
+
+const getHeaderName = (key: string): string => {
+  return headerNameMap[key] || key;
+};
 </script>
 
 <style scoped>
+.original-title {
+  font-size: 0.8em;
+  color: #fff;
+  padding-left: 3px;
+}
 .raw-data {
   border-radius: 0;
   padding: 0px 3px;
@@ -82,5 +111,18 @@ const toggle = (key: string) => {
   background: transparent;
   border: 0px;
   color: #2c3e50;
+  font-family: "Poppins", sans-serif;
+}
+.accordion-content > div:hover {
+  background-color: #f0f0f0; /* Hover background color for content */
+}
+.bold-text {
+  font-weight: 500;
+}
+.accordion-header.active {
+  font-weight: 600;
+}
+.medium-text {
+  font-weight: 600;
 }
 </style>
