@@ -33,10 +33,21 @@
                     id="splitter-4-panel-1"
                     style="height: 100%; overflow-y: auto"
                   >
-                    <PacketDiagram v-if="clickPacket" :pkt="clickPacket" />
+                    <AccordionPacketData
+                      v-if="clickPacket"
+                      :pkt="clickPacket"
+                      :component="DiagramStructure"
+                    />
                   </SplitterPanel>
-                  <SplitterPanel id="splitter-4-panel-2">
-                    Panel 4
+                  <SplitterPanel
+                    id="splitter-4-panel-2"
+                    style="height: 100%; overflow-y: auto"
+                  >
+                    <AccordionPacketData
+                      v-if="clickPacket"
+                      :pkt="clickPacket"
+                      :component="RawData"
+                    />
                   </SplitterPanel>
                 </Splitter>
               </SplitterPanel>
@@ -69,8 +80,10 @@ import {
   PacketTable,
   MenuButton,
   PacketGraph,
-  PacketDiagram,
   PacketFlowChart,
+  DiagramStructure,
+  RawData,
+  AccordionPacketData,
 } from "@/components";
 import SplitterPanel from "primevue/splitterpanel";
 import Splitter from "primevue/splitter";

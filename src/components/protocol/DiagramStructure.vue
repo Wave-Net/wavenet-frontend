@@ -152,7 +152,7 @@ const fieldStyle = (field) => {
     borderRadius: "2.8px",
     boxShadow: "1px 1px 3px rgba(0, 0, 0, 0.1)",
     backgroundColor:
-      hoveredPart.value === field.originalName ? "#f0f0f0" : "transparent",
+      hoveredPart.value === field.originalName ? "#7bc2d035" : "transparent",
   };
 };
 

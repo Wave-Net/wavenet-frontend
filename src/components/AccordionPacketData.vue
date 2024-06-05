@@ -9,22 +9,21 @@
         {{ item.title }}
       </div>
       <div v-if="item.isOpen" class="accordion-content">
-        <ContentComponent :fields="item.data" />
+        <component :is="component" :fields="item.data" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ContentComponent from "./protocol/ContentComponent.vue";
-
 export default {
-  components: {
-    ContentComponent,
-  },
   props: {
     pkt: {
       type: Object,
+      required: true,
+    },
+    component: {
+      type: String,
       required: true,
     },
   },
@@ -108,7 +107,7 @@ export default {
 }
 
 .accordion-header {
-  padding: 10px;
+  padding: 1px;
   cursor: pointer;
   background-color: #7bc2d0;
   color: #fff;
@@ -126,12 +125,19 @@ export default {
 }
 
 .accordion-content {
-  padding: 5px 10px 10px 10px;
+  /* padding: 5px; */
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Poppins", sans-serif;
-  margin-bottom: 5px;
+  border-top: none;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
