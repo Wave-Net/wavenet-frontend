@@ -45,13 +45,18 @@ const captureStore = useCaptureStore();
 const packetMessages = computed(() => captureStore.packetMessages);
 
 const columns = [
-  { field: "index", header: "#", style: { width: "10px" }, sortable: true },
-  { field: "seconds_since_beginning", header: "Time" },
-  { field: "src", header: "Src" },
-  { field: "dst", header: "Dst" },
-  { field: "layer", header: "Protocol" },
-  { field: "length", header: "Len", sortable: true },
-  { field: "mqtt_type", header: "Info" },
+  {
+    field: "info.index",
+    header: "#",
+    style: { width: "10px" },
+    sortable: true,
+  },
+  { field: "info.seconds_since_beginning", header: "Time" },
+  { field: "layers.IP.src.value", header: "Src" },
+  { field: "layers.IP.dst.value", header: "Dst" },
+  { field: "info.protocol", header: "Protocol" },
+  // { field: "length", header: "Len", sortable: true },
+  // { field: "mqtt_type", header: "Info" },
 ];
 
 const emit = defineEmits(["row-click"]);
@@ -61,14 +66,16 @@ const handleRowClick = (event) => {
 };
 
 const rowClass = (data) => {
-  if (data.index === props.highlightedIndex) {
+  console.log("이거먼데", data.info.index);
+  if (data.info.index === props.highlightedIndex) {
     return "highlight";
-  } else if (data.index === props.highlightedFlowchartIndex) {
+  } else if (data.info.index === props.highlightedFlowchartIndex) {
     return "flowchart-highlight";
   }
   return "";
 };
 
+// //하이라이트 인덱스 확인 코드
 // // Watch for changes in highlightedIndex and highlightedFlowchartIndex
 // watch(
 //   () => [props.highlightedIndex, props.highlightedFlowchartIndex],

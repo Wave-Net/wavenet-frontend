@@ -19,17 +19,17 @@
             <!-- MQTT FLOW CHART -->
             <div
               class="info"
-              @click="emitPacketIndex(packet.index)"
-              :class="{ highlight: isHighlighted(packet.index) }"
-              v-if="packet.layer == 'MQTT'"
+              @click="emitPacketIndex(packet.info.index)"
+              :class="{ highlight: isHighlighted(packet.info.index) }"
+              v-if="packet.info.protocol == 'mqtt'"
             >
               <h3 class="title">
-                {{ packet.mqtt_type }}
+                {{ packet.layers.MQTT.msgtype.value }}
               </h3>
-
+              <!-- 플로우 차트는 여기서부터 수정하기 MQTT ver -->
               <div class="info-content">
                 <p class="font-size-small">
-                  Time : {{ packet.seconds_since_beginning }}
+                  Time : {{ packet.info.seconds_since_beginning }}
                 </p>
                 <div v-if="packet.mqtt_type == 'CONNECT'">
                   <p v-if="packet.connect.willtopic" class="font-size-small">
@@ -75,9 +75,9 @@
             <!-- CoAP FLOW CHART -->
             <div
               class="info"
-              @click="emitPacketIndex(packet.index)"
-              :class="{ highlight: isHighlighted(packet.index) }"
-              v-if="packet.layer == 'CoAP'"
+              @click="emitPacketIndex(packet.info.index)"
+              :class="{ highlight: isHighlighted(packet.info.index) }"
+              v-if="packet.info.protocol == 'coap'"
             >
               <h3 class="title">
                 <!-- {{ packet.code }} -->
@@ -86,7 +86,7 @@
 
               <div class="info-content">
                 <p class="font-size-small">
-                  Time : {{ packet.seconds_since_beginning }}
+                  Time : {{ packet.info.seconds_since_beginning }}
                 </p>
                 <div v-if="packet.code">
                   <p class="font-size-small">Code : {{ packet.code }}</p>
@@ -114,6 +114,7 @@ export default {
   methods: {
     emitPacketIndex(index) {
       this.$emit("packetIndexSelected", index);
+      console.log("이건 진짜 뭔데", index);
     },
     isHighlighted(index) {
       return this.highlightedIndex === index;
@@ -128,10 +129,13 @@ export default {
         const packet = this.flowchart_packets[i];
         // 선택한 행의 두개의 ip주소만 필터링해서 플로우차트에 표시
         if (
-          (packet.src == this.sourceIP || packet.src === this.destinationIP) &&
-          (packet.dst === this.sourceIP || packet.dst === this.destinationIP)
+          (packet.layers.IP.src.value == this.sourceIP ||
+            packet.layers.IP.src.value === this.destinationIP) &&
+          (packet.layers.IP.dst.value === this.sourceIP ||
+            packet.layers.IP.dst.value === this.destinationIP)
         ) {
-          const direction = packet.src === this.sourceIP ? "left" : "right";
+          const direction =
+            packet.layers.IP.src.value === this.sourceIP ? "left" : "right";
 
           if (!currentGroup || currentGroup.direction !== direction) {
             currentGroup = { direction, packets: [] };

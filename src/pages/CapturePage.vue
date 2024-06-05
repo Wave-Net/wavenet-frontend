@@ -110,20 +110,21 @@ const highlightedIndex = ref<number | null>(null);
 const highlightedFlowchartIndex = ref<number | null>(null);
 
 const onRowClick = (event: any) => {
-  console.log(event.data);
+  console.log("CLICK !! : ", event.data);
   clickPacket.value = event.data;
 
-  sourceIP.value = event.data.src;
-  destinationIP.value = event.data.dst;
+  sourceIP.value = event.data.layers.IP.src.value;
+  destinationIP.value = event.data.layers.IP.dst.value;
   flowchartPacket.value = captureStore.packetMessages; // 웹소켓 스토어에서 메세지 배열을 저장
+  console.log("FLOWCHART PACKET :", flowchartPacket);
 
   // 클릭된 행이 이미 하이라이트된 행인지 확인
-  if (highlightedIndex.value === event.data.index) {
+  if (highlightedIndex.value === event.data.info.index) {
     highlightedIndex.value = null; // 하이라이트 해제
     highlightedFlowchartIndex.value = null; // flowchart 하이라이트 해제
   } else {
-    highlightedIndex.value = event.data.index; // 새로운 하이라이트 설정
-    highlightedFlowchartIndex.value = event.data.index; // flowchart 하이라이트 설정
+    highlightedIndex.value = event.data.info.index; // 새로운 하이라이트 설정
+    highlightedFlowchartIndex.value = event.data.info.index; // flowchart 하이라이트 설정
   }
 };
 
@@ -135,7 +136,7 @@ const handlePacketHighlight = (index: number) => {
     highlightedIndex.value = index; // 새로운 하이라이트 설정
     highlightedFlowchartIndex.value = index; // flowchart 하이라이트 설정
   }
-  console.log("INDEX", index);
+  // console.log("INDEX", index);
 };
 </script>
 
