@@ -20,21 +20,23 @@
         <div
           v-for="(field, fieldIndex) in fieldRow"
           :key="fieldIndex"
-          :style="fieldStyle(field)"
+          :style="fieldStyle(field, fieldIndex === fieldRow.length - 1)"
           :class="['field-box-diagram', `part-${field.originalName}`]"
           @mouseover="handleMouseOver(field.originalName)"
           @mouseleave="handleMouseLeave(field.originalName)"
         >
           <template v-if="isWidestBox(field)">
-            <div>{{ field.name }} ({{ field.totalBits }} bits)</div>
-            <div>{{ field.value }}</div>
+            <div class="diagram-field-title">
+              {{ field.name }} ({{ field.totalBits }} bits)
+            </div>
+            <div class="diagram-field-content">{{ field.value }}</div>
           </template>
         </div>
         <div
           v-if="remainingWidth(fieldRowIndex) > 0"
           :style="{
             ...remainingStyle(remainingWidth(fieldRowIndex)),
-            borderTop: '0.1px solid #7bc2d0',
+            borderTop: '0.1px solid #2c3e50',
           }"
           class="empty-box"
         ></div>
@@ -141,18 +143,18 @@ const fieldRows = computed(() => {
   return rows;
 });
 
-const fieldStyle = (field) => {
+const fieldStyle = (field, isLastInRow) => {
   return {
     width: `${field.width}%`,
-    height: "36px",
-    borderTop: field.isFirstPart ? "1px solid #7bc2d0" : "none",
-    borderBottom: field.isLastPart ? "1px solid #7bc2d0" : "none",
-    borderLeft: "1px solid #7bc2d0",
-    borderRight: "1px solid #7bc2d0",
-    borderRadius: "2.8px",
+    height: "50px",
+    borderTop: field.isFirstPart ? "1px solid #2c3e50" : "none",
+    borderBottom: field.isLastPart ? "1px solid #2c3e50" : "none",
+    borderLeft: "1px solid #2c3e50",
+    borderRight: isLastInRow ? "1px solid #2c3e50" : "none",
+    // borderRadius: "2.8px",
     boxShadow: "1px 1px 3px rgba(0, 0, 0, 0.1)",
     backgroundColor:
-      hoveredPart.value === field.originalName ? "#7bc2d035" : "transparent",
+      hoveredPart.value === field.originalName ? "#2c3e5035" : "transparent",
   };
 };
 
@@ -176,14 +178,22 @@ const isWidestBox = (field) => {
 </script>
 
 <style scoped>
+.diagram-field-title {
+  font-size: 10px;
+  color: #999999;
+}
+
+.diagram-field-content {
+  font-size: 13px;
+}
 .title-diagram {
   font-size: 20px;
   font-family: "Poppins", sans-serif;
   text-align: center;
   padding: 5px 10px;
   color: #fff;
-  background-color: #7bc2d0;
-  border: 2px solid #7bc2d0;
+  background-color: #2c3e50;
+  border: 2px solid #2c3e50;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
@@ -219,6 +229,9 @@ const isWidestBox = (field) => {
   text-align: center;
   box-sizing: border-box;
   padding: 4px;
+  overflow: hidden; /* 넘치는 내용을 숨김 */
+  text-overflow: ellipsis; /* 넘치는 내용을 생략 부호(...)로 표시 */
+  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
 }
 
 .empty-box {
@@ -231,21 +244,21 @@ const isWidestBox = (field) => {
 }
 
 .byte-style-right {
-  background-image: linear-gradient(to top, #7bc2d0 50%, transparent 25%),
-    linear-gradient(to top, #7bc2d0 90%, transparent 20%);
-  background-size: 2px 100%;
+  background-image: linear-gradient(to top, #2c3e50 50%, transparent 25%),
+    linear-gradient(to top, #2c3e50 90%, transparent 20%);
+  background-size: 1px 100%;
   background-position: left, right;
   background-repeat: no-repeat;
 }
 .byte-style-left {
-  background-image: linear-gradient(to top, #7bc2d0 90%, transparent 20%);
-  background-size: 2px 100%;
+  background-image: linear-gradient(to top, #2c3e50 90%, transparent 20%);
+  background-size: 1px 100%;
   background-position: left;
   background-repeat: no-repeat;
 }
 .byte-style-center {
-  background-image: linear-gradient(to top, #7bc2d0 50%, transparent 25%);
-  background-size: 2px 100%;
+  background-image: linear-gradient(to top, #2c3e50 50%, transparent 25%);
+  background-size: 1px 100%;
   background-position: left;
   background-repeat: no-repeat;
 }
@@ -256,7 +269,7 @@ const isWidestBox = (field) => {
   font-size: 10px;
   text-align: center;
   font-family: "Poppins", sans-serif;
-  color: #7bc2d0;
-  border-bottom: #7bc2d0 solid 0.1px;
+  color: #2c3e50;
+  border-bottom: #2c3e50 solid 0.1px;
 }
 </style>
