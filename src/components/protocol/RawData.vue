@@ -17,13 +17,13 @@
         <span class="original-title">({{ key }})</span>
       </div>
       <div v-if="openPanels.includes(key)" class="accordion-content">
-        <div>
+        <div @click.stop="highlight(key)">
           Value : <span class="medium-text">{{ field.value }}</span>
         </div>
-        <div>
+        <div @click.stop="highlight(key)">
           Raw Bytes : <span class="medium-text">{{ field.raw_bytes }}</span>
         </div>
-        <div>
+        <div @click.stop="highlight(key)">
           ASCII : <span class="medium-text">{{ field.ascii }}</span>
         </div>
       </div>
@@ -32,7 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
+import { ref, defineProps, onMounted, onUnmounted } from "vue";
+import { eventBus } from "@/eventBus";
 
 const props = defineProps({
   fields: {
@@ -54,6 +55,28 @@ const toggle = (key: string) => {
     openPanels.value.push(key);
   }
 };
+
+const highlight = (key: string) => {
+  eventBus.emit("highlightField", key, true); // emit event to highlight
+};
+
+const handleToggleAccordion = (key: string, shouldOpen: boolean) => {
+  if (shouldOpen) {
+    if (!openPanels.value.includes(key)) {
+      openPanels.value.push(key);
+    }
+  } else {
+    openPanels.value = openPanels.value.filter((panel) => panel !== key);
+  }
+};
+
+onMounted(() => {
+  eventBus.on("toggleAccordion", handleToggleAccordion);
+});
+
+onUnmounted(() => {
+  eventBus.off("toggleAccordion", handleToggleAccordion);
+});
 
 const headerNameMap = {
   dst: "Destination",
@@ -115,6 +138,7 @@ const getHeaderName = (key: string): string => {
 }
 .accordion-content > div:hover {
   background-color: #f0f0f0; /* Hover background color for content */
+  cursor: pointer; /* Added cursor pointer to indicate clickable item */
 }
 .bold-text {
   font-weight: 500;

@@ -21,9 +21,14 @@
           v-for="(field, fieldIndex) in fieldRow"
           :key="fieldIndex"
           :style="fieldStyle(field, fieldIndex === fieldRow.length - 1)"
-          :class="['field-box-diagram', `part-${field.originalName}`]"
+          :class="[
+            'field-box-diagram',
+            `part-${field.originalName}`,
+            { selected: field.isSelected },
+          ]"
           @mouseover="handleMouseOver(field.originalName)"
           @mouseleave="handleMouseLeave(field.originalName)"
+          @click="handleClick(field)"
         >
           <template v-if="isWidestBox(field)">
             <div class="diagram-field-title">
@@ -46,7 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, ref } from "vue";
+import { defineProps, computed, ref, watch, onMounted, onUnmounted } from "vue";
+import { eventBus } from "@/eventBus";
 
 const props = defineProps({
   fields: {
@@ -59,6 +65,7 @@ const props = defineProps({
 });
 
 const hoveredPart = ref("");
+const selectedPart = ref<string | null>(null);
 
 const handleMouseOver = (partName: string) => {
   hoveredPart.value = partName;
@@ -69,6 +76,34 @@ const handleMouseLeave = (partName: string) => {
     hoveredPart.value = "";
   }
 };
+
+const handleClick = (field: any) => {
+  if (selectedPart.value === field.originalName) {
+    selectedPart.value = null;
+    eventBus.emit("toggleAccordion", field.originalName, false);
+  } else {
+    selectedPart.value = field.originalName;
+    eventBus.emit("toggleAccordion", field.originalName, true);
+  }
+};
+
+const handleHighlightField = (fieldName: string, shouldHighlight: boolean) => {
+  if (shouldHighlight) {
+    selectedPart.value = fieldName;
+  } else {
+    if (selectedPart.value === fieldName) {
+      selectedPart.value = null;
+    }
+  }
+};
+
+onMounted(() => {
+  eventBus.on("highlightField", handleHighlightField);
+});
+
+onUnmounted(() => {
+  eventBus.off("highlightField", handleHighlightField);
+});
 
 const fieldRows = computed(() => {
   const rows = [];
@@ -104,6 +139,7 @@ const fieldRows = computed(() => {
         originalName: field.name,
         totalBits: field.field_length,
         value: field.value,
+        isSelected: field.originalName === selectedPart.value,
       };
 
       currentRowFields.push(fieldPart);
@@ -143,6 +179,14 @@ const fieldRows = computed(() => {
   return rows;
 });
 
+watch(selectedPart, () => {
+  fieldRows.value.forEach((row) => {
+    row.forEach((field) => {
+      field.isSelected = field.originalName === selectedPart.value;
+    });
+  });
+});
+
 const fieldStyle = (field, isLastInRow) => {
   return {
     width: `${field.width}%`,
@@ -151,10 +195,13 @@ const fieldStyle = (field, isLastInRow) => {
     borderBottom: field.isLastPart ? "1px solid #2c3e50" : "none",
     borderLeft: "1px solid #2c3e50",
     borderRight: isLastInRow ? "1px solid #2c3e50" : "none",
-    // borderRadius: "2.8px",
-    boxShadow: "1px 1px 3px rgba(0, 0, 0, 0.1)",
     backgroundColor:
-      hoveredPart.value === field.originalName ? "#2c3e5035" : "transparent",
+      hoveredPart.value === field.originalName
+        ? "#2c3e5035"
+        : field.isSelected
+        ? "#2c3e5035"
+        : "transparent",
+    boxShadow: "1px 1px 3px rgba(0, 0, 0, 0.1)",
   };
 };
 
@@ -229,39 +276,26 @@ const isWidestBox = (field) => {
   text-align: center;
   box-sizing: border-box;
   padding: 4px;
-  overflow: hidden; /* 넘치는 내용을 숨김 */
-  text-overflow: ellipsis; /* 넘치는 내용을 생략 부호(...)로 표시 */
-  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+  cursor: pointer;
 }
 
-.empty-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 4px;
+.byte-style-left {
+  border-left: 0.1px solid #2c3e50;
+  border-bottom: 0.1px solid #2c3e50;
 }
 
 .byte-style-right {
-  background-image: linear-gradient(to top, #2c3e50 50%, transparent 25%),
-    linear-gradient(to top, #2c3e50 90%, transparent 20%);
-  background-size: 1px 100%;
-  background-position: left, right;
-  background-repeat: no-repeat;
+  border-right: 0.1px solid #2c3e50;
+  border-bottom: 0.1px solid #2c3e50;
 }
-.byte-style-left {
-  background-image: linear-gradient(to top, #2c3e50 90%, transparent 20%);
-  background-size: 1px 100%;
-  background-position: left;
-  background-repeat: no-repeat;
-}
+
 .byte-style-center {
   background-image: linear-gradient(to top, #2c3e50 50%, transparent 25%);
   background-size: 1px 100%;
   background-position: left;
   background-repeat: no-repeat;
 }
+
 .byte-style {
   height: 18px;
   width: 6.25%;
@@ -271,5 +305,9 @@ const isWidestBox = (field) => {
   font-family: "Poppins", sans-serif;
   color: #2c3e50;
   border-bottom: #2c3e50 solid 0.1px;
+}
+
+.field-box-diagram.selected {
+  background-color: #2c3e5035;
 }
 </style>

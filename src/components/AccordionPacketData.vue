@@ -55,7 +55,7 @@ export default {
       }, {});
 
       this.accordionItems = Object.entries(this.pkt.layers).map(
-        ([key, value]) => {
+        ([key, value], index) => {
           let title = "";
           switch (key) {
             case "ETH":
@@ -82,13 +82,18 @@ export default {
           }
 
           return {
-            id: existingItems[title]?.id || this.accordionItems.length,
+            id: `${key}-${index}`,
             title,
             data: value,
             isOpen: existingItems[title]?.isOpen || false,
           };
         }
       );
+
+      // Log each id to the console
+      this.accordionItems.forEach((item) => {
+        console.log(`ID: ${item.id}`);
+      });
     },
     toggle(index) {
       this.accordionItems[index].isOpen = !this.accordionItems[index].isOpen;
