@@ -12,14 +12,14 @@
       </SplitterPanel>
       <SplitterPanel id="splitter-1-panel-2" :size="85">
         <Splitter id="splitter-2" style="width: 100%; height: 100%">
-          <SplitterPanel id="splitter-2-panel-1" :size="80">
+          <SplitterPanel id="splitter-2-panel-1" :size="70">
             <Splitter
               id="splitter-3"
               style="width: 100%; height: 100%"
               layout="vertical"
               @resize="updatePacketTableHeight"
             >
-              <SplitterPanel id="splitter-3-panel-1" :size="70">
+              <SplitterPanel id="splitter-3-panel-1" :size="50">
                 <PacketTable
                   :scrollable-height="packetTableHeight"
                   @row-click="onRowClick"
@@ -27,10 +27,11 @@
                   :highlightedFlowchartIndex="highlightedFlowchartIndex"
                 />
               </SplitterPanel>
-              <SplitterPanel id="splitter-3-panel-2" :size="30">
+              <SplitterPanel id="splitter-3-panel-2">
                 <Splitter id="splitter-4" style="width: 100%; height: 100%">
                   <SplitterPanel
                     id="splitter-4-panel-1"
+                    :size="65"
                     style="height: 100%; overflow-y: auto"
                   >
                     <AccordionPacketData
