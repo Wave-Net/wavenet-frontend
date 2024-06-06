@@ -121,6 +121,7 @@ const getHeaderName = (key: string): string => {
   align-items: center;
   transition: background-color 0.3s ease;
   border: 0px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
 }
 .accordion-header:hover {
   background-color: #f0f0f0; /* Hover background color */

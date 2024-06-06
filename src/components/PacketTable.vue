@@ -64,6 +64,7 @@ const columns = [
   { field: "layers.IP.src.value", header: "Src" },
   { field: "layers.IP.dst.value", header: "Dst" },
   { field: "info.protocol", header: "Protocol" },
+  { field: "info.len", header: "Length" },
   { field: "dynamicField", header: "Info" }, // 동적 필드 추가
 ];
 
@@ -89,10 +90,10 @@ const getValue = (obj, path) => {
 
 // 조건에 따라 동적 필드 값을 가져오는 함수
 const getDynamicFieldValue = (data) => {
-  if (data.info.protocol === "mqtt") {
-    return getValue(data, "layers.MQTT.msgtype.value");
-  } else if (data.info.protocol === "coap") {
-    return getValue(data, "layers.COAP.code.value");
+  if (data.info.protocol === "MQTT") {
+    return getValue(data, "info.summary");
+  } else if (data.info.protocol === "CoAP") {
+    return getValue(data, "info.summary");
   }
   return "";
 };

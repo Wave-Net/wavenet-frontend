@@ -21,10 +21,10 @@
               class="info"
               @click="emitPacketIndex(packet.info.index)"
               :class="{ highlight: isHighlighted(packet.info.index) }"
-              v-if="packet.info.protocol == 'mqtt'"
+              v-if="packet.info.protocol == 'MQTT'"
             >
               <h3 class="title">
-                {{ packet.info.index }} : {{ packet.layers.MQTT.msgtype.value }}
+                {{ packet.info.index }} : {{ packet.info.summary }}
               </h3>
               <!-- 플로우 차트는 여기서부터 수정하기 MQTT ver -->
               <div class="info-content">
@@ -44,18 +44,17 @@
                   <b>Client ID : </b>{{ packet.layers.MQTT.client_id.value }}
                 </p>
                 <p
-                  v-if="packet.layers.MQTT?.conack_flags?.value"
+                  v-if="packet.layers.MQTT?.conack_val?.value"
                   class="font-size-small"
                 >
-                  <b>Return Code : </b
-                  >{{ packet.layers.MQTT.conack_flags.value }}
+                  <b>Return Code : </b>{{ packet.layers.MQTT.conack_val.value }}
                 </p>
 
                 <p
                   v-if="packet.layers.MQTT?.suback_qos?.value"
                   class="font-size-small"
                 >
-                  <b>Return Code : </b>{{ packet.layers.MQTT.suback_qos.value }}
+                  <b>QOS : </b>{{ packet.layers.MQTT.suback_qos.value }}
                 </p>
 
                 <p
@@ -78,7 +77,7 @@
               class="info"
               @click="emitPacketIndex(packet.info.index)"
               :class="{ highlight: isHighlighted(packet.info.index) }"
-              v-if="packet.info.protocol == 'coap'"
+              v-if="packet.info.protocol == 'CoAP'"
             >
               <h3 class="title">
                 <!-- {{ packet.code }} -->
