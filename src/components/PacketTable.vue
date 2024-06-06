@@ -121,4 +121,8 @@ const getDynamicFieldValue = (data) => {
 .highlight {
   background-color: #e0f7fa;
 }
+
+.p-datatable .p-datatable-tbody > tr > td {
+  text-shadow: 0.1px 0.1px rgba(34, 42, 66, 0.181);
+}
 </style>
