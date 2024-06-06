@@ -277,6 +277,9 @@ const isWidestBox = (field) => {
   box-sizing: border-box;
   padding: 4px;
   cursor: pointer;
+  overflow: hidden; /* 넘치는 내용을 숨김 */
+  text-overflow: ellipsis; /* 넘치는 내용을 생략 부호(...)로 표시 */
+  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
 }
 
 .byte-style-left {
