@@ -17,14 +17,14 @@
       :sortable="true"
     >
       <template #body="slotProps">
-        <span :style="{ 'font-weight': '400' }">
+        <span>
           {{ getValue(slotProps.data, col.field) }}
         </span>
       </template>
     </Column>
     <Column field="dynamicFieldValue" header="Info" :sortable="true">
       <template #body="slotProps">
-        <span :style="{ 'font-weight': '400' }">
+        <span>
           {{ getDynamicFieldValue(slotProps.data) }}
         </span>
       </template>
