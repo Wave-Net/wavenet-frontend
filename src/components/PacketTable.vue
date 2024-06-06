@@ -14,17 +14,18 @@
       :field="col.field"
       :header="col.header"
       :style="col.style"
-      :sortable="col.sortable"
+      :sortable="true"
     >
       <template #body="slotProps">
-        <span
-          v-if="col.field === 'dynamicField'"
-          :style="{ 'font-weight': '400' }"
-        >
-          {{ getDynamicFieldValue(slotProps.data) }}
-        </span>
-        <span v-else :style="{ 'font-weight': '400' }">
+        <span :style="{ 'font-weight': '400' }">
           {{ getValue(slotProps.data, col.field) }}
+        </span>
+      </template>
+    </Column>
+    <Column field="dynamicFieldValue" header="Info" :sortable="true">
+      <template #body="slotProps">
+        <span :style="{ 'font-weight': '400' }">
+          {{ getDynamicFieldValue(slotProps.data) }}
         </span>
       </template>
     </Column>
@@ -54,21 +55,20 @@ const props = defineProps({
 });
 
 const captureStore = useCaptureStore();
-const packetMessages = computed(() => captureStore.packetMessages);
+const packetMessages = computed(() => {
+  return captureStore.packetMessages.map((message) => ({
+    ...message,
+    dynamicFieldValue: getDynamicFieldValue(message),
+  }));
+});
 
 const columns = [
-  {
-    field: "info.index",
-    header: "#",
-    style: { width: "10px" },
-    sortable: true,
-  },
+  { field: "info.index", header: "#", style: { width: "10px" } },
   { field: "info.seconds_since_beginning", header: "Time" },
   { field: "layers.IP.src.value", header: "Src" },
   { field: "layers.IP.dst.value", header: "Dst" },
   { field: "info.protocol", header: "Protocol" },
   { field: "info.len", header: "Length" },
-  { field: "dynamicField", header: "Info" }, // 동적 필드 추가
 ];
 
 const emit = defineEmits(["row-click"]);
@@ -86,12 +86,10 @@ const rowClass = (data) => {
   return "";
 };
 
-// 객체에서 중첩된 필드 값을 가져오는 함수
 const getValue = (obj, path) => {
   return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
-// 조건에 따라 동적 필드 값을 가져오는 함수
 const getDynamicFieldValue = (data) => {
   let dynamicField = "";
   if (data.info.protocol === "MQTT") {
@@ -121,6 +119,6 @@ const getDynamicFieldValue = (data) => {
 
 <style>
 .highlight {
-  background-color: #e0f7fa; /* 하이라이트 스타일 */
+  background-color: #e0f7fa;
 }
 </style>
