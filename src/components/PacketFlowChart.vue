@@ -89,6 +89,12 @@
                   <b>Time :</b> {{ packet.info.seconds_since_beginning }}
                 </p>
                 <p
+                  v-if="packet.layers.COAP?.mid?.value"
+                  class="font-size-small"
+                >
+                  <b>Message ID :</b> {{ packet.layers.COAP.mid.value }}
+                </p>
+                <p
                   v-if="packet.layers.COAP?.type?.value"
                   class="font-size-small"
                 >
