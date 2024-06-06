@@ -127,8 +127,14 @@ const onRowClick = (event: any) => {
   console.log("CLICK !! : ", event.data);
   clickPacket.value = event.data;
 
-  sourceIP.value = event.data.layers.IP.src.value;
-  destinationIP.value = event.data.layers.IP.dst.value;
+  if (event.data.layers.IP.src.value == deviceIp.value) {
+    sourceIP.value = event.data.layers.IP.src.value;
+    destinationIP.value = event.data.layers.IP.dst.value;
+  }
+  else {
+    sourceIP.value = event.data.layers.IP.dst.value;
+    destinationIP.value = event.data.layers.IP.src.value;
+  }
   flowchartPacket.value = captureStore.packetMessages; // 웹소켓 스토어에서 메세지 배열을 저장
   console.log("FLOWCHART PACKET :", flowchartPacket);
 
