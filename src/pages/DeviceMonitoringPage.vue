@@ -28,43 +28,63 @@
 import { TheHeader, TheFooter, DeviceTable, DeviceDiagram } from "@/components";
 import Card from "primevue/card";
 import { watch, ref, computed, onMounted, onUnmounted } from "vue";
-import { useMonitorStore, monitorMessageTypes } from "@/stores";
+import { useMonitorStore } from "@/stores";
 
 const monitorStore = useMonitorStore();
+const deviceData = ref([]);
+const referenceData = ref([]);
 
 onMounted(() => {
   monitorStore.connect();
-  
 });
 
 onUnmounted(() => {
   monitorStore.disconnect();
 });
 
-const deviceData = ref([]);
-
 const isActive = (newItem, oldItem) => {
-  return oldItem ? (
-    oldItem.stat.send_pkt !== newItem.stat.send_pkt ||
-    oldItem.stat.recv_pkt !== newItem.stat.recv_pkt ||
-    oldItem.stat.send_data !== newItem.stat.send_data ||
-    oldItem.stat.recv_data !== newItem.stat.recv_data
-  ) : true;
+  if (!oldItem) return true;
+
+  const { send_pkt, recv_pkt, send_data, recv_data } = oldItem.stat;
+  const {
+    send_pkt: newSendPkt,
+    recv_pkt: newRecvPkt,
+    send_data: newSendData,
+    recv_data: newRecvData,
+  } = newItem.stat;
+
+  return (
+    send_pkt !== newSendPkt ||
+    recv_pkt !== newRecvPkt ||
+    send_data !== newSendData ||
+    recv_data !== newRecvData
+  );
 };
 
-const isAllStatsZero = (stat: monitorMessageTypes.StatInfo) => {
-  return stat.send_pkt === 0 &&
-         stat.recv_pkt === 0 &&
-         stat.send_data === 0 &&
-         stat.recv_data === 0;
-};
-
-const updateDeviceData = (newData, oldData) => {
+const updateDeviceData = (newData) => {
   return newData.map((newItem, index) => {
-    const oldItem = oldData?.find(item => item.device.ip === newItem.device.ip);
-    newItem.is_active = isActive(newItem, oldItem) && !isAllStatsZero(newItem.stat);
-    newItem.index = index + 1;
-    return newItem;
+    const referenceItem = referenceData.value.find(
+      (item) => item.device.ip === newItem.device.ip
+    );
+
+    let is_active = false;
+    if (!referenceItem) {
+      referenceData.value.push(newItem);
+    } else {
+      is_active = isActive(referenceItem, newItem);
+
+      if (is_active) {
+        referenceData.value = referenceData.value.map((item) =>
+          item.device.ip === newItem.device.ip ? newItem : item
+        );
+      }
+    }
+
+    return {
+      ...newItem,
+      is_active,
+      index: index + 1,
+    };
   });
 };
 
