@@ -24,52 +24,53 @@
               v-if="packet.info.protocol == 'mqtt'"
             >
               <h3 class="title">
-                {{ packet.layers.MQTT.msgtype.value }}
+                {{ packet.info.index }} : {{ packet.layers.MQTT.msgtype.value }}
               </h3>
               <!-- 플로우 차트는 여기서부터 수정하기 MQTT ver -->
               <div class="info-content">
                 <p class="font-size-small">
-                  Time : {{ packet.info.seconds_since_beginning }}
+                  <b>Time : </b>{{ packet.info.seconds_since_beginning }}
                 </p>
-                <div v-if="packet.mqtt_type == 'CONNECT'">
-                  <p v-if="packet.connect.willtopic" class="font-size-small">
-                    Will Topic : {{ packet.connect.willtopic }}
-                  </p>
-                  <p v-if="packet.connect.willmsg" class="font-size-small">
-                    Will Message: {{ packet.connect.willmsg }}
-                  </p>
-                </div>
-                <div v-if="packet.mqtt_type == 'CONNACK'">
-                  <p class="font-size-small">
-                    Return Code : {{ packet.connack.return_code }}
-                  </p>
-                </div>
-                <div v-if="packet.mqtt_type == 'PUBLISH'">
-                  <p class="font-size-small">
-                    Topic : {{ packet.publish.topic }}
-                  </p>
-                </div>
-                <div v-if="packet.mqtt_type == 'SUBSCRIBE'">
-                  <div
-                    v-for="(item, index) in packet.subscribe.topic_filters"
-                    :key="index"
-                  >
-                    <p class="font-size-small">Topic : {{ item.topic }}</p>
-                  </div>
-                </div>
-                <div v-if="packet.mqtt_type == 'SUBACK'">
-                  <p class="font-size-small">
-                    Return Code : {{ packet.suback.return_code }}
-                  </p>
-                </div>
-                <div v-if="packet.mqtt_type == 'UNSUBSCRIBE'">
-                  <div
-                    v-for="(item, index) in packet.unsubscribe.topic_filters"
-                    :key="index"
-                  >
-                    <p class="font-size-small">Topic : {{ item.topic }}</p>
-                  </div>
-                </div>
+                <p
+                  v-if="packet.layers.MQTT?.kalive?.value"
+                  class="font-size-small"
+                >
+                  <b>Keep Alive : </b>{{ packet.layers.MQTT.kalive.value }}
+                </p>
+                <p
+                  v-if="packet.layers.MQTT?.client_id?.value"
+                  class="font-size-small"
+                >
+                  <b>Client ID : </b>{{ packet.layers.MQTT.client_id.value }}
+                </p>
+                <p
+                  v-if="packet.layers.MQTT?.conack_flags?.value"
+                  class="font-size-small"
+                >
+                  <b>Return Code : </b
+                  >{{ packet.layers.MQTT.conack_flags.value }}
+                </p>
+
+                <p
+                  v-if="packet.layers.MQTT?.suback_qos?.value"
+                  class="font-size-small"
+                >
+                  <b>Return Code : </b>{{ packet.layers.MQTT.suback_qos.value }}
+                </p>
+
+                <p
+                  v-if="packet.layers.MQTT?.topic?.value"
+                  class="font-size-small"
+                >
+                  <b>Topic : </b>{{ packet.layers.MQTT.topic.value }}
+                </p>
+
+                <p
+                  v-if="packet.layers.MQTT?.msg?.value"
+                  class="font-size-small"
+                >
+                  <b>Message : </b>{{ packet.layers.MQTT.msg.ascii }}
+                </p>
               </div>
             </div>
             <!-- CoAP FLOW CHART -->
@@ -81,19 +82,31 @@
             >
               <h3 class="title">
                 <!-- {{ packet.code }} -->
-                {{ packet.message_id }}
+                {{ packet.info.index }} : {{ packet.layers.COAP.code.value }}
               </h3>
 
               <div class="info-content">
                 <p class="font-size-small">
-                  Time : {{ packet.info.seconds_since_beginning }}
+                  <b>Time :</b> {{ packet.info.seconds_since_beginning }}
                 </p>
-                <div v-if="packet.code">
-                  <p class="font-size-small">Code : {{ packet.code }}</p>
-                </div>
-                <div v-if="packet.token">
-                  <p class="font-size-small">Token : {{ packet.token }}</p>
-                </div>
+                <p
+                  v-if="packet.layers.COAP?.type?.value"
+                  class="font-size-small"
+                >
+                  <b>Type :</b> {{ packet.layers.COAP.type.value }}
+                </p>
+                <p
+                  v-if="packet.layers.COAP?.token?.value"
+                  class="font-size-small"
+                >
+                  <b>Token :</b> {{ packet.layers.COAP.token.value }}
+                </p>
+                <p
+                  v-if="packet.layers.COAP?.opt_name?.value"
+                  class="font-size-small"
+                >
+                  <b>Options :</b> {{ packet.layers.COAP.opt_name.value }}
+                </p>
               </div>
             </div>
           </div>
@@ -114,7 +127,6 @@ export default {
   methods: {
     emitPacketIndex(index) {
       this.$emit("packetIndexSelected", index);
-      console.log("이건 진짜 뭔데", index);
     },
     isHighlighted(index) {
       return this.highlightedIndex === index;
