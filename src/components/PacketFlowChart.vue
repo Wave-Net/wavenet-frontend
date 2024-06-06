@@ -32,6 +32,12 @@
                   <b>Time : </b>{{ packet.info.seconds_since_beginning }}
                 </p>
                 <p
+                  v-if="packet.layers.MQTT?.msgid?.value"
+                  class="font-size-small"
+                >
+                  <b>Message ID : </b>{{ packet.layers.MQTT.msgid.value }}
+                </p>
+                <p
                   v-if="packet.layers.MQTT?.kalive?.value"
                   class="font-size-small"
                 >
@@ -241,7 +247,7 @@ export default {
   /* font-size: 10px; */
 }
 .info.highlight {
-  background-color: #7bc2d045; /* Info 하이라이트 스타일 */
+  background-color: #e0f7fa; /* Info 하이라이트 스타일 */
 }
 
 /* Title of the Flow Msg */
