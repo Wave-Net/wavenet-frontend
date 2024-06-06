@@ -79,6 +79,7 @@ const processedDeviceData = computed(() => {
   return deviceData.value.map((item) => ({
     ip: item.device.ip,
     mac: item.device.mac,
+    vendor: item.device.vendor,
     hostname: item.device.hostname,
     send_pkt: item.stat.send_pkt,
     recv_pkt: item.stat.recv_pkt,
