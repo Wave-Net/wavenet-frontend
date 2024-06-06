@@ -25,6 +25,7 @@
             'field-box-diagram',
             `part-${field.originalName}`,
             { selected: field.isSelected },
+            { truncated: field.isTruncated },
           ]"
           @mouseover="handleMouseOver(field.originalName)"
           @mouseleave="handleMouseLeave(field.originalName)"
@@ -35,6 +36,9 @@
               {{ field.name }} ({{ field.totalBits }} bits)
             </div>
             <div class="diagram-field-content">{{ field.value }}</div>
+          </template>
+          <template v-if="field.isTruncated">
+            <div class="truncated-indicator">...</div>
           </template>
         </div>
         <div
@@ -117,8 +121,9 @@ const fieldRows = computed(() => {
   }));
 
   for (const field of fieldsArray) {
-    let remainingFieldBits = field.field_length;
+    let remainingFieldBits = Math.min(field.field_length, 32); // 필드 비트 길이를 최대 32bit로 제한
     let partNumber = 1;
+    const isTruncated = field.field_length > 32;
 
     while (remainingFieldBits > 0) {
       const bitsForCurrentBox = Math.min(
@@ -140,6 +145,7 @@ const fieldRows = computed(() => {
         totalBits: field.field_length,
         value: field.value,
         isSelected: field.originalName === selectedPart.value,
+        isTruncated: isTruncated && remainingFieldBits <= 16,
       };
 
       currentRowFields.push(fieldPart);
@@ -233,6 +239,12 @@ const isWidestBox = (field) => {
 .diagram-field-content {
   font-size: 13px;
 }
+
+.truncated-indicator {
+  font-size: 20px;
+  color: #2c3e50;
+}
+
 .title-diagram {
   font-size: 20px;
   font-family: "Poppins", sans-serif;
@@ -246,16 +258,19 @@ const isWidestBox = (field) => {
   margin-bottom: 10px;
   box-sizing: border-box;
 }
+
 .wrap-container {
   width: 100%;
   height: 100%;
   padding: 7px;
 }
+
 .unit-diagram {
   width: 100%;
   height: 18px;
   display: flex;
 }
+
 .wrap-diagram {
   display: flex;
   flex-direction: column;

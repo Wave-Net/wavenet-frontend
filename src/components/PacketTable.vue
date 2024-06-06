@@ -17,10 +17,13 @@
       :sortable="col.sortable"
     >
       <template #body="slotProps">
-        <span v-if="col.field === 'dynamicField'">
+        <span
+          v-if="col.field === 'dynamicField'"
+          :style="{ 'font-weight': '400' }"
+        >
           {{ getDynamicFieldValue(slotProps.data) }}
         </span>
-        <span v-else>
+        <span v-else :style="{ 'font-weight': '400' }">
           {{ getValue(slotProps.data, col.field) }}
         </span>
       </template>
@@ -101,6 +104,6 @@ const getDynamicFieldValue = (data) => {
 
 <style>
 .highlight {
-  background-color: #b2dfdb45; /* 하이라이트 스타일 */
+  background-color: #e0f7fa; /* 하이라이트 스타일 */
 }
 </style>
