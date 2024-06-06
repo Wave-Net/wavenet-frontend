@@ -27,10 +27,11 @@
                   :highlightedFlowchartIndex="highlightedFlowchartIndex"
                 />
               </SplitterPanel>
-              <SplitterPanel id="splitter-3-panel-2" :size="50">
+              <SplitterPanel id="splitter-3-panel-2">
                 <Splitter id="splitter-4" style="width: 100%; height: 100%">
                   <SplitterPanel
                     id="splitter-4-panel-1"
+                    :size="65"
                     style="height: 100%; overflow-y: auto"
                   >
                     <AccordionPacketData
