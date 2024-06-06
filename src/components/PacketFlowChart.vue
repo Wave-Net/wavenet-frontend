@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="title-box">
-      <p class="title-ip">Source IP<br />{{ sourceIP }}</p>
-      <p class="title-ip">Destination IP<br />{{ destinationIP }}</p>
+      <p class="title-ip">Device<br />{{ sourceIP }}</p>
+      <p class="title-ip">Another<br />{{ destinationIP }}</p>
     </div>
     <div class="timeline">
       <div class="outer">
