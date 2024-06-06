@@ -35,6 +35,7 @@ const columns = [
   { field: "index", header: "#", style: { width: "40.29px" } },
   { field: "mac", header: "MAC", style: { width: "160px" } },
   { field: "ip", header: "IP", style: { width: "125px" } },
+  { field: "vendor", header: "Vendor", style: { width: "145px" } },
   { field: "hostname", header: "Hostname", style: { width: "125px" } },
   { field: "send_data", header: "Send Byte", style: { width: "161.14px" } },
   { field: "recv_data", header: "Recv Byte", style: { width: "161.14px" } },
