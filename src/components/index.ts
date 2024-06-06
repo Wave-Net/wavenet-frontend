@@ -1,4 +1,11 @@
-export { default as TheHeader } from './TheHeader.vue'
-export { default as TheFooter } from './TheFooter.vue'
-export { default as DeviceTable } from './DeviceTable.vue'
-export { default as DeviceDiagram } from './DeviceDiagram.vue'
+export { default as TheHeader } from "./TheHeader.vue";
+export { default as TheFooter } from "./TheFooter.vue";
+export { default as DeviceTable } from "./DeviceTable.vue";
+export { default as DeviceDiagram } from "./DeviceDiagram.vue";
+export { default as PacketTable } from "./PacketTable.vue";
+export { default as MenuButton } from "./MenuButton.vue";
+export { default as PacketGraph } from "./PacketGraph.vue";
+export { default as AccordionPacketData } from "./AccordionPacketData.vue";
+export { default as PacketFlowChart } from "./PacketFlowChart.vue";
+export { default as DiagramStructure } from "./protocol/DiagramStructure.vue";
+export { default as RawData } from "./protocol/RawData.vue";

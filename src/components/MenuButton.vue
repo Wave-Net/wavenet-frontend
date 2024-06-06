@@ -1,67 +1,71 @@
 <template>
-  <div>
+  <div class="menu-button-container">
     <ToggleButton
       v-model="captureButtonState"
-      onLabel="중단"
-      offLabel="시작"
-      onIcon="pi pi-stop-circle"
-      offIcon="pi pi-play-circle"
-      class="startButton"
+      onLabel="Stop"
+      offLabel="Start"
       @change="handleCaptureToggle"
     />
     <SplitButton
-      label="데이터내보내기"
+      label="Save"
       :model="items"
-      :disabled="captureButtonState"
-      class="dataPrint"
-    >
-      <i class="pi pi-download"
-        ><span style="padding-left: 5px">데이터 내보내기</span></i
-      >
-    </SplitButton>
+      :disabled="captureButtonState || !captureStore.packetMessages.length"
+      @click="handleSplitButtonClick"
+    />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import "primeicons/primeicons.css";
 import ToggleButton from "primevue/togglebutton";
 import SplitButton from "primevue/splitbutton";
-import "primeicons/primeicons.css";
-import { useWebSocketStore } from "@/stores";
-import { ref, defineEmits } from "vue";
+import { useCaptureStore } from "@/stores";
+import { ref, defineProps } from "vue";
 
-const emit = defineEmits(["capture-state-change"]);
+const props = defineProps({
+  deviceIp: {
+    type: String,
+    required: true,
+  },
+});
 
-const websocketStore = useWebSocketStore();
+const captureStore = useCaptureStore();
 const captureButtonState = ref(false);
-const items = [{ label: "PCAP" }, { label: "JSON" }, { label: "CSV" }];
+const items = [
+  { label: "PCAP", command: () => handleDownload("pcap") },
+  { label: "JSON", command: () => handleDownload("json") },
+  { label: "CSV", command: () => handleDownload("csv") }
+];
 
 const handleCaptureToggle = () => {
   if (captureButtonState.value) {
     console.log("capture start");
-    websocketStore.startCapture();
+    captureStore.startCapture(props.deviceIp);
   } else {
     console.log("capture stop");
-    websocketStore.stopCapture();
+    captureStore.stopCapture();
   }
-  //capture-state-change 이벤트를 발생시켜 상위 컴포넌트인 Capture.vue에 captureButtonState의 변경 사항을 알립니다.
-  emit("capture-state-change", captureButtonState.value);
+};
+
+const handleSplitButtonClick = () => {
+  captureStore.downloadPacketFile(props.deviceIp, "pcap");
+};
+
+const handleDownload = (format: string) => {
+  captureStore.downloadPacketFile(props.deviceIp, format);
 };
 </script>
 
-<style>
-.startButton {
-  /* margin-left: 3.5px; */
-  margin-right: 4.5px;
+<style scoped>
+.menu-button-container {
+  display: flex;
+  gap: 6px;
 }
 
-.dataPrint {
-  /* margin-right: 3.5px; */
-}
-
-.p-splitbutton-defaultbutton {
-  padding-left: 5px !important;
-  padding-right: 5px !important;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
+.p-component,
+.p-component * {
+  box-sizing: border-box;
+  font-size: 13px;
+  /* padding: 0.3rem 0.4rem; */
 }
 </style>

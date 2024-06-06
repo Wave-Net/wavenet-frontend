@@ -35,13 +35,29 @@ const columns = [
   { field: "index", header: "#", style: { width: "40.29px" } },
   { field: "mac", header: "MAC", style: { width: "160px" } },
   { field: "ip", header: "IP", style: { width: "125px" } },
+  { field: "vendor", header: "Vendor", style: { width: "145px" } },
   { field: "hostname", header: "Hostname", style: { width: "125px" } },
   { field: "send_data", header: "Send Byte", style: { width: "161.14px" } },
   { field: "recv_data", header: "Recv Byte", style: { width: "161.14px" } },
   { field: "send_pkt", header: "Send Packet", style: { width: "120.86px" } },
   { field: "recv_pkt", header: "Recv Packet", style: { width: "120.86px" } },
-  { field: "capture", header: "Capture", style: { width: "40.29px" }, notSortable: true },
+  {
+    field: "capture",
+    header: "Capture",
+    style: { width: "40.29px" },
+    notSortable: true,
+  },
 ];
 </script>
 
-<style scoped></style>
+<style scoped>
+.p-component,
+.p-component * {
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.p-button {
+  padding: 0.3rem 0.4rem;
+}
+</style>

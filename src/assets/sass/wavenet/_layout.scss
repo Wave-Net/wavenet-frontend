@@ -18,7 +18,9 @@ main {
   flex: 1;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 footer {
@@ -60,12 +62,21 @@ a {
   font-weight: $font-weight-light;
 }
 
+button {
+  font-feature-settings: var(--font-feature-settings);
+  font-family: var(--font-family);
+}
+
 .pi {
   font-size: 0.8rem;
 }
 
 .row {
   justify-content: center;
+}
+
+.highlight {
+  background-color: #e0f7fa;
 }
 
 .col,
@@ -78,6 +89,165 @@ a {
   min-height: 1px;
   padding-right: 15px;
   padding-left: 15px;
+}
+
+.p-component {
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings, normal);
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.p-component,
+.p-component * {
+  box-sizing: border-box;
+}
+
+.p-button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: $font-weight-bold;
+  color: #ffffff;
+  background: #7bc2d0;
+  border: 1px solid #7bc2d0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s, outline-color 0.2s;
+  border-radius: 6px;
+  outline-color: transparent;
+}
+
+.p-button:not(:disabled):hover {
+  background: #5c9fb8;
+  color: #ffffff;
+  border-color: #5c9fb8;
+}
+
+.p-button:not(:disabled):active {
+  background: #374f64;
+  color: #ffffff;
+  border-color: #374f64;
+}
+
+.p-button:focus-visible {
+  outline: 1px solid var(--p-focus-ring-color);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.p-togglebutton .p-togglebutton-input  {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.p-splitbutton {
+  display: inline-flex;
+  position: relative;
+}
+
+.p-splitbutton {
+  border-radius: 6px;
+}
+
+.p-splitbutton .p-splitbutton-defaultbutton,
+.p-splitbutton.p-button-rounded > .p-splitbutton-defaultbutton.p-button,
+.p-splitbutton.p-button-outlined > .p-splitbutton-defaultbutton.p-button,
+.p-splitbutton.p-button-outlined
+  > .p-splitbutton-defaultbutton.p-button-outlined.p-button:hover {
+  flex: 1 1 auto;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0 none;
+}
+
+.p-splitbutton-menubutton,
+.p-splitbutton.p-button-rounded > .p-splitbutton-menubutton.p-button,
+.p-splitbutton.p-button-outlined > .p-splitbutton-menubutton.p-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.p-icon {
+  display: inline-block;
+}
+
+.p-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.p-button.p-button-icon-only {
+  width: 2.5rem;
+  padding: 0.5rem 0;
+}
+
+.p-tieredmenu .p-menuitem > .p-menuitem-content .p-menuitem-link {
+  color: #334155;
+  padding: 0.5rem 0.75rem;
+  user-select: none;
+}
+
+.p-tieredmenu .p-menuitem-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.p-tieredmenu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  text-align: -webkit-match-parent;
+}
+
+.p-splitter {
+  border: none;
+  background: #ffffff;
+  color: #495057;
+}
+
+.p-splitter-panel {
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 1px 15px 0 hsla(0, 0%, 48.2%, 0.05);
+}
+
+.p-splitter-horizontal > .p-splitter-gutter {
+  cursor: ew-resize;
+  width: 0.5rem;
+}
+
+.p-splitter-vertical > .p-splitter-gutter {
+  cursor: ns-resize;
+  height: 0.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  font-family: $font-type-base, sans-serif;
+  border: 0;
+  border-radius: 0.2857rem;
+  position: relative;
+  width: 100%;
+  background: #fff;
+  margin: 3px;
+  box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .p-card {
@@ -102,6 +272,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  padding: 2%;
 }
 
 .p-card,
@@ -217,7 +388,7 @@ a {
 }
 
 .p-organizationchart-table {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 12px;
   font-weight: $font-weight-bold;
   border-spacing: 0;
@@ -254,6 +425,36 @@ a {
 
 .text-purple-900 {
   color: #4c1d95 !important;
+}
+
+.btn {
+  display: inline-flex;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  align-items: center;
+  vertical-align: bottom;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  outline-color: transparent;
+}
+
+.dropdown-toggle {
+  outline-color: transparent;
+}
+
+.btn-wavenet {
+  font-family: "Poppins", sans-serif;
+  color: #ffffff;
+  background: #7bc2d0;
+  border: 1px solid #7bc2d0;
+  padding: 0.3rem 0.4rem;
+  font-size: 16px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s, outline-color 0.2s;
+  border-radius: 6px;
 }
 
 .p-organizationchart-node-content .p-node-toggler {
@@ -377,34 +578,10 @@ a {
   border-top-left-radius: 6px;
 }
 
-.p-button {
-  font-weight: $font-weight-bold;
-  color: #ffffff;
-  background: #7BC2D0;
-  border: 1px solid #7BC2D0;
-  padding: 0.3rem 0.4rem;
-  font-size: 13px;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+.p-splitbutton {
+  display: inline-flex;
+  position: relative;
   border-radius: 6px;
-  outline-color: transparent;
-}
-
-.p-button:not(:disabled):hover {
-  background: #5C9FB8;
-  color: #ffffff;
-  border-color: #5C9FB8;
-}
-
-.p-button:not(:disabled):active {
-  background: #374f64;
-  color: #ffffff;
-  border-color: #374f64;
-}
-
-.p-button:focus-visible {
-  outline: 1px solid var(--p-focus-ring-color);
-  outline-offset: 2px;
-  box-shadow: none;
 }
 
 .logo-container {
