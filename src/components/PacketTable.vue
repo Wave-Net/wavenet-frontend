@@ -93,12 +93,29 @@ const getValue = (obj, path) => {
 
 // 조건에 따라 동적 필드 값을 가져오는 함수
 const getDynamicFieldValue = (data) => {
+  let dynamicField = "";
   if (data.info.protocol === "MQTT") {
-    return getValue(data, "info.summary");
+    dynamicField = getValue(data, "info.summary");
+    const msgId = getValue(data, "layers.MQTT.msgid.value");
+    if (msgId) {
+      dynamicField += ` ,(Msg ID: ${msgId})`;
+    }
+    const msg = getValue(data, "layers.MQTT.msg.ascii");
+    if (msg) {
+      dynamicField += ` ,(Msg: ${msg})`;
+    }
+    const rtcode = getValue(data, "layers.MQTT.conack_val.value");
+    if (rtcode) {
+      dynamicField += ` ,(Return Code: ${rtcode})`;
+    }
   } else if (data.info.protocol === "CoAP") {
-    return getValue(data, "info.summary");
+    dynamicField = getValue(data, "info.summary");
+    const msgId = getValue(data, "layers.COAP.mid.value");
+    if (msgId) {
+      dynamicField += ` ,(Msg ID: ${msgId})`;
+    }
   }
-  return "";
+  return dynamicField;
 };
 </script>
 
