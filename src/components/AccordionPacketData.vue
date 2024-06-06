@@ -57,28 +57,20 @@ export default {
       this.accordionItems = Object.entries(this.pkt.layers).map(
         ([key, value], index) => {
           let title = "";
-          switch (key) {
-            case "ETH":
-              title = "Ethernet";
-              break;
-            case "IP":
-              title = "Internet Protocol Version 4";
-              break;
-            case "TCP":
-              title = "Transmission Control Protocol";
-              break;
-            case "UDP":
-              title = "User Datagram Protocol";
-              break;
-            case "MQTT":
-              title = "MQ Telemetry TransPort";
-              break;
-            case "COAP":
-              title = "Constrained Application Protocol";
-              break;
-            default:
-              title = key;
-              break;
+          if (key === "ETH") {
+            title = "Ethernet";
+          } else if (key === "IP") {
+            title = "Internet Protocol Version 4";
+          } else if (key === "TCP") {
+            title = "Transmission Control Protocol";
+          } else if (key === "UDP") {
+            title = "User Datagram Protocol";
+          } else if (key.startsWith("MQTT")) {
+            title = `MQ Telemetry TransPort (${key.substring(4)})`;
+          } else if (key === "COAP") {
+            title = "Constrained Application Protocol";
+          } else {
+            title = key;
           }
 
           return {
@@ -141,6 +133,7 @@ export default {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
