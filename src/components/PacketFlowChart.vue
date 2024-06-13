@@ -31,51 +31,59 @@
                 <p class="font-size-small">
                   <b>Time : </b>{{ packet.info.seconds_since_beginning }}
                 </p>
-                <p
-                  v-if="packet.layers.MQTT?.msgid?.value"
-                  class="font-size-small"
+                <!-- 동적으로 MQTT 레이어 반복 표시 -->
+                <div
+                  v-for="mqttKey in Object.keys(packet.layers).filter((key) =>
+                    key.startsWith('MQTT')
+                  )"
+                  :key="mqttKey"
                 >
-                  <b>Message ID : </b>{{ packet.layers.MQTT.msgid.value }}
-                </p>
-                <p
-                  v-if="packet.layers.MQTT?.kalive?.value"
-                  class="font-size-small"
-                >
-                  <b>Keep Alive : </b>{{ packet.layers.MQTT.kalive.value }}
-                </p>
-                <p
-                  v-if="packet.layers.MQTT?.client_id?.value"
-                  class="font-size-small"
-                >
-                  <b>Client ID : </b>{{ packet.layers.MQTT.client_id.value }}
-                </p>
-                <p
-                  v-if="packet.layers.MQTT?.conack_val?.value"
-                  class="font-size-small"
-                >
-                  <b>Return Code : </b>{{ packet.layers.MQTT.conack_val.value }}
-                </p>
-
-                <p
-                  v-if="packet.layers.MQTT?.suback_qos?.value"
-                  class="font-size-small"
-                >
-                  <b>QOS : </b>{{ packet.layers.MQTT.suback_qos.value }}
-                </p>
-
-                <p
-                  v-if="packet.layers.MQTT?.topic?.value"
-                  class="font-size-small"
-                >
-                  <b>Topic : </b>{{ packet.layers.MQTT.topic.value }}
-                </p>
-
-                <p
-                  v-if="packet.layers.MQTT?.msg?.value"
-                  class="font-size-small"
-                >
-                  <b>Message : </b>{{ packet.layers.MQTT.msg.ascii }}
-                </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.msgid?.value"
+                    class="font-size-small"
+                  >
+                    <b>Message ID : </b>{{ packet.layers[mqttKey].msgid.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.kalive?.value"
+                    class="font-size-small"
+                  >
+                    <b>Keep Alive : </b
+                    >{{ packet.layers[mqttKey].kalive.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.client_id?.value"
+                    class="font-size-small"
+                  >
+                    <b>Client ID : </b
+                    >{{ packet.layers[mqttKey].client_id.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.conack_val?.value"
+                    class="font-size-small"
+                  >
+                    <b>Return Code : </b
+                    >{{ packet.layers[mqttKey].conack_val.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.suback_qos?.value"
+                    class="font-size-small"
+                  >
+                    <b>QOS : </b>{{ packet.layers[mqttKey].suback_qos.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.topic?.value"
+                    class="font-size-small"
+                  >
+                    <b>Topic : </b>{{ packet.layers[mqttKey].topic.value }}
+                  </p>
+                  <p
+                    v-if="packet.layers[mqttKey]?.msg?.value"
+                    class="font-size-small"
+                  >
+                    <b>Message : </b>{{ packet.layers[mqttKey].msg.ascii }}
+                  </p>
+                </div>
               </div>
             </div>
             <!-- CoAP FLOW CHART -->
