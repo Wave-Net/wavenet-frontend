@@ -14,18 +14,17 @@
       :field="col.field"
       :header="col.header"
       :style="col.style"
-      :sortable="true"
+      :sortable="col.sortable"
     >
       <template #body="slotProps">
-        <span>
-          {{ getValue(slotProps.data, col.field) }}
-        </span>
-      </template>
-    </Column>
-    <Column field="dynamicFieldValue" header="Info" :sortable="true">
-      <template #body="slotProps">
-        <span>
+        <span
+          v-if="col.field === 'dynamicField'"
+          :style="{ 'font-weight': '400' }"
+        >
           {{ getDynamicFieldValue(slotProps.data) }}
+        </span>
+        <span v-else :style="{ 'font-weight': '400' }">
+          {{ getValue(slotProps.data, col.field) }}
         </span>
       </template>
     </Column>
@@ -55,20 +54,21 @@ const props = defineProps({
 });
 
 const captureStore = useCaptureStore();
-const packetMessages = computed(() => {
-  return captureStore.packetMessages.map((message) => ({
-    ...message,
-    dynamicFieldValue: getDynamicFieldValue(message),
-  }));
-});
+const packetMessages = computed(() => captureStore.packetMessages);
 
 const columns = [
-  { field: "info.index", header: "#", style: { width: "10px" } },
+  {
+    field: "info.index",
+    header: "#",
+    style: { width: "10px" },
+    sortable: true,
+  },
   { field: "info.seconds_since_beginning", header: "Time" },
   { field: "layers.IP.src.value", header: "Src" },
   { field: "layers.IP.dst.value", header: "Dst" },
   { field: "info.protocol", header: "Protocol" },
   { field: "info.len", header: "Length" },
+  { field: "dynamicField", header: "Info" }, // 동적 필드 추가
 ];
 
 const emit = defineEmits(["row-click"]);
@@ -86,36 +86,41 @@ const rowClass = (data) => {
   return "";
 };
 
+// 객체에서 중첩된 필드 값을 가져오는 함수
 const getValue = (obj, path) => {
   return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
+// 조건에 따라 동적 필드 값을 가져오는 함수
 const getDynamicFieldValue = (data) => {
   let dynamicField = "";
   if (data.info.protocol === "MQTT") {
     dynamicField = getValue(data, "info.summary");
-    const msgId = getValue(data, "layers.MQTT.msgid.value");
+    const msgId = getValue(data, "layers.MQTT1.msgid.value");
     if (msgId) {
-      dynamicField += ` ,(Msg ID: ${msgId})`;
+      dynamicField += ` , (Msg ID: ${msgId})`;
     }
-    const msg = getValue(data, "layers.MQTT.msg.ascii");
+    const msg = getValue(data, "layers.MQTT1.msg.ascii");
     if (msg) {
-      dynamicField += ` ,(Msg: ${msg})`;
+      dynamicField += ` , Msg: ${msg}`;
     }
-    const rtcode = getValue(data, "layers.MQTT.conack_val.value");
+    const rtcode = getValue(data, "layers.MQTT1.conack_val.value");
     if (rtcode) {
-      dynamicField += ` ,(Return Code: ${rtcode})`;
+      dynamicField += ` , Return Code: ${rtcode}`;
     }
   } else if (data.info.protocol === "CoAP") {
     dynamicField = getValue(data, "info.summary");
     const msgId = getValue(data, "layers.COAP.mid.value");
     if (msgId) {
-      dynamicField += ` ,(Msg ID: ${msgId})`;
+      dynamicField += ` , (Msg ID: ${msgId})`;
     }
   }
   return dynamicField;
 };
 </script>
 
-<style scoped>
+<style>
+.highlight {
+  background-color: #e0f7fa; /* 하이라이트 스타일 */
+}
 </style>
